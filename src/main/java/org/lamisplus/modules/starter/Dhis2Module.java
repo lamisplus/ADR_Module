@@ -27,15 +27,15 @@ import java.util.List;
         })
 @Slf4j
 @EnableSwagger2
-public class StarterModule extends AcrossModule
+public class Dhis2Module extends AcrossModule
 {
-    public final static String NAME = "StarterModule";
+    public final static String NAME = "Dhis2Module";
 
     public static void main(String[] args) {
-        SpringApplication.run (StarterModule.class, args);
+        SpringApplication.run (Dhis2Module.class, args);
     }
 
-    public StarterModule(){
+    public Dhis2Module(){
         super();
         addApplicationContextConfigurer(new ComponentScanConfigurer(
                 getClass().getPackage().getName() +".controller",
