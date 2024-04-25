@@ -1,9 +1,13 @@
-package org.lamisplus.modules.starter.domain.entity;
+package org.lamisplus.modules.starter.client;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-@Configuration
+import java.time.Duration;
+
+@Component
+@ConfigurationProperties()
 public class DHIS2Config {
     @Value("${dhis2.username}")
     private String username;
@@ -13,6 +17,26 @@ public class DHIS2Config {
 
     @Value("${dhis2.baseUrl}")
     private String baseUrl;
+    @Value("${dhis2.readTimeout}")
+    private Duration readTimeout;
+    @Value("${dhis2.connectTimeout}")
+    private Duration connectTimeout;
+
+    public Duration getReadTimeout() {
+        return readTimeout;
+    }
+
+    public void setReadTimeout(int readTimeout) {
+        this.readTimeout = Duration.ofDays(readTimeout);
+    }
+
+    public Duration getConnectTimeout() {
+        return connectTimeout;
+    }
+
+    public void setConnectTimeout(int connectTimeout) {
+        this.connectTimeout = Duration.ofDays(connectTimeout);
+    }
 
     public String getUsername() {
         return username;

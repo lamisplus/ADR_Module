@@ -1,12 +1,12 @@
 package org.lamisplus.modules.starter.domain.entity;
 
-public class PrepWeekly {
+public class DataValue {
     private String dataElement;
+    private String orgUnit;
+    private String period;
     private String categoryOptionCombo;
     private String attributeOptionCombo;
-    private String facilityId;
-    private String period;
-    private int totalPrepCount;
+    private int value;
 
     public String getDataElement() {
         return dataElement;
@@ -14,6 +14,22 @@ public class PrepWeekly {
 
     public void setDataElement(String dataElement) {
         this.dataElement = dataElement;
+    }
+
+    public String getOrgUnit() {
+        return orgUnit;
+    }
+
+    public void setOrgUnit(String orgUnit) {
+        this.orgUnit = orgUnit;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
     }
 
     public String getCategoryOptionCombo() {
@@ -32,27 +48,11 @@ public class PrepWeekly {
         this.attributeOptionCombo = attributeOptionCombo;
     }
 
-    public String getFacilityId() {
-        return facilityId;
+    public int getValue() {
+        return value;
     }
 
-    public void setFacilityId(String facilityId) {
-        this.facilityId = facilityId;
-    }
-
-    public String getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(String period) {
-        this.period = period;
-    }
-
-    public int getTotalPrepCount() {
-        return totalPrepCount;
-    }
-
-    public void setTotalPrepCount(int totalPrepCount) {
-        this.totalPrepCount = totalPrepCount;
+    public void setValue(int value) {
+        this.value = value;
     }
 }

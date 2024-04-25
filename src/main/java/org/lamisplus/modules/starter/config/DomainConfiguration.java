@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 @Slf4j
 @Configuration
-@EnableJpaRepositories( transactionManagerRef = "starterTransactionManger",
+@EnableJpaRepositories( transactionManagerRef = "dhis2TransactionManger",
         basePackages = {"org.lamisplus.modules.starter.repository"})
 public class DomainConfiguration {
     private final DataSource dataSource;
@@ -26,7 +26,7 @@ public class DomainConfiguration {
     private  final EntityManagerFactory entityManagerFactory;
 
 
-    @Bean(name = "starterTransactionManger")
+    @Bean(name = "dhis2TransactionManger")
     @Primary
     public TransactionManager transactionManager(){
         JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
