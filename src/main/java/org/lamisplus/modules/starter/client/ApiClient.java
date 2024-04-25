@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class ApiClient {
     public static HttpHeaders getHeaders ()
     {
-        String dhis2Credentials = "Victor:P@55w0rd@1";
+        String dhis2Credentials = "";
         String encodedCredentials =
                 new String(Base64.encodeBase64(dhis2Credentials.getBytes()));
 

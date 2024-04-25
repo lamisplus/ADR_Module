@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project name="maven-antrun-" default="main"  >
 <target name="main">
-  <copy todir="C:\Users\victor.ajor\Lamisplus_public\starter_module\target/classes/views/static/hepatitis">
+  <copy todir="C:\Users\victor.ajor\Lamisplus_public\starter_module\target/classes/views/static/dhis2">
     <fileset dir="C:\Users\victor.ajor\Lamisplus_public\starter_module/build"/>
   </copy>
 </target>

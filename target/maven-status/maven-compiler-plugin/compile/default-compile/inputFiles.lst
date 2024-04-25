@@ -3,10 +3,10 @@ C:\Users\victor.ajor\Lamisplus_public\starter_module\src\main\java\org\lamisplus
 C:\Users\victor.ajor\Lamisplus_public\starter_module\src\main\java\org\lamisplus\modules\starter\config\DomainConfiguration.java
 C:\Users\victor.ajor\Lamisplus_public\starter_module\src\main\java\org\lamisplus\modules\starter\Dhis2Module.java
 C:\Users\victor.ajor\Lamisplus_public\starter_module\src\main\java\org\lamisplus\modules\starter\domain\entity\DataValue.java
-C:\Users\victor.ajor\Lamisplus_public\starter_module\src\main\java\org\lamisplus\modules\starter\installers\SchemaInstaller1.java
 C:\Users\victor.ajor\Lamisplus_public\starter_module\src\main\java\org\lamisplus\modules\starter\client\ApiClient.java
 C:\Users\victor.ajor\Lamisplus_public\starter_module\src\main\java\org\lamisplus\modules\starter\domain\mapper\StarterMapper.java
 C:\Users\victor.ajor\Lamisplus_public\starter_module\src\main\java\org\lamisplus\modules\starter\domain\constants\Enum\Detect.java
+C:\Users\victor.ajor\Lamisplus_public\starter_module\src\main\java\org\lamisplus\modules\starter\installers\Dhis2SchemaInstaller.java
 C:\Users\victor.ajor\Lamisplus_public\starter_module\src\main\java\org\lamisplus\modules\starter\domain\dto\request\PostSuccessResponse.java
 C:\Users\victor.ajor\Lamisplus_public\starter_module\src\main\java\org\lamisplus\modules\starter\domain\dto\request\ResourceResponse.java
 C:\Users\victor.ajor\Lamisplus_public\starter_module\src\main\java\org\lamisplus\modules\starter\domain\entity\DataValueSet.java

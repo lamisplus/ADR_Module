@@ -15,7 +15,7 @@ acrossHibernate:
 applicationInfo:
   applicationId: dhis2
   applicationName: DHIS2
-  buildDate: "2024-04-25T14:04:39Z"
+  buildDate: "2024-04-25T19:55:48Z"
   buildId: "1.0.0-1.0.0"
 build:
   number: "1.0.0"
