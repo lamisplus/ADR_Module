@@ -7,6 +7,7 @@ import org.lamisplus.modules.starter.domain.entity.DataValue;
 import org.lamisplus.modules.starter.domain.entity.DataValueSet;
 import org.lamisplus.modules.starter.domain.entity.Upload;
 import org.lamisplus.modules.starter.service.Dhis2Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,32 +23,33 @@ import java.util.List;
 @RequestMapping("/v1/dhis2")
 @AllArgsConstructor
 public class Dhis2Controller {
-    private final Dhis2Service dhis2Service;
+    @Autowired
+    private Dhis2Service dhis2Service;
 
     @GetMapping("/resources")
     public ResponseEntity<Object> getDhis2Resources() {
-        Object resources = Dhis2Service.getAllDhis2Resources();
+        Object resources = dhis2Service.getAllDhis2Resources();
         assert resources != null;
         return ResponseEntity.ok(resources);
     }
 
     @GetMapping("/data-sets")
     public ResponseEntity<Object> getDataSets() {
-        Object resources = Dhis2Service.getDhis2DataSets();
+        Object resources = dhis2Service.getDhis2DataSets();
         assert resources != null;
         return ResponseEntity.ok(resources);
     }
 
     @GetMapping("/org-unit")
     public ResponseEntity<Object> getOrgUnits() {
-        Object resources = Dhis2Service.getDhis2OrgUnits();
+        Object resources = dhis2Service.getDhis2OrgUnits();
         assert resources != null;
         return ResponseEntity.ok(resources);
     }
 
     @GetMapping("/data-elements")
     public ResponseEntity<Object> getDataElements() {
-        Object resources = Dhis2Service.getDhis2DataElements();
+        Object resources = dhis2Service.getDhis2DataElements();
         assert resources != null;
         return ResponseEntity.ok(resources);
     }
@@ -57,7 +59,7 @@ public class Dhis2Controller {
             @RequestParam("orgUnit") String orgUnit,
             @RequestParam("period") String period,
             @RequestParam("dataElement") String dataElement) {
-        Object resources = Dhis2Service.confirmDataValueSetPushed(orgUnit, period, dataElement);
+        Object resources = dhis2Service.confirmDataValueSetPushed(orgUnit, period, dataElement);
         if (resources != null) {
             return ResponseEntity.ok(resources);
         } else {

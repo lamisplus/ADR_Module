@@ -1,17 +1,18 @@
 package org.lamisplus.modules.starter.service;
 
 import lombok.AllArgsConstructor;
-import org.lamisplus.modules.starter.client.ApiClient;
-import org.lamisplus.modules.starter.domain.dto.request.UploadDTO;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.lamisplus.modules.starter.domain.entity.DataValueSet;
+import org.lamisplus.modules.starter.domain.entity.Dhis2Configuration;
 import org.lamisplus.modules.starter.domain.entity.Upload;
-import org.lamisplus.modules.starter.repository.Dhis2Repository;
+import org.lamisplus.modules.starter.repository.Dhis2ConfigurationRepository;
+import org.lamisplus.modules.starter.repository.Dhis2UploadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.swing.text.html.Option;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,13 +25,35 @@ import java.util.List;
 @AllArgsConstructor
 public class Dhis2Service {
     @Autowired
-    private static ApiClient apiClient;
+    private Dhis2UploadRepository dhis2UploadRepository;
     @Autowired
-    private Dhis2Repository dhis2Repository;
+    private Dhis2ConfigurationRepository dhis2ConfigurationRepository;
     public static final String DHIS2_SERVICE_URL = "https://dev.hatappr.org/api/";
-
     private static RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+    public HttpHeaders getHeaders ()
+    {
+        List<Dhis2Configuration> configurations = dhis2ConfigurationRepository.findAll();
+
+        if (configurations.isEmpty()) {
+            throw new RuntimeException("No DHIS2 configurations found");
+        }
+        Dhis2Configuration config = configurations.get(0);
+        String username = config.getUsername();
+        String password = config.getPassword();
+
+        String dhis2Credentials = username + ":" + password;
+        System.out.println( config.getUrl() );
+        String encodedCredentials =
+                new String(Base64.encodeBase64(dhis2Credentials.getBytes()));
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", "Basic " + encodedCredentials);
+        httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        return httpHeaders;
     }
 
     private static void logInfo(String message) {
@@ -44,11 +67,13 @@ public class Dhis2Service {
 
     public Object pushData(DataValueSet dataValues) {
         try {
-            HttpHeaders httpHeaders = ApiClient.getHeaders();
+            List<Dhis2Configuration> configurations = dhis2ConfigurationRepository.findAll();
+            Dhis2Configuration config = configurations.get(0);
+            HttpHeaders httpHeaders = getHeaders();
 
             HttpEntity<Object> httpEntityRequest = new HttpEntity<>(dataValues, httpHeaders);
 
-            ResponseEntity<Object> responseEntity = restTemplate().exchange(DHIS2_SERVICE_URL + "dataValueSets?dataElementIdScheme=UID&orgUnitIdScheme=UID&importStrategy=NEW_AND_UPDATES",
+            ResponseEntity<Object> responseEntity = restTemplate().exchange(config.getUrl() + "dataValueSets?dataElementIdScheme=UID&orgUnitIdScheme=UID&importStrategy=NEW_AND_UPDATES",
                     HttpMethod.POST, httpEntityRequest, Object.class);
 
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
@@ -63,13 +88,15 @@ public class Dhis2Service {
         return null;
     }
 
-    public static Object getAllDhis2Resources() {
+    public Object getAllDhis2Resources() {
         try {
-            HttpHeaders httpHeaders = ApiClient.getHeaders();
+            List<Dhis2Configuration> configurations = dhis2ConfigurationRepository.findAll();
+            Dhis2Configuration config = configurations.get(0);
+            HttpHeaders httpHeaders = getHeaders();
 
             HttpEntity<String> httpEntity = new HttpEntity<>(httpHeaders);
 
-            ResponseEntity<Object> responseEntity = restTemplate().exchange(DHIS2_SERVICE_URL + "resources",
+            ResponseEntity<Object> responseEntity = restTemplate().exchange(config.getUrl() + "resources",
                     HttpMethod.GET, httpEntity, Object.class);
 
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
@@ -84,13 +111,15 @@ public class Dhis2Service {
         return null;
     }
 
-    public static Object getDhis2DataSets() {
+    public Object getDhis2DataSets() {
         try {
-            HttpHeaders httpHeaders = ApiClient.getHeaders();
+            List<Dhis2Configuration> configurations = dhis2ConfigurationRepository.findAll();
+            Dhis2Configuration config = configurations.get(0);
+            HttpHeaders httpHeaders = getHeaders();
 
             HttpEntity<String> httpEntity = new HttpEntity<>(httpHeaders);
 
-            ResponseEntity<Object> responseEntity = restTemplate().exchange(DHIS2_SERVICE_URL + "dataSets",
+            ResponseEntity<Object> responseEntity = restTemplate().exchange(config.getUrl() + "dataSets",
                     HttpMethod.GET, httpEntity, Object.class);
 
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
@@ -105,13 +134,15 @@ public class Dhis2Service {
         return null;
     }
 
-    public static Object getDhis2OrgUnits() {
+    public Object getDhis2OrgUnits() {
         try {
-            HttpHeaders httpHeaders = ApiClient.getHeaders();
+            List<Dhis2Configuration> configurations = dhis2ConfigurationRepository.findAll();
+            Dhis2Configuration config = configurations.get(0);
+            HttpHeaders httpHeaders = getHeaders();
 
             HttpEntity<String> httpEntity = new HttpEntity<>(httpHeaders);
 
-            ResponseEntity<Object> responseEntity = restTemplate().exchange(DHIS2_SERVICE_URL + "organisationUnits",
+            ResponseEntity<Object> responseEntity = restTemplate().exchange(config.getUrl() + "organisationUnits",
                     HttpMethod.GET, httpEntity, Object.class);
 
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
@@ -126,13 +157,15 @@ public class Dhis2Service {
         return null;
     }
 
-    public static Object getDhis2DataElements() {
+    public Object getDhis2DataElements() {
         try {
-            HttpHeaders httpHeaders = ApiClient.getHeaders();
+            List<Dhis2Configuration> configurations = dhis2ConfigurationRepository.findAll();
+            Dhis2Configuration config = configurations.get(0);
+            HttpHeaders httpHeaders = getHeaders();
 
             HttpEntity<String> httpEntity = new HttpEntity<>(httpHeaders);
 
-            ResponseEntity<Object> responseEntity = restTemplate().exchange(DHIS2_SERVICE_URL + "dataElements",
+            ResponseEntity<Object> responseEntity = restTemplate().exchange(config.getUrl() + "dataElements",
                     HttpMethod.GET, httpEntity, Object.class);
 
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
@@ -147,13 +180,15 @@ public class Dhis2Service {
         return null;
     }
 
-    public static Object confirmDataValueSetPushed(String OrgUnit, String Period, String DataElement) {
+    public Object confirmDataValueSetPushed(String OrgUnit, String Period, String DataElement) {
         try {
-            HttpHeaders httpHeaders = ApiClient.getHeaders();
+            List<Dhis2Configuration> configurations = dhis2ConfigurationRepository.findAll();
+            Dhis2Configuration config = configurations.get(0);
+            HttpHeaders httpHeaders = getHeaders();
 
             HttpEntity<String> httpEntity = new HttpEntity<>(httpHeaders);
 
-            ResponseEntity<Object> responseEntity = restTemplate().exchange(DHIS2_SERVICE_URL+"dataValueSets"+"?OrgUnit="+OrgUnit+"&period="+Period+"&dataElement="+DataElement,
+            ResponseEntity<Object> responseEntity = restTemplate().exchange(config.getUrl() +"dataValueSets"+"?OrgUnit="+OrgUnit+"&period="+Period+"&dataElement="+DataElement,
                     HttpMethod.GET, httpEntity, Object.class);
 
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
@@ -169,10 +204,10 @@ public class Dhis2Service {
     }
 
     public Upload uploadsToDhis2(Upload upload) {
-        return dhis2Repository.save(upload);
+        return dhis2UploadRepository.save(upload);
     }
     public List<Upload> getAllUploads() {
-        return dhis2Repository.findAll();
+        return dhis2UploadRepository.findAll();
     }
 
 }

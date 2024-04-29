@@ -13,6 +13,8 @@ import MaterialTable from "material-table";
 import axios from "axios";
 import { token as token, url as baseUrl } from "./../../api";
 import { toast } from "react-toastify";
+import Login from "./Login";
+import LoginList from "./LoginList";
 
 import { Link } from "react-router-dom";
 import { FaUserPlus } from "react-icons/fa";
@@ -66,6 +68,7 @@ const Home = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [fileName, setFileName] = useState(null);
   const [upload, setUpload] = useState([]);
+  const [dhis2List, setDhis2List] = useState([]);
 
   const getAllUploads = () => {
     axios
@@ -82,8 +85,40 @@ const Home = () => {
       });
   };
 
+  const getList = () => {
+    axios
+      .get(`${baseUrl}v1/configuration/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setDhis2List(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const deleteLogin = (id) => {
+    axios
+      .delete(`${baseUrl}v1/configuration/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        toast.success("Login credentials deleted successfully");
+        getList();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     getAllUploads();
+    getList();
   }, []);
 
   const handleFileChange = (event) => {
@@ -124,14 +159,23 @@ const Home = () => {
         .then((resp) => {
           document.getElementById("fileInput").value = "";
           setFile(null);
-          toast.success(`DHIS2 Data ${resp.data.message}`);
-          setUploadProgress(0);
 
-          let upload = {
-            filename: fileName,
-            uploadDate: calculateCurrentDate(),
-            status: "Upload Successful",
-          };
+          setUploadProgress(0);
+          let upload = null;
+          if (resp.data) {
+            upload = {
+              filename: fileName,
+              uploadDate: calculateCurrentDate(),
+              status: "Upload Successful",
+            };
+            toast.success(`DHIS2 Data ${resp.data.message}`);
+          } else {
+            upload = {
+              filename: fileName,
+              uploadDate: calculateCurrentDate(),
+              status: "Upload Failed",
+            };
+          }
 
           axios
             .post(`${baseUrl}v1/dhis2/dhis2-status-uploads`, upload, {
@@ -148,25 +192,7 @@ const Home = () => {
         })
         .catch((err) => {
           setUploadProgress(0);
-
-          let upload = {
-            filename: fileName,
-            uploadDate: calculateCurrentDate(),
-            status: "Upload Failed",
-          };
-
-          axios
-            .post(`${baseUrl}v1/dhis2/dhis2-status-uploads`, upload, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            })
-            .then((response) => {
-              getAllUploads();
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+          toast.error(err.message);
         });
     };
     fileReader.readAsText(file);
@@ -175,51 +201,67 @@ const Home = () => {
   return (
     <>
       <Container fluid>
-        <Card className="mt-3">
+        <Card className="mt-4">
           <Breadcrumb>
             <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
             <Breadcrumb.Item href="/">DHIS2</Breadcrumb.Item>
           </Breadcrumb>
-          <Card.Title className="m-2">
-            LAMISPlus DHIS2 Integration Module
-          </Card.Title>
-          <Card.Text className="m-2">
-            This module is design to assist with direct push of aggregate data
-            from LAMISPlus to DHIS2.
-          </Card.Text>
+          {/* <Card.Title className="m-2">
+            LAMISPlus DHIS2 Data Exchange Module
+          </Card.Title> */}
+
           <Card.Body>
             <Row>
               <Col>
-                {/* {uploadProgress > 0 && uploadProgress < 100 && ( */}
-                <ProgressBar animated now={uploadProgress} />
-                {/* )} */}
+                {dhis2List.length <= 0 ? (
+                  <>
+                    <Card.Text className="m-2">
+                      Kindly Provide Dhis2 Login Credentials
+                    </Card.Text>
+                    <Login dhis2List={getList} />
+                  </>
+                ) : (
+                  <>
+                    <Card.Text className="m-2">
+                      DHIS2 Login Credentials
+                    </Card.Text>
+                    <LoginList
+                      dhis2List={dhis2List}
+                      deleteLogin={deleteLogin}
+                    />
+                  </>
+                )}
               </Col>
-              <Col>
-                <Row className="align-items-center">
-                  <Col sm={6} className="my-1">
-                    <Form.Group className="mb-3">
-                      <Form.Label>
-                        <b>Upload Aggregate Data</b>
-                      </Form.Label>
-                      <Form.Control
-                        placeholder="Dhis2 json file upload"
-                        type="file"
-                        onChange={handleFileChange}
-                        id="fileInput"
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col sm={6} className="my-1">
-                    <Button variant="primary" onClick={handleUpload}>
-                      Upload{" "}
-                      <span
-                        className="fa fa-cloud-upload"
-                        aria-hidden="true"
-                      ></span>
-                    </Button>
-                  </Col>
-                </Row>
-              </Col>
+              {dhis2List.length > 0 ? (
+                <Col>
+                  <ProgressBar animated now={uploadProgress} />
+                  <br />
+                  <Row className="align-items-center">
+                    <Col sm={6} className="my-1">
+                      <Form.Group className="mb-3">
+                        <Form.Label>
+                          <b>Upload Aggregate Data</b>
+                        </Form.Label>
+                        <Form.Control
+                          placeholder="Dhis2 json file upload"
+                          type="file"
+                          onChange={handleFileChange}
+                          id="fileInput"
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col sm={6} className="my-1">
+                      <Button variant="primary" onClick={handleUpload}>
+                        Upload{" "}
+                        <span
+                          className="fa fa-cloud-upload"
+                          aria-hidden="true"
+                        ></span>
+                      </Button>
+                    </Col>
+                  </Row>
+                </Col>
+              ) : null}
             </Row>
             <Row>
               <Col>
