@@ -10,6 +10,6 @@ import org.springframework.core.annotation.Order;
         version = 1)
 public class ADRSchemaInstaller extends AcrossLiquibaseInstaller {
     public ADRSchemaInstaller() {
-        super("classpath:installers/starter/dhis2Schema/adr-schema-1.xml");
+        super("classpath:installers/starter/adrSchema/adr-schema-1.xml");
     }
 }
