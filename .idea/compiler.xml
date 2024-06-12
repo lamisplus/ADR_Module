@@ -11,7 +11,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.4.2.Final/mapstruct-processor-1.4.2.Final.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.4.2.Final/mapstruct-1.4.2.Final.jar" />
         </processorPath>
-        <module name="DHIS2_module" />
+        <module name="ADR_module" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -20,7 +20,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="DHIS2_module" options="-parameters" />
+      <module name="ADR_module" options="-parameters" />
       <module name="starter_module" options="-parameters" />
     </option>
   </component>

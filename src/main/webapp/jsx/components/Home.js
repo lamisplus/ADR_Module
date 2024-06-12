@@ -15,9 +15,7 @@ import { token as token, url as baseUrl } from "./../../api";
 import { toast } from "react-toastify";
 import Login from "./Login";
 import LoginList from "./LoginList";
-
-import { Link } from "react-router-dom";
-import { FaUserPlus } from "react-icons/fa";
+import Papa from "papaparse";
 
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
@@ -135,67 +133,92 @@ const Home = () => {
     return `${year}-${month}-${day}`;
   };
 
+  const parseCSV = (csvFile) => {
+    return new Promise((resolve, reject) => {
+      Papa.parse(csvFile, {
+        header: true,
+        complete: (result) => {
+          console.log(result.data);
+          resolve(result.data);
+        },
+        error: (error) => {
+          reject(error);
+        },
+      });
+    });
+  };
+
   const handleUpload = async () => {
     if (!file) {
       toast.error("No file selected for upload");
       return;
     }
-    const fileReader = new FileReader();
-    fileReader.onload = async () => {
-      const jsonData = JSON.parse(fileReader.result);
-      await axios
-        .post(`${baseUrl}v1/dhis2/push-data`, JSON.stringify(jsonData), {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          onUploadProgress: (progressEvent) => {
-            const progress = Math.round(
-              (progressEvent.loaded / progressEvent.total) * 100
-            );
-            setUploadProgress(progress);
-          },
-        })
-        .then((resp) => {
-          document.getElementById("fileInput").value = "";
-          setFile(null);
+    let jsonData;
+    if (file.type === "application/json") {
+      const fileReader = new FileReader();
+      fileReader.onload = async () => {
+        jsonData = JSON.parse(fileReader.result);
 
-          setUploadProgress(0);
-          let upload = null;
-          if (resp.data) {
-            upload = {
-              filename: fileName,
-              uploadDate: calculateCurrentDate(),
-              status: "Upload Successful",
-            };
-            toast.success(`DHIS2 Data ${resp.data.message}`);
-          } else {
-            upload = {
-              filename: fileName,
-              uploadDate: calculateCurrentDate(),
-              status: "Upload Failed",
-            };
-          }
+        await axios
+          .post(`${baseUrl}v1/dhis2/push-data`, JSON.stringify(jsonData), {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            onUploadProgress: (progressEvent) => {
+              const progress = Math.round(
+                (progressEvent.loaded / progressEvent.total) * 100
+              );
+              setUploadProgress(progress);
+            },
+          })
+          .then((resp) => {
+            document.getElementById("fileInput").value = "";
+            setFile(null);
 
-          axios
-            .post(`${baseUrl}v1/dhis2/dhis2-status-uploads`, upload, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            })
-            .then((response) => {
-              getAllUploads();
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        })
-        .catch((err) => {
-          setUploadProgress(0);
-          toast.error(err.message);
-        });
-    };
-    fileReader.readAsText(file);
+            setUploadProgress(0);
+            let upload = null;
+            if (resp.data) {
+              upload = {
+                filename: fileName,
+                uploadDate: calculateCurrentDate(),
+                status: "Upload Successful",
+              };
+              toast.success(`DHIS2 Data ${resp.data.message}`);
+            } else {
+              upload = {
+                filename: fileName,
+                uploadDate: calculateCurrentDate(),
+                status: "Upload Failed",
+              };
+            }
+
+            axios
+              .post(`${baseUrl}v1/dhis2/dhis2-status-uploads`, upload, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              })
+              .then((response) => {
+                getAllUploads();
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          })
+          .catch((err) => {
+            setUploadProgress(0);
+            toast.error(err.message);
+          });
+      };
+      fileReader.readAsText(file);
+    } else if (file.type === "text/csv") {
+      const parsedData = await parseCSV(file);
+      jsonData = JSON.stringify(parsedData);
+      console.log(jsonData);
+    } else {
+      alert("Unsupported file type");
+    }
   };
 
   return (

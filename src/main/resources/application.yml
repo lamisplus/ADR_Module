@@ -13,8 +13,8 @@ acrossHibernate:
     hibernate.show_sql: false
     hibernate.event.merge.enty_copy_observer: allow
 applicationInfo:
-  applicationId: dhis2
-  applicationName: DHIS2
+  applicationId: adr
+  applicationName: ADR
   buildDate: "@timestamp@"
   buildId: "@pom.version@-@build.revision@"
 build:

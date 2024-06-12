@@ -4,7 +4,7 @@ import com.foreach.across.core.annotations.ModuleConfiguration;
 import com.foreach.across.modules.hibernate.provider.HibernatePackageConfigurer;
 import com.foreach.across.modules.hibernate.provider.HibernatePackageRegistry;
 import lombok.extern.slf4j.Slf4j;
-import org.lamisplus.modules.starter.domain.Dhis2Domain;
+import org.lamisplus.modules.starter.domain.ADRDomain;
 
 @Slf4j
 @ModuleConfiguration({"AcrossHibernateJpaModule"})
@@ -14,6 +14,6 @@ public class EntityScanConfiguration implements HibernatePackageConfigurer {
     }
 
     public void configureHibernatePackage(HibernatePackageRegistry hibernatePackageRegistry) {
-        hibernatePackageRegistry.addPackageToScan(Dhis2Domain.class);
+        hibernatePackageRegistry.addPackageToScan(ADRDomain.class);
     }
 }

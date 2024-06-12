@@ -11,7 +11,7 @@
 	</parent>
 
 	<groupId>org.lamisplus.modules</groupId>
-	<artifactId>DHIS2_module</artifactId>
+	<artifactId>ADR_module</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
 	<name>DHIS2_module</name>
