@@ -119,10 +119,3 @@ jwt:
   # Token is valid 12 hours
   token-validity-in-milli-seconds: 43200000
   token-validity-in-milli-seconds-for-remember-me: 43200000
-
-dhis2:
-  baseUrl: https://play.dhis2.org/40.3.0/api
-  username: admin
-  password: district
-  readTimeout: 2000
-  connectTimeout: 2000
