@@ -118,7 +118,7 @@ const ClientList = (props) => {
                 actions: (
                   <div>
                     <Link to="/adr-form" state={{ patientInfo: row }}>
-                      <Button>Fill Forms</Button>
+                      <Button>Fill Form</Button>
                     </Link>
                   </div>
                 ),
