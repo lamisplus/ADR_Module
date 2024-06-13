@@ -19,7 +19,7 @@ public class SuspectedDrugDto {
     private String batchNo;
     private String NAFDACNo;
     private String expiryDate;
-    private Integer dosage;
+    private Integer drugDosage;
     private Integer frequency;
     private String routeOfAdministration;
     private String medicationStarted;

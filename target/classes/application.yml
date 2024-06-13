@@ -15,7 +15,7 @@ acrossHibernate:
 applicationInfo:
   applicationId: adr
   applicationName: ADR
-  buildDate: "2024-06-13T13:27:25Z"
+  buildDate: "2024-06-13T17:28:44Z"
   buildId: "1.0.0-1.0.0"
 build:
   number: "1.0.0"

@@ -30,8 +30,8 @@ public class SuspectedDrug {
     private String NAFDACNo;
     @Column(name = "expiry_date")
     private String expiryDate;
-    @Column(name = "dosage")
-    private Integer dosage;
+    @Column(name = "drug_dosage")
+    private Integer drugDosage;;
     @Column(name = "frequency")
     private Integer frequency;
     @Column(name = "route_of_administration")
