@@ -1,19 +1,19 @@
 basePackage: org.lamisplus.modules.starter
-name: Dhis2Module
+name: ADRModule
 store: true
 menus:
   - icon: fa fa-exchange
     disabled: false
-    name: Dhis2
-    state: dhis2
-    url: /across/resources/static/dhis2/index.html
-umdLocation: /across/resources/static/dhis2/index.html
+    name: ADR
+    state: adr
+    url: /across/resources/static/adr/index.html
+umdLocation: /across/resources/static/adr/index.html
 webModules:
-  - breadcrumb: Dhis2
-    name: Dhis2Module
-    path: dhis2
+  - breadcrumb: ADR
+    name: ADRModule
+    path: adr
     position: 99
 permissions:
-  - name: create_dhis2
-    description: create dhis2
-    moduleName: Dhis2Module
+  - name: create_adr
+    description: create adr
+    moduleName: ADRModule
