@@ -183,6 +183,7 @@ function ADRForm() {
     relevant_result: "",
     relevant_result_date: "",
     preexisting_medical_conditions: "",
+    preexisting_medical_others: "",
   });
 
   const [reporter, setReporter] = useState({
@@ -194,6 +195,8 @@ function ADRForm() {
     phone: "",
     health_professional: "",
     occupation: "",
+    country: "",
+    email: "",
   });
 
   const handleBioInputChange = (event) => {
@@ -432,216 +435,320 @@ function ADRForm() {
                         />
                       </FormGroup>
                     </div>
-                    <h3>Seriousness of Adverse Event (check all that apply)</h3>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="death"
-                            checked={adverseEffect.death}
-                            onChange={handleAdverseInputChange}
-                          />{" "}
-                          Death
-                        </label>
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="life_threatening"
-                            checked={adverseEffect.life_threatening}
-                            onChange={handleAdverseInputChange}
-                          />{" "}
-                          Life threatening
-                        </label>
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <label>Hospitalization: </label>
-                        <select
-                          className="form-control"
-                          type="text"
-                          name="hospitalization"
-                          id="hospitalization"
-                          value={adverseEffect.hospitalization}
-                          style={{ border: "1px solid #014d88" }}
-                          onChange={handleAdverseInputChange}
-                        >
-                          <option value="">--Please choose an option--</option>
-                          <option value="Initial">Initial</option>
-                          <option value="Prolonged">Prolonged</option>
-                        </select>
-                      </FormGroup>
-                    </div>
-                    {adverseEffect.death === false ? (
-                      ""
-                    ) : (
-                      <div className="form-group mb-3 col-md-4">
-                        <FormGroup>
-                          <Label for="death_date">
-                            Death Date <span style={{ color: "red" }}>*</span>
-                          </Label>
-                          <input
-                            className="form-control"
-                            type="date"
-                            name="death_date"
-                            id="death_date"
-                            value={adverseEffect.death_date}
-                            onChange={handleAdverseInputChange}
-                            style={{ border: "1px solid #014d88" }}
-                          />
-                        </FormGroup>
-                      </div>
-                    )}
 
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="disability"
-                            checked={adverseEffect.disability}
-                            onChange={handleAdverseInputChange}
-                          />{" "}
-                          Disability or Permanent Damage
-                        </label>
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="anomaly"
-                            checked={adverseEffect.anomaly}
-                            onChange={handleAdverseInputChange}
-                          />{" "}
-                          Congenital Anomaly/Birth Defects
-                        </label>
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="intervention"
-                            checked={adverseEffect.intervention}
-                            onChange={handleAdverseInputChange}
-                          />{" "}
-                          Require Intervention to Permanent Impairment or
-                          Disability (Devices)
-                        </label>
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="others"
-                            checked={handleAdverseInputChange.others}
-                            onChange={handleAdverseInputChange}
-                          />{" "}
-                          Others
-                        </label>
-                      </FormGroup>
-                    </div>
-                    {adverseEffect.others === false ? (
-                      " "
-                    ) : (
-                      <div className="form-group mb-3 col-md-4">
-                        <FormGroup>
-                          <Label for="others_description">
-                            Others Description{" "}
-                            <span style={{ color: "red" }}>*</span>
-                          </Label>
-                          <textarea
-                            className="form-control"
-                            type="text"
-                            name="others_description"
-                            id="others_description"
-                            value={adverseEffect.others_description}
-                            onChange={handleAdverseInputChange}
-                            style={{
-                              border: "1px solid #014d88",
-                            }}
-                          />
-                        </FormGroup>
-                      </div>
-                    )}
-                    {adverseEffect.eventDescription === "" ? (
-                      ""
-                    ) : (
-                      <div className="form-group  col-md-4">
-                        <FormGroup>
-                          <Label>
-                            Outcomes <span style={{ color: "red" }}>*</span>
-                          </Label>
-                          <select
-                            className="form-control"
-                            type="text"
-                            name="outcomes"
-                            id="outcomes"
-                            style={{ border: "1px solid #014d88" }}
-                            value={adverseEffect.outcomes}
-                            onChange={handleAdverseInputChange}
-                          >
-                            <option value="">
-                              --Please choose an option--
-                            </option>
-                            {outcomes?.map((outcome, index) => (
-                              <option key={outcome.id} value={outcome.id}>
-                                {outcome.display}
-                              </option>
-                            ))}
-                          </select>
-                        </FormGroup>
-                      </div>
-                    )}
-                    {adverseEffect.outcomes === "" ? (
-                      ""
-                    ) : (
-                      <div className="form-group mb-3 col-md-4">
-                        <FormGroup>
-                          <Label for="onset_date">
-                            Onset Date of Event{" "}
-                            <span style={{ color: "red" }}>*</span>
-                          </Label>
-                          <input
-                            className="form-control"
-                            type="date"
-                            name="onset_date"
-                            id="onset_date"
-                            value={adverseEffect.onset_date}
-                            onChange={handleAdverseInputChange}
-                            style={{ border: "1px solid #014d88" }}
-                          />
-                        </FormGroup>
-                      </div>
-                    )}
+                    <table className="table table-sm">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <h3>Seriousness of Adverse Event</h3>
+                          </td>
+                          <td>
+                            <h3>Outcomes (check all that apply)</h3>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            {" "}
+                            <div className="form-group mb-3 col-md-6">
+                              <FormGroup>
+                                <label>
+                                  <input
+                                    type="checkbox"
+                                    name="death"
+                                    checked={adverseEffect.death}
+                                    onChange={handleAdverseInputChange}
+                                  />{" "}
+                                  Death
+                                </label>
+                              </FormGroup>
+                            </div>
+                          </td>
+                          <td>
+                            {" "}
+                            {adverseEffect.eventDescription === "" ? (
+                              ""
+                            ) : (
+                              <div className="form-group  col-md-6">
+                                <FormGroup>
+                                  <Label>
+                                    Outcomes{" "}
+                                    <span style={{ color: "red" }}>*</span>
+                                  </Label>
+                                  <select
+                                    className="form-control"
+                                    type="text"
+                                    name="outcomes"
+                                    id="outcomes"
+                                    style={{ border: "1px solid #014d88" }}
+                                    value={adverseEffect.outcomes}
+                                    onChange={handleAdverseInputChange}
+                                  >
+                                    <option value="">
+                                      --Please choose an option--
+                                    </option>
+                                    {outcomes?.map((outcome, index) => (
+                                      <option
+                                        key={outcome.id}
+                                        value={outcome.id}
+                                      >
+                                        {outcome.display}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </FormGroup>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
 
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="stop_date">
-                          Stop Date of Event{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="date"
-                          name="stop_date"
-                          id="stop_date"
-                          value={adverseEffect.stop_date}
-                          onChange={handleAdverseInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
+                        <tr>
+                          <td>
+                            {" "}
+                            <div className="form-group mb-3 col-md-6">
+                              <FormGroup>
+                                <label>
+                                  <input
+                                    type="checkbox"
+                                    name="life_threatening"
+                                    checked={adverseEffect.life_threatening}
+                                    onChange={handleAdverseInputChange}
+                                  />{" "}
+                                  Life threatening
+                                </label>
+                              </FormGroup>
+                            </div>
+                          </td>
+                          <td>
+                            {" "}
+                            {adverseEffect.outcomes === "1616" ? (
+                              <div className="form-group mb-3 col-md-6">
+                                <FormGroup>
+                                  <Label for="outcomes_others_description">
+                                    Outcomes Others Description{" "}
+                                    <span style={{ color: "red" }}>*</span>
+                                  </Label>
+                                  <textarea
+                                    className="form-control"
+                                    type="text"
+                                    name="outcomes_others_description"
+                                    id="outcomes_others_description"
+                                    value={
+                                      adverseEffect.outcomes_others_description
+                                    }
+                                    onChange={handleAdverseInputChange}
+                                    style={{
+                                      border: "1px solid #014d88",
+                                    }}
+                                  />
+                                </FormGroup>
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            {" "}
+                            <div className="form-group mb-3 col-md-6">
+                              <FormGroup>
+                                <label>Hospitalization: </label>
+                                <select
+                                  className="form-control"
+                                  type="text"
+                                  name="hospitalization"
+                                  id="hospitalization"
+                                  value={adverseEffect.hospitalization}
+                                  style={{ border: "1px solid #014d88" }}
+                                  onChange={handleAdverseInputChange}
+                                >
+                                  <option value="">
+                                    --Please choose an option--
+                                  </option>
+                                  <option value="Initial">Initial</option>
+                                  <option value="Prolonged">Prolonged</option>
+                                </select>
+                              </FormGroup>
+                            </div>
+                          </td>
+                          <td>
+                            {adverseEffect.outcomes === "" ? (
+                              ""
+                            ) : (
+                              <div className="form-group mb-3 col-md-6">
+                                <FormGroup>
+                                  <Label for="onset_date">
+                                    Onset Date of Event{" "}
+                                    <span style={{ color: "red" }}>*</span>
+                                  </Label>
+                                  <input
+                                    className="form-control"
+                                    type="date"
+                                    name="onset_date"
+                                    id="onset_date"
+                                    value={adverseEffect.onset_date}
+                                    onChange={handleAdverseInputChange}
+                                    style={{ border: "1px solid #014d88" }}
+                                  />
+                                </FormGroup>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            {" "}
+                            <div className="form-group mb-3 col-md-6">
+                              <FormGroup>
+                                <label>
+                                  <input
+                                    type="checkbox"
+                                    name="disability"
+                                    checked={adverseEffect.disability}
+                                    onChange={handleAdverseInputChange}
+                                  />{" "}
+                                  Disability or Permanent Damage
+                                </label>
+                              </FormGroup>
+                            </div>
+                          </td>
+                          <td>
+                            {" "}
+                            <div className="form-group mb-3 col-md-6">
+                              <FormGroup>
+                                <Label for="stop_date">
+                                  Stop Date of Event{" "}
+                                  <span style={{ color: "red" }}>*</span>
+                                </Label>
+                                <input
+                                  className="form-control"
+                                  type="date"
+                                  name="stop_date"
+                                  id="stop_date"
+                                  value={adverseEffect.stop_date}
+                                  onChange={handleAdverseInputChange}
+                                  style={{ border: "1px solid #014d88" }}
+                                />
+                              </FormGroup>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            {" "}
+                            <div className="form-group mb-3 col-md-6">
+                              <FormGroup>
+                                <label>
+                                  <input
+                                    type="checkbox"
+                                    name="anomaly"
+                                    checked={adverseEffect.anomaly}
+                                    onChange={handleAdverseInputChange}
+                                  />{" "}
+                                  Congenital Anomaly/Birth Defects
+                                </label>
+                              </FormGroup>
+                            </div>
+                          </td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            {" "}
+                            <div className="form-group mb-3 col-md-6">
+                              <FormGroup>
+                                <label>
+                                  <input
+                                    type="checkbox"
+                                    name="intervention"
+                                    checked={adverseEffect.intervention}
+                                    onChange={handleAdverseInputChange}
+                                  />{" "}
+                                  Require Intervention to Permanent Impairment
+                                  or Disability (Devices)
+                                </label>
+                              </FormGroup>
+                            </div>
+                          </td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            {" "}
+                            <div className="form-group mb-3 col-md-6">
+                              <FormGroup>
+                                <label>
+                                  <input
+                                    type="checkbox"
+                                    name="others"
+                                    checked={handleAdverseInputChange.others}
+                                    onChange={handleAdverseInputChange}
+                                  />{" "}
+                                  Others
+                                </label>
+                              </FormGroup>
+                            </div>
+                          </td>
+                          <td>
+                            {" "}
+                            {adverseEffect.others === false ? (
+                              " "
+                            ) : (
+                              <div className="form-group mb-3 col-md-6">
+                                <FormGroup>
+                                  <Label for="others_description">
+                                    Others Description{" "}
+                                    <span style={{ color: "red" }}>*</span>
+                                  </Label>
+                                  <textarea
+                                    className="form-control"
+                                    type="text"
+                                    name="others_description"
+                                    id="others_description"
+                                    value={adverseEffect.others_description}
+                                    onChange={handleAdverseInputChange}
+                                    style={{
+                                      border: "1px solid #014d88",
+                                    }}
+                                  />
+                                </FormGroup>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            {" "}
+                            {adverseEffect.death === false ? (
+                              ""
+                            ) : (
+                              <div className="form-group mb-3 col-md-6">
+                                <FormGroup>
+                                  <Label for="death_date">
+                                    Death Date{" "}
+                                    <span style={{ color: "red" }}>*</span>
+                                  </Label>
+                                  <input
+                                    className="form-control"
+                                    type="date"
+                                    name="death_date"
+                                    id="death_date"
+                                    value={adverseEffect.death_date}
+                                    onChange={handleAdverseInputChange}
+                                    style={{ border: "1px solid #014d88" }}
+                                  />
+                                </FormGroup>
+                              </div>
+                            )}
+                          </td>
+                          <td></td>
+                        </tr>
+                        {/* <tr>
+                          <td>Mark</td>
+                          <td>Otto</td>
+                        </tr> */}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
@@ -1156,6 +1263,30 @@ function ADRForm() {
                         </select>
                       </FormGroup>
                     </div>
+                    {concomitantMedicines.preexisting_medical_conditions !==
+                    "1625" ? (
+                      ""
+                    ) : (
+                      <div className="form-group mb-3 col-md-4">
+                        <FormGroup>
+                          <Label for="preexisting_medical_others">
+                            Preexisting Medical Other Description{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </Label>
+                          <textarea
+                            className="form-control"
+                            type="text"
+                            name="preexisting_medical_others"
+                            id="preexisting_medical_others"
+                            value={adverseEffect.preexisting_medical_others}
+                            onChange={handleMedicineInputChange}
+                            style={{
+                              border: "1px solid #014d88",
+                            }}
+                          />
+                        </FormGroup>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -1229,6 +1360,22 @@ function ADRForm() {
                     </div>
                     <div className="form-group mb-3 col-md-4">
                       <FormGroup>
+                        <Label for="country">
+                          Country <span style={{ color: "red" }}>*</span>
+                        </Label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="country"
+                          id="country"
+                          value={reporter.country}
+                          onChange={handleReporterInputChange}
+                          style={{ border: "1px solid #014d88" }}
+                        />
+                      </FormGroup>
+                    </div>
+                    <div className="form-group mb-3 col-md-4">
+                      <FormGroup>
                         <Label for="onset_date">
                           City <span style={{ color: "red" }}>*</span>
                         </Label>
@@ -1270,6 +1417,22 @@ function ADRForm() {
                           name="phone"
                           id="phone"
                           value={reporter.phone}
+                          onChange={handleReporterInputChange}
+                          style={{ border: "1px solid #014d88" }}
+                        />
+                      </FormGroup>
+                    </div>
+                    <div className="form-group  col-md-4">
+                      <FormGroup>
+                        <Label>
+                          Email <span style={{ color: "red" }}>*</span>
+                        </Label>
+                        <input
+                          className="form-control"
+                          type="email"
+                          name="email"
+                          id="email"
+                          value={reporter.email}
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
