@@ -10,6 +10,8 @@ import { TiArrowBack } from "react-icons/ti";
 import { Form, FormGroup, Label, Spinner } from "reactstrap";
 import SaveIcon from "@material-ui/icons/Save";
 import { token, url as baseUrl } from "../../api";
+import Drug from "./Drug";
+import DrugMedicine from "./DrugMedicine";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -74,7 +76,7 @@ function ADRForm() {
   const classes = useStyles();
   const [saving, setSaving] = useState(false);
   const [outcomes, setOutcomes] = useState([]);
-  const [drugs, setDrugs] = useState([]);
+
   const [relevant, setRelevant] = useState([]);
   let { state } = useLocation();
   const history = useNavigate();
@@ -99,15 +101,6 @@ function ADRForm() {
     } catch (e) {}
   }, []);
 
-  const adrDrugs = useCallback(async () => {
-    try {
-      const response = await axios.get(
-        `${baseUrl}application-codesets/v2/ADR_DRUG_TYPE`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setDrugs(response.data.sort());
-    } catch (e) {}
-  }, []);
   const adrRelevant = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -120,7 +113,6 @@ function ADRForm() {
 
   useEffect(() => {
     adrOutcomes();
-    adrDrugs();
     adrRelevant();
   }, []);
 
@@ -154,14 +146,6 @@ function ADRForm() {
   });
 
   const [severeDrugs, setSevereDrugs] = useState({
-    drug_type: "",
-    brand_name: "",
-    generic_name: "",
-    manufacturer_name: "",
-    manufacturer_address: "",
-    batch_no: "",
-    nafdac_no: "",
-    expiry_date: "",
     dosage: "",
     frequency: "",
     administration_route: "",
@@ -240,17 +224,46 @@ function ADRForm() {
   };
 
   const submitForm = () => {
+    const drugs = JSON.parse(localStorage.getItem("severeDrugs"));
+    const medicines = JSON.parse(localStorage.getItem("medicine"));
+
+    const severeDrugData = {
+      drugs: drugs,
+      dosage: severeDrugs.dosage,
+      frequency: severeDrugs.frequency,
+      administration_route: severeDrugs.administration_route,
+      date_medication_started: severeDrugs.date_medication_started,
+      date_medication_stop: severeDrugs.date_medication_stop,
+      reaction_stopped: severeDrugs.reaction_stopped,
+      reaction_reappeared: severeDrugs.reaction_reappeared,
+    };
+
+    const medicationData = {
+      medicines: medicines,
+      relevant_test: concomitantMedicines.relevant_test,
+      relevant_test_date: concomitantMedicines.relevant_test_date,
+      relevant_result: concomitantMedicines.relevant_result,
+      relevant_result_date: concomitantMedicines.relevant_result_date,
+      preexisting_medical_conditions:
+        concomitantMedicines.preexisting_medical_conditions,
+      preexisting_medical_others:
+        concomitantMedicines.preexisting_medical_others,
+    };
+
     const adrPayload = {
       patientUUID: uuid,
       weight: bioData.weight,
       facilityId: organization?.id,
       adverseEffect: adverseEffect,
-      severeDrugs: severeDrugs,
-      concomitantMedicines: concomitantMedicines,
+      severeDrugs: severeDrugData,
+      concomitantMedicines: medicationData,
       reporter: reporter,
     };
 
     console.log(adrPayload);
+
+    localStorage.removeItem("severeDrugs");
+    localStorage.removeItem("medicine");
     history("/");
   };
 
@@ -435,7 +448,6 @@ function ADRForm() {
                         />
                       </FormGroup>
                     </div>
-
                     <table className="table table-sm">
                       <tbody>
                         <tr>
@@ -459,6 +471,90 @@ function ADRForm() {
                                     onChange={handleAdverseInputChange}
                                   />{" "}
                                   Death
+                                </label>
+                              </FormGroup>
+                            </div>
+                          </td>
+                          <td></td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            {" "}
+                            <div className="form-group mb-3 col-md-6">
+                              <FormGroup>
+                                <label>
+                                  <input
+                                    type="checkbox"
+                                    name="life_threatening"
+                                    checked={adverseEffect.life_threatening}
+                                    onChange={handleAdverseInputChange}
+                                  />{" "}
+                                  Life threatening
+                                </label>
+                              </FormGroup>
+                            </div>
+                          </td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            {" "}
+                            <div className="form-group mb-3 col-md-6">
+                              <FormGroup>
+                                <label>Hospitalization: </label>
+                                <select
+                                  className="form-control"
+                                  type="text"
+                                  name="hospitalization"
+                                  id="hospitalization"
+                                  value={adverseEffect.hospitalization}
+                                  style={{ border: "1px solid #014d88" }}
+                                  onChange={handleAdverseInputChange}
+                                >
+                                  <option value="">
+                                    --Please choose an option--
+                                  </option>
+                                  <option value="Initial">Initial</option>
+                                  <option value="Prolonged">Prolonged</option>
+                                </select>
+                              </FormGroup>
+                            </div>
+                          </td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            {" "}
+                            <div className="form-group mb-3 col-md-6">
+                              <FormGroup>
+                                <label>
+                                  <input
+                                    type="checkbox"
+                                    name="disability"
+                                    checked={adverseEffect.disability}
+                                    onChange={handleAdverseInputChange}
+                                  />{" "}
+                                  Disability or Permanent Damage
+                                </label>
+                              </FormGroup>
+                            </div>
+                          </td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            {" "}
+                            <div className="form-group mb-3 col-md-6">
+                              <FormGroup>
+                                <label>
+                                  <input
+                                    type="checkbox"
+                                    name="anomaly"
+                                    checked={adverseEffect.anomaly}
+                                    onChange={handleAdverseInputChange}
+                                  />{" "}
+                                  Congenital Anomaly/Birth Defects
                                 </label>
                               </FormGroup>
                             </div>
@@ -500,7 +596,6 @@ function ADRForm() {
                             )}
                           </td>
                         </tr>
-
                         <tr>
                           <td>
                             {" "}
@@ -509,69 +604,18 @@ function ADRForm() {
                                 <label>
                                   <input
                                     type="checkbox"
-                                    name="life_threatening"
-                                    checked={adverseEffect.life_threatening}
+                                    name="intervention"
+                                    checked={adverseEffect.intervention}
                                     onChange={handleAdverseInputChange}
                                   />{" "}
-                                  Life threatening
+                                  Require Intervention to Permanent Impairment
+                                  or Disability (Devices)
                                 </label>
                               </FormGroup>
                             </div>
                           </td>
                           <td>
                             {" "}
-                            {adverseEffect.outcomes === "1616" ? (
-                              <div className="form-group mb-3 col-md-6">
-                                <FormGroup>
-                                  <Label for="outcomes_others_description">
-                                    Outcomes Others Description{" "}
-                                    <span style={{ color: "red" }}>*</span>
-                                  </Label>
-                                  <textarea
-                                    className="form-control"
-                                    type="text"
-                                    name="outcomes_others_description"
-                                    id="outcomes_others_description"
-                                    value={
-                                      adverseEffect.outcomes_others_description
-                                    }
-                                    onChange={handleAdverseInputChange}
-                                    style={{
-                                      border: "1px solid #014d88",
-                                    }}
-                                  />
-                                </FormGroup>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            <div className="form-group mb-3 col-md-6">
-                              <FormGroup>
-                                <label>Hospitalization: </label>
-                                <select
-                                  className="form-control"
-                                  type="text"
-                                  name="hospitalization"
-                                  id="hospitalization"
-                                  value={adverseEffect.hospitalization}
-                                  style={{ border: "1px solid #014d88" }}
-                                  onChange={handleAdverseInputChange}
-                                >
-                                  <option value="">
-                                    --Please choose an option--
-                                  </option>
-                                  <option value="Initial">Initial</option>
-                                  <option value="Prolonged">Prolonged</option>
-                                </select>
-                              </FormGroup>
-                            </div>
-                          </td>
-                          <td>
                             {adverseEffect.outcomes === "" ? (
                               ""
                             ) : (
@@ -603,11 +647,11 @@ function ADRForm() {
                                 <label>
                                   <input
                                     type="checkbox"
-                                    name="disability"
-                                    checked={adverseEffect.disability}
+                                    name="others"
+                                    checked={handleAdverseInputChange.others}
                                     onChange={handleAdverseInputChange}
                                   />{" "}
-                                  Disability or Permanent Damage
+                                  Others
                                 </label>
                               </FormGroup>
                             </div>
@@ -631,89 +675,6 @@ function ADRForm() {
                                 />
                               </FormGroup>
                             </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            <div className="form-group mb-3 col-md-6">
-                              <FormGroup>
-                                <label>
-                                  <input
-                                    type="checkbox"
-                                    name="anomaly"
-                                    checked={adverseEffect.anomaly}
-                                    onChange={handleAdverseInputChange}
-                                  />{" "}
-                                  Congenital Anomaly/Birth Defects
-                                </label>
-                              </FormGroup>
-                            </div>
-                          </td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            <div className="form-group mb-3 col-md-6">
-                              <FormGroup>
-                                <label>
-                                  <input
-                                    type="checkbox"
-                                    name="intervention"
-                                    checked={adverseEffect.intervention}
-                                    onChange={handleAdverseInputChange}
-                                  />{" "}
-                                  Require Intervention to Permanent Impairment
-                                  or Disability (Devices)
-                                </label>
-                              </FormGroup>
-                            </div>
-                          </td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            <div className="form-group mb-3 col-md-6">
-                              <FormGroup>
-                                <label>
-                                  <input
-                                    type="checkbox"
-                                    name="others"
-                                    checked={handleAdverseInputChange.others}
-                                    onChange={handleAdverseInputChange}
-                                  />{" "}
-                                  Others
-                                </label>
-                              </FormGroup>
-                            </div>
-                          </td>
-                          <td>
-                            {" "}
-                            {adverseEffect.others === false ? (
-                              " "
-                            ) : (
-                              <div className="form-group mb-3 col-md-6">
-                                <FormGroup>
-                                  <Label for="others_description">
-                                    Others Description{" "}
-                                    <span style={{ color: "red" }}>*</span>
-                                  </Label>
-                                  <textarea
-                                    className="form-control"
-                                    type="text"
-                                    name="others_description"
-                                    id="others_description"
-                                    value={adverseEffect.others_description}
-                                    onChange={handleAdverseInputChange}
-                                    style={{
-                                      border: "1px solid #014d88",
-                                    }}
-                                  />
-                                </FormGroup>
-                              </div>
-                            )}
                           </td>
                         </tr>
                         <tr>
@@ -749,6 +710,54 @@ function ADRForm() {
                         </tr> */}
                       </tbody>
                     </table>
+                    {/* <row> */}{" "}
+                    {adverseEffect.others === false ? (
+                      " "
+                    ) : (
+                      <div className="form-group mb-3 col-md-6">
+                        <FormGroup>
+                          <Label for="others_description">
+                            Others Description{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </Label>
+                          <textarea
+                            className="form-control"
+                            type="text"
+                            name="others_description"
+                            id="others_description"
+                            value={adverseEffect.others_description}
+                            onChange={handleAdverseInputChange}
+                            style={{
+                              border: "1px solid #014d88",
+                            }}
+                          />
+                        </FormGroup>
+                      </div>
+                    )}{" "}
+                    {adverseEffect.outcomes === "1616" ? (
+                      <div className="form-group mb-3 col-md-6">
+                        <FormGroup>
+                          <Label for="outcomes_others_description">
+                            Outcomes Others Description{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </Label>
+                          <textarea
+                            className="form-control"
+                            type="text"
+                            name="outcomes_others_description"
+                            id="outcomes_others_description"
+                            value={adverseEffect.outcomes_others_description}
+                            onChange={handleAdverseInputChange}
+                            style={{
+                              border: "1px solid #014d88",
+                            }}
+                          />
+                        </FormGroup>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    {/* </row> */}
                   </div>
                 </div>
               </div>
@@ -774,144 +783,7 @@ function ADRForm() {
                 <div className="basic-form">
                   <div className="row">
                     <h3>Product Details</h3>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Drug Type <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <select
-                          className="form-control"
-                          type="text"
-                          name="drug_type"
-                          id="drug_type"
-                          style={{ border: "1px solid #014d88" }}
-                          value={severeDrugs.drug_type}
-                          onChange={handleSevereInputChange}
-                        >
-                          <option value="">--Please choose an option--</option>
-                          {drugs.map((drug, index) => (
-                            <option key={drug.id} value={drug.id}>
-                              {drug.display}
-                            </option>
-                          ))}
-                        </select>
-                      </FormGroup>
-                    </div>
-
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Brand name <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="brand_name"
-                          id="brand_name"
-                          value={severeDrugs.brand_name}
-                          onChange={handleSevereInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Generic name <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="generic_name"
-                          id="generic_name"
-                          value={severeDrugs.generic_name}
-                          onChange={handleSevereInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Name of manufacturer{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="manufacturer_name"
-                          id="manufacturer_name"
-                          value={severeDrugs.manufacturer_name}
-                          onChange={handleSevereInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Address of manufacturer{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="manufacturer_address"
-                          id="manufacturer_address"
-                          value={severeDrugs.manufacturer_address}
-                          onChange={handleSevereInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Batch No <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="batch_no"
-                          id="batch_no"
-                          value={severeDrugs.batch_no}
-                          onChange={handleSevereInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          NAFDAC No <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="nafdac_no"
-                          id="nafdac_no"
-                          value={severeDrugs.nafdac_no}
-                          onChange={handleSevereInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-3">
-                      <FormGroup>
-                        <Label for="onset_date">
-                          Expiry Date <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="date"
-                          name="expiry_date"
-                          id="expiry_date"
-                          value={severeDrugs.expiry_date}
-                          onChange={handleSevereInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
+                    <Drug />
                     <h3>Indication for use (Diagnosis)</h3>
                     <div className="form-group  col-md-4">
                       <FormGroup>
@@ -1065,108 +937,8 @@ function ADRForm() {
                 <div className="basic-form">
                   <div className="row">
                     <h3>All medicines taken within the last 3 months</h3>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Brand or Generic name{" "}
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="concomitant_brand_name"
-                          id="concomitant_brand_name"
-                          value={concomitantMedicines.concomitant_brand_name}
-                          onChange={handleMedicineInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Dosage
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="concomitant_dosage"
-                          id="concomitant_dosage"
-                          value={concomitantMedicines.concomitant_dosage}
-                          onChange={handleMedicineInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Route
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="concomitant_route"
-                          id="concomitant_route"
-                          value={concomitantMedicines.concomitant_route}
-                          onChange={handleMedicineInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="onset_date">
-                          Date started
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="date"
-                          name="date_concomitant_started"
-                          id="date_concomitant_started"
-                          value={concomitantMedicines.date_concomitant_started}
-                          onChange={handleMedicineInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="date_concomitant_stopped">
-                          Date stopped
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="date"
-                          name="date_concomitant_stopped"
-                          id="date_concomitant_stopped"
-                          value={concomitantMedicines.date_concomitant_stopped}
-                          onChange={handleMedicineInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Reason for Use
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="concomitant_reason_use"
-                          id="concomitant_reason_use"
-                          value={concomitantMedicines.concomitant_reason_use}
-                          onChange={handleMedicineInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
+
+                    <DrugMedicine />
                     <h3>Relevant Tests/Laboratory Data with Dates</h3>
                     <div className="form-group  col-md-3">
                       <FormGroup>
