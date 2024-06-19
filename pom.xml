@@ -14,8 +14,8 @@
 	<artifactId>ADR_module</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
-	<name>DHIS2_module</name>
-	<description>dhis2 module</description>
+	<name>ADR_module</name>
+	<description>adr module</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -306,7 +306,7 @@
 						<phase>generate-resources</phase>
 						<configuration>
 							<target>
-								<copy todir="${project.build.directory}/classes/views/static/dhis2">
+								<copy todir="${project.build.directory}/classes/views/static/adr">
 									<fileset dir="${project.basedir}/build" />
 								</copy>
 							</target>
