@@ -81,6 +81,7 @@ function Home(props) {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
+        console.log(response)
         setPermissions(response.data.permissions);
       })
       .catch((error) => {});
