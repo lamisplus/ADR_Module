@@ -23,6 +23,6 @@ public interface ADRRepository extends JpaRepository<ADR, Long> {
     @Query(value = "SELECT p.uuid,p.hospital_Number, p.first_Name, p.surname, p.sex, adr.*\n" +
             "            FROM adr_table adr \n" +
             "            JOIN patient_person p on p.uuid=adr.patient_uuid",nativeQuery = true)
-    List<Object[]> getAllPatientAdr();
+    List<ADR> getAllPatientAdr();
 
 }
