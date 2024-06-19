@@ -70,9 +70,9 @@ public class ADRService {
     }
 
 
-    public List<Object[]> getPatientDataByAdr(String patientUuid){
+    public List<PatientDetails> getPatientDataByAdr(String patientUuid){
 
-        List<Object[]> patientDataByAdr = adrRepository.findPatientDataByAdr(patientUuid);
+        List<PatientDetails> patientDataByAdr = adrRepository.findPatientDataByAdr(patientUuid);
 
         if (patientDataByAdr.isEmpty()) {
             throw new ADRNotFoundException("No patient data found for ADR with patient ID " + patientUuid);
@@ -117,7 +117,7 @@ public class ADRService {
 
     public ApiResponse getAllAdrs( ){
 
-        List<ADR> adrList = adrRepository.findAll();
+        List<PatientDetails> adrList = adrRepository.getAllPatientAdr();
         log.info("adr list: {}", adrList);
 
         if(adrList.isEmpty()){
