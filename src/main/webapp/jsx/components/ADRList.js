@@ -101,7 +101,7 @@ const AList = (props) => {
             });
           } else {
             resolve({
-              data: result.data.records.map((row) => ({
+              data: result.data.details.map((row) => ({
                 name: "",
                 id: "",
                 sex: "",
@@ -109,7 +109,7 @@ const AList = (props) => {
                 age: "",
                 actions: (
                   <div>
-                    <Link to="/adr-form" state={{ patientInfo: row }}>
+                    <Link to="/edit-adr-form" state={{ patientInfo: row }}>
                       <Button className="btn btn-info">Edit Form</Button>
                     </Link>
                   </div>

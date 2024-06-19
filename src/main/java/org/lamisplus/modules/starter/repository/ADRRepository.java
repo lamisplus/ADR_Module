@@ -14,16 +14,15 @@ import java.util.Optional;
 public interface ADRRepository extends JpaRepository<ADR, Long> {
     Optional<ADR> findByPatientUuid(String patientUuid);
 
-    @Query(value = "SELECT adr.patient_uuid,p.hospital_Number, p.first_Name, p.surname, p.sex " +
-            "FROM adr_table adr " +
-            "JOIN patient_person p on p.uuid=adr.patient_uuid",nativeQuery = true)
-    List<PatientDetails> findPatientDataByAdr(@Param("patientUuid") String patientUuid);
+    @Query(value = "SELECT p.hospital_Number, p.first_Name, p.surname, p.sex " +
+        "FROM adr_table adr " +
+        "JOIN patient_person p on p.uuid=adr.patient_uuid " +
+        "WHERE adr.patient_uuid = :patientUuid", nativeQuery = true)
+    List<ADR> findPatientDataByAdr(@Param("patientUuid") String patientUuid);
 
-    @Query(value = "SELECT adr.patient_uuid,p.hospital_Number, p.first_Name, p.surname, p.sex " +
-            "FROM adr_table adr " +
-            "JOIN patient_person p on p.uuid=adr.patient_uuid",nativeQuery = true)
-    List<PatientDetails> getAllPatientAdr();
-
-
+    @Query(value = "SELECT p.uuid,p.hospital_Number, p.first_Name, p.surname, p.sex, adr.*\n" +
+            "            FROM adr_table adr \n" +
+            "            JOIN patient_person p on p.uuid=adr.patient_uuid",nativeQuery = true)
+    List<Object[]> getAllPatientAdr();
 
 }

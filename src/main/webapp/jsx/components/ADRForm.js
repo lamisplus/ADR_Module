@@ -587,8 +587,8 @@ function ADRForm() {
                                     </option>
                                     {outcomes?.map((outcome, index) => (
                                       <option
-                                        key={outcome.id}
-                                        value={outcome.id}
+                                        key={outcome.code}
+                                        value={outcome.code}
                                       >
                                         {outcome.display}
                                       </option>
@@ -737,7 +737,8 @@ function ADRForm() {
                         </FormGroup>
                       </div>
                     )}{" "}
-                    {adverseEffect.outcomes === "1616" ? (
+                    {adverseEffect.outcomes ===
+                    "ADVERSE_EVENT_OUTCOME_OTHERS_(SPECIFY)" ? (
                       <div className="form-group mb-3 col-md-6">
                         <FormGroup>
                           <Label for="outcomesOtherDescription">
@@ -1031,7 +1032,7 @@ function ADRForm() {
                         >
                           <option value="">--Please choose an option--</option>
                           {relevant.map((outcome, index) => (
-                            <option key={outcome.id} value={outcome.id}>
+                            <option key={outcome.code} value={outcome.code}>
                               {outcome.display}
                             </option>
                           ))}
@@ -1039,7 +1040,7 @@ function ADRForm() {
                       </FormGroup>
                     </div>
                     {concomitantMedicines.preexistingMedicalConditions !==
-                    "1625" ? (
+                    "ADR_PREEXISTING_MEDICAL_CONDITIONS_OTHERS_(SPECIFY)" ? (
                       ""
                     ) : (
                       <div className="form-group mb-3 col-md-4">

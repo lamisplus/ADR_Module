@@ -20,6 +20,7 @@ org\lamisplus\modules\starter\domain\dto\ADRRequest$ADRRequestBuilder.class
 org\lamisplus\modules\starter\domain\dto\Drug.class
 org\lamisplus\modules\starter\domain\dto\SevereDrug.class
 org\lamisplus\modules\starter\service\ADRService.class
+org\lamisplus\modules\starter\domain\dto\PatientDetails.class
 org\lamisplus\modules\starter\domain\dto\Medicine.class
 org\lamisplus\modules\starter\exeception\ADRAlreadyExistException.class
 org\lamisplus\modules\starter\controller\ADRController.class

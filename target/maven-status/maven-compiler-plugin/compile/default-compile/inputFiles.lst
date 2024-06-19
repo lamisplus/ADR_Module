@@ -6,6 +6,7 @@ C:\Users\victor.ajor\Lamisplus_public\ADR_Module\src\main\java\org\lamisplus\mod
 C:\Users\victor.ajor\Lamisplus_public\ADR_Module\src\main\java\org\lamisplus\modules\starter\installers\ADRSchemaInstaller.java
 C:\Users\victor.ajor\Lamisplus_public\ADR_Module\src\main\java\org\lamisplus\modules\starter\domain\dto\ConcomitantMedicines.java
 C:\Users\victor.ajor\Lamisplus_public\ADR_Module\src\main\java\org\lamisplus\modules\starter\domain\dto\AdverseEffect.java
+C:\Users\victor.ajor\Lamisplus_public\ADR_Module\src\main\java\org\lamisplus\modules\starter\domain\dto\PatientDetails.java
 C:\Users\victor.ajor\Lamisplus_public\ADR_Module\src\main\java\org\lamisplus\modules\starter\ADRModule.java
 C:\Users\victor.ajor\Lamisplus_public\ADR_Module\src\main\java\org\lamisplus\modules\starter\exeception\ADRAlreadyExistException.java
 C:\Users\victor.ajor\Lamisplus_public\ADR_Module\src\main\java\org\lamisplus\modules\starter\controller\ADRController.java

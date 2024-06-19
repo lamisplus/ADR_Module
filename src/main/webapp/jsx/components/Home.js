@@ -97,14 +97,14 @@ function Home(props) {
         </Tab.Pane>
       ),
     },
-    {
-      menuItem: "ADR",
-      render: () => (
-        <Tab.Pane>
-          <ADRList permissions={permissions} />
-        </Tab.Pane>
-      ),
-    },
+    // {
+    //   menuItem: "ADR",
+    //   render: () => (
+    //     <Tab.Pane>
+    //       <ADRList permissions={permissions} />
+    //     </Tab.Pane>
+    //   ),
+    // },
   ];
 
   return (

@@ -8,8 +8,10 @@ import javax.persistence.*;
 
 import lombok.*;
 import org.hibernate.annotations.Type;
+import org.lamisplus.modules.patient.domain.Patient;
 import org.springframework.data.domain.Persistable;
 import com.fasterxml.jackson.databind.JsonNode;
+import javax.persistence.Entity;
 
 @Entity
 @Getter
@@ -49,5 +51,4 @@ public class ADR extends ADRAuditEntity implements Persistable<Long>, Serializab
         // TODO Auto-generated method stub
         return id == null;
     }
-
 }

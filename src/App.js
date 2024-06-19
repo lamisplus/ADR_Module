@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./main/webapp/vendor/bootstrap-select/dist/css/bootstrap-select.min.css";
 import "./../src/main/webapp/css/style.css";
 import "bootstrap/dist/css/bootstrap.css";
 import Home from "./main/webapp/jsx/components/Home";
 import ADRForm from "./main/webapp/jsx/components/ADRForm";
+import EditForm from "./main/webapp/jsx/components/EditForm";
 
 export default function App() {
   return (
@@ -15,6 +15,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/adr-form" element={<ADRForm />} />
+        <Route path="/edit-adr-form" element={<EditForm />} />
       </Routes>
     </BrowserRouter>
   );
