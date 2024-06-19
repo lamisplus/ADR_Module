@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ADRRepository extends JpaRepository<ADR, Long> {
-    Optional<ADR> findByPatientId(Long patientId);
+    Optional<ADR> findByPatientUuid(String patientUuid);
 }

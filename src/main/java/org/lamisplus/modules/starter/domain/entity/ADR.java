@@ -1,48 +1,53 @@
 package org.lamisplus.modules.starter.domain.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import java.io.Serializable;
+
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
+
+import lombok.*;
+import org.hibernate.annotations.Type;
+import org.springframework.data.domain.Persistable;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Table(name = "ADR_table")
-public class ADR {
+@Table(name = "adr_table")
+public class ADR extends ADRAuditEntity implements Persistable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false)
     private Long id;
-    @Column(name = "patient_id")
-    @NotNull(message = "PatientId must not be null")
-    private Long patientId;
+    @Column(name = "patient_uuid")
+    private String patientUuid;
     @Column(name = "weight")
-    @NotNull(message = "weight must not be null")
     private Integer weight;
-    @Embedded
-    @Column(name = "adverse_event")
-    private AdverseEvent adverseEvent;
-    @Embedded
-    @Column(name = "suspected_drug")
-    private SuspectedDrug suspectedDrug;
-    @Embedded
-    @Column(name = "concomitant_medicines")
-    private ConcomitantMedicines concomitantMedicines;
-    @Column(name = "relevant_test")
-    private String relevantTest;
-    @Column(name= "relevant_test_date")
-    @JsonFormat(pattern = "yyyy-mm-dd")
-    private Date relevantTestDate;
-    @Column(name= "preexisting_medical_conditions")
-    private String preexistingMedicalConditions;
-    @Embedded
-    @Column(name= "reporter")
-    @NotNull(message = "Reporter must not be null")
-    private Reporter reporter;
+    @Column(name = "facility_id")
+    private Long facilityID;
+    @Type(type = "jsonb-node")
+    @Column(columnDefinition = "jsonb", name = "adverse_effect", nullable = true)
+    private JsonNode adverseEffect;
+
+    @Type(type = "jsonb-node")
+    @Column(columnDefinition = "jsonb", name = "severe_drugs", nullable = true)
+    private JsonNode severeDrugs;
+
+    @Type(type = "jsonb-node")
+    @Column(columnDefinition = "jsonb", name = "concomitant_medicines", nullable = true)
+    private JsonNode concomitantMedicines;
+
+    @Type(type = "jsonb-node")
+    @Column(columnDefinition = "jsonb", name = "reporter", nullable = true)
+    private JsonNode reporter;
+
+    @Override
+    public boolean isNew() {
+        // TODO Auto-generated method stub
+        return id == null;
+    }
+
 }

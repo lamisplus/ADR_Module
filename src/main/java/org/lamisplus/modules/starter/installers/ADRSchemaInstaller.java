@@ -7,9 +7,9 @@ import org.springframework.core.annotation.Order;
 @Order(1)
 @Installer(name = "schema-installer-adr",
         description = "Installs the required adr tables",
-        version = 1)
+        version = 9)
 public class ADRSchemaInstaller extends AcrossLiquibaseInstaller {
     public ADRSchemaInstaller() {
-        super("classpath:installers/starter/dhis2Schema/adr-schema-1.xml");
+        super("classpath:installers/starter/adrSchema/adr-schema-1.xml");
     }
 }

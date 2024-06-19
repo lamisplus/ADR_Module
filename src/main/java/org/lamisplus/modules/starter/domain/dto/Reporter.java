@@ -5,13 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReporterDto {
+public class Reporter {
 
     private String lastName;
     private String firstName;
@@ -19,6 +18,8 @@ public class ReporterDto {
     private String city;
     private String state;
     private String phoneNumber;
-    private String professional;
+    private String healthProfessional;
     private String occupation;
+    private String country;
+    private String email;
 }
