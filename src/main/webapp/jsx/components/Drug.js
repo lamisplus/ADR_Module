@@ -11,14 +11,14 @@ const Drug = () => {
   const [storedValues, setStoredValues] = useState([]);
 
   const [severeDrugs, setSevereDrugs] = useState({
-    drug_type: "",
-    brand_name: "",
-    generic_name: "",
-    manufacturer_name: "",
-    manufacturer_address: "",
-    batch_no: "",
-    nafdac_no: "",
-    expiry_date: "",
+    drugType: "",
+    brandName: "",
+    genericName: "",
+    manufacturerName: "",
+    manufacturerAddress: "",
+    batchNo: "",
+    nafdacNo: "",
+    expiryDate: "",
   });
 
   const adrDrugs = useCallback(async () => {
@@ -55,14 +55,14 @@ const Drug = () => {
     localStorage.setItem("severeDrugs", JSON.stringify(newValues));
 
     setSevereDrugs({
-      drug_type: "",
-      brand_name: "",
-      generic_name: "",
-      manufacturer_name: "",
-      manufacturer_address: "",
-      batch_no: "",
-      nafdac_no: "",
-      expiry_date: "",
+      drugType: "",
+      brandName: "",
+      genericName: "",
+      manufacturerName: "",
+      manufacturerAddress: "",
+      batchNo: "",
+      nafdacNo: "",
+      expiryDate: "",
     });
   };
 
@@ -82,10 +82,10 @@ const Drug = () => {
           <select
             className="form-control"
             type="text"
-            name="drug_type"
-            id="drug_type"
+            name="drugType"
+            id="drugType"
             style={{ border: "1px solid #014d88" }}
-            value={severeDrugs.drug_type}
+            value={severeDrugs.drugType}
             onChange={handleSevereInputChange}
           >
             <option value="">--Please choose an option--</option>
@@ -105,9 +105,9 @@ const Drug = () => {
           <input
             className="form-control"
             type="text"
-            name="brand_name"
-            id="brand_name"
-            value={severeDrugs.brand_name}
+            name="brandName"
+            id="brandName"
+            value={severeDrugs.brandName}
             onChange={handleSevereInputChange}
             style={{ border: "1px solid #014d88" }}
           />
@@ -121,9 +121,9 @@ const Drug = () => {
           <input
             className="form-control"
             type="text"
-            name="generic_name"
-            id="generic_name"
-            value={severeDrugs.generic_name}
+            name="genericName"
+            id="genericName"
+            value={severeDrugs.genericName}
             onChange={handleSevereInputChange}
             style={{ border: "1px solid #014d88" }}
           />
@@ -137,9 +137,9 @@ const Drug = () => {
           <input
             className="form-control"
             type="text"
-            name="manufacturer_name"
-            id="manufacturer_name"
-            value={severeDrugs.manufacturer_name}
+            name="manufacturerName"
+            id="manufacturerName"
+            value={severeDrugs.manufacturerName}
             onChange={handleSevereInputChange}
             style={{ border: "1px solid #014d88" }}
           />
@@ -153,9 +153,9 @@ const Drug = () => {
           <input
             className="form-control"
             type="text"
-            name="manufacturer_address"
-            id="manufacturer_address"
-            value={severeDrugs.manufacturer_address}
+            name="manufacturerAddress"
+            id="manufacturerAddress"
+            value={severeDrugs.manufacturerAddress}
             onChange={handleSevereInputChange}
             style={{ border: "1px solid #014d88" }}
           />
@@ -169,9 +169,9 @@ const Drug = () => {
           <input
             className="form-control"
             type="text"
-            name="batch_no"
-            id="batch_no"
-            value={severeDrugs.batch_no}
+            name="batchNo"
+            id="batchNo"
+            value={severeDrugs.batchNo}
             onChange={handleSevereInputChange}
             style={{ border: "1px solid #014d88" }}
           />
@@ -185,9 +185,9 @@ const Drug = () => {
           <input
             className="form-control"
             type="text"
-            name="nafdac_no"
-            id="nafdac_no"
-            value={severeDrugs.nafdac_no}
+            name="nafdacNo"
+            id="nafdacNo"
+            value={severeDrugs.nafdacNo}
             onChange={handleSevereInputChange}
             style={{ border: "1px solid #014d88" }}
           />
@@ -201,9 +201,9 @@ const Drug = () => {
           <input
             className="form-control"
             type="date"
-            name="expiry_date"
-            id="expiry_date"
-            value={severeDrugs.expiry_date}
+            name="expiryDate"
+            id="expiryDate"
+            value={severeDrugs.expiryDate}
             onChange={handleSevereInputChange}
             style={{ border: "1px solid #014d88" }}
           />
@@ -228,7 +228,7 @@ const Drug = () => {
         <>
           <div className="col-xl-12 col-lg-12">
             <br />
-            <table className="table table-sm table-bordered table-responsive">
+            <table className="table table-bordered table-responsive">
               <thead>
                 <tr>
                   <th scope="col">Drug Type</th>
@@ -245,13 +245,13 @@ const Drug = () => {
               <tbody>
                 {storedValues.map((x, i) => (
                   <tr key={i}>
-                    <td>{x.drug_type}</td>
-                    <td>{x.brand_name}</td>
-                    <td>{x.generic_name}</td>
-                    <td>{x.manufacturer_name}</td>
-                    <td>{x.manufacturer_address}</td>
-                    <td>{x.batch_no}</td>
-                    <td>{x.nafdac_no}</td>
+                    <td>{x.drugType}</td>
+                    <td>{x.brandName}</td>
+                    <td>{x.genericName}</td>
+                    <td>{x.manufacturerName}</td>
+                    <td>{x.manufacturerAddress}</td>
+                    <td>{x.batchNo}</td>
+                    <td>{x.nafdacNo}</td>
                     <td>{x.expiry_date}</td>
                     <td>
                       <Button

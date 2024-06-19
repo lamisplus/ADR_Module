@@ -13,9 +13,9 @@ acrossHibernate:
     hibernate.show_sql: false
     hibernate.event.merge.enty_copy_observer: allow
 applicationInfo:
-  applicationId: dhis2
-  applicationName: DHIS2
-  buildDate: "2024-05-07T11:02:42Z"
+  applicationId: adr
+  applicationName: ADR
+  buildDate: "2024-06-19T10:40:28Z"
   buildId: "1.0.0-1.0.0"
 build:
   number: "1.0.0"
@@ -98,8 +98,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/lamisplus
-    password: agentboy
-    username: postgres
+    password: *
+    username: *
 
   jpa:
     database: POSTGRESQL
@@ -111,7 +111,7 @@ spring:
       hibernate.enable_lazy_load_no_trans: true
 
 remote:
-  lamis.url: http://localhost:8081/api/dhis2/
+  lamis.url: http://localhost:8081/api/adr/
 
 jwt:
   # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
@@ -119,10 +119,3 @@ jwt:
   # Token is valid 12 hours
   token-validity-in-milli-seconds: 43200000
   token-validity-in-milli-seconds-for-remember-me: 43200000
-
-dhis2:
-  baseUrl: https://play.dhis2.org/40.3.0/api
-  username: admin
-  password: district
-  readTimeout: 2000
-  connectTimeout: 2000

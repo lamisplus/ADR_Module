@@ -132,52 +132,47 @@ function ADRForm() {
   const [adverseEffect, setAdverseEffect] = useState({
     eventDescription: "",
     death: false,
-    life_threatening: false,
+    lifeThreatening: false,
     hospitalization: "",
-    death_date: "",
+    dateOfDeath: "",
     disability: false,
     anomaly: false,
     intervention: false,
     others: false,
-    others_description: "",
+    otherDescription: "",
     outcomes: "",
-    onset_date: "",
-    stop_date: "",
+    onsetDate: "",
+    stoppedDate: "",
+    outcomesOtherDescription: "",
   });
 
   const [severeDrugs, setSevereDrugs] = useState({
     dosage: "",
     frequency: "",
-    administration_route: "",
-    date_medication_started: "",
-    date_medication_stop: "",
-    reaction_stopped: "",
-    reaction_reappeared: "",
+    administrationRoute: "",
+    dateMedicationStarted: "",
+    dateMedicationStopped: "",
+    reactionReappeared: "",
+    reactionStopped: "",
   });
 
   const [concomitantMedicines, setConcomitantMedicines] = useState({
-    concomitant_brand_name: "",
-    concomitant_dosage: "",
-    concomitant_route: "",
-    date_concomitant_started: "",
-    date_concomitant_stopped: "",
-    concomitant_reason_use: "",
-    relevant_test: "",
-    relevant_test_date: "",
-    relevant_result: "",
-    relevant_result_date: "",
-    preexisting_medical_conditions: "",
-    preexisting_medical_others: "",
+    relevantTest: "",
+    relevantTestDate: "",
+    relevantResult: "",
+    relevantResultDate: "",
+    preexistingMedicalConditions: "",
+    preexistingMedicalOthers: "",
   });
 
   const [reporter, setReporter] = useState({
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     address: "",
     city: "",
     state: "",
     phone: "",
-    health_professional: "",
+    healthProfessional: "",
     occupation: "",
     country: "",
     email: "",
@@ -231,23 +226,22 @@ function ADRForm() {
       drugs: drugs,
       dosage: severeDrugs.dosage,
       frequency: severeDrugs.frequency,
-      administration_route: severeDrugs.administration_route,
-      date_medication_started: severeDrugs.date_medication_started,
-      date_medication_stop: severeDrugs.date_medication_stop,
-      reaction_stopped: severeDrugs.reaction_stopped,
-      reaction_reappeared: severeDrugs.reaction_reappeared,
+      administrationRoute: severeDrugs.administrationRoute,
+      dateMedicationStarted: severeDrugs.dateMedicationStarted,
+      dateMedicationStopped: severeDrugs.dateMedicationStopped,
+      reactionReappeared: severeDrugs.reactionReappeared,
+      reactionStopped: severeDrugs.reactionStopped,
     };
 
     const medicationData = {
       medicines: medicines,
-      relevant_test: concomitantMedicines.relevant_test,
-      relevant_test_date: concomitantMedicines.relevant_test_date,
-      relevant_result: concomitantMedicines.relevant_result,
-      relevant_result_date: concomitantMedicines.relevant_result_date,
-      preexisting_medical_conditions:
-        concomitantMedicines.preexisting_medical_conditions,
-      preexisting_medical_others:
-        concomitantMedicines.preexisting_medical_others,
+      relevantTest: concomitantMedicines.relevantTest,
+      relevantTestDate: concomitantMedicines.relevantTestDate,
+      relevantResult: concomitantMedicines.relevantResult,
+      relevantResultDate: concomitantMedicines.relevantResultDate,
+      preexistingMedicalConditions:
+        concomitantMedicines.preexistingMedicalConditions,
+      preexistingMedicalOthers: concomitantMedicines.preexistingMedicalOthers,
     };
 
     const adrPayload = {
@@ -486,8 +480,8 @@ function ADRForm() {
                                 <label>
                                   <input
                                     type="checkbox"
-                                    name="life_threatening"
-                                    checked={adverseEffect.life_threatening}
+                                    name="lifeThreatening"
+                                    checked={adverseEffect.lifeThreatening}
                                     onChange={handleAdverseInputChange}
                                   />{" "}
                                   Life threatening
@@ -621,16 +615,16 @@ function ADRForm() {
                             ) : (
                               <div className="form-group mb-3 col-md-6">
                                 <FormGroup>
-                                  <Label for="onset_date">
+                                  <Label for="onsetDate">
                                     Onset Date of Event{" "}
                                     <span style={{ color: "red" }}>*</span>
                                   </Label>
                                   <input
                                     className="form-control"
                                     type="date"
-                                    name="onset_date"
-                                    id="onset_date"
-                                    value={adverseEffect.onset_date}
+                                    name="onsetDate"
+                                    id="onsetDate"
+                                    value={adverseEffect.onsetDate}
                                     onChange={handleAdverseInputChange}
                                     style={{ border: "1px solid #014d88" }}
                                   />
@@ -660,16 +654,16 @@ function ADRForm() {
                             {" "}
                             <div className="form-group mb-3 col-md-6">
                               <FormGroup>
-                                <Label for="stop_date">
+                                <Label for="stoppedDate">
                                   Stop Date of Event{" "}
                                   <span style={{ color: "red" }}>*</span>
                                 </Label>
                                 <input
                                   className="form-control"
                                   type="date"
-                                  name="stop_date"
-                                  id="stop_date"
-                                  value={adverseEffect.stop_date}
+                                  name="stoppedDate"
+                                  id="stoppedDate"
+                                  value={adverseEffect.stoppedDate}
                                   onChange={handleAdverseInputChange}
                                   style={{ border: "1px solid #014d88" }}
                                 />
@@ -685,16 +679,16 @@ function ADRForm() {
                             ) : (
                               <div className="form-group mb-3 col-md-6">
                                 <FormGroup>
-                                  <Label for="death_date">
+                                  <Label for="dateOfDeath">
                                     Death Date{" "}
                                     <span style={{ color: "red" }}>*</span>
                                   </Label>
                                   <input
                                     className="form-control"
                                     type="date"
-                                    name="death_date"
-                                    id="death_date"
-                                    value={adverseEffect.death_date}
+                                    name="dateOfDeath"
+                                    id="dateOfDeath"
+                                    value={adverseEffect.dateOfDeath}
                                     onChange={handleAdverseInputChange}
                                     style={{ border: "1px solid #014d88" }}
                                   />
@@ -716,16 +710,16 @@ function ADRForm() {
                     ) : (
                       <div className="form-group mb-3 col-md-6">
                         <FormGroup>
-                          <Label for="others_description">
+                          <Label for="otherDescription">
                             Others Description{" "}
                             <span style={{ color: "red" }}>*</span>
                           </Label>
                           <textarea
                             className="form-control"
                             type="text"
-                            name="others_description"
-                            id="others_description"
-                            value={adverseEffect.others_description}
+                            name="otherDescription"
+                            id="otherDescription"
+                            value={adverseEffect.otherDescription}
                             onChange={handleAdverseInputChange}
                             style={{
                               border: "1px solid #014d88",
@@ -737,16 +731,16 @@ function ADRForm() {
                     {adverseEffect.outcomes === "1616" ? (
                       <div className="form-group mb-3 col-md-6">
                         <FormGroup>
-                          <Label for="outcomes_others_description">
+                          <Label for="outcomesOtherDescription">
                             Outcomes Others Description{" "}
                             <span style={{ color: "red" }}>*</span>
                           </Label>
                           <textarea
                             className="form-control"
                             type="text"
-                            name="outcomes_others_description"
-                            id="outcomes_others_description"
-                            value={adverseEffect.outcomes_others_description}
+                            name="outcomesOtherDescription"
+                            id="outcomesOtherDescription"
+                            value={adverseEffect.outcomesOtherDescription}
                             onChange={handleAdverseInputChange}
                             style={{
                               border: "1px solid #014d88",
@@ -826,9 +820,9 @@ function ADRForm() {
                         <input
                           className="form-control"
                           type="text"
-                          name="administration_route"
-                          id="administration_route"
-                          value={severeDrugs.administration_route}
+                          name="administrationRoute"
+                          id="administrationRoute"
+                          value={severeDrugs.administrationRoute}
                           onChange={handleSevereInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
@@ -836,16 +830,16 @@ function ADRForm() {
                     </div>
                     <div className="form-group mb-3 col-md-4">
                       <FormGroup>
-                        <Label for="onset_date">
+                        <Label for="">
                           Date medication started{" "}
                           <span style={{ color: "red" }}>*</span>
                         </Label>
                         <input
                           className="form-control"
                           type="date"
-                          name="date_medication_started"
-                          id="date_medication_started"
-                          value={severeDrugs.date_medication_started}
+                          name="dateMedicationStarted"
+                          id="dateMedicationStarted"
+                          value={severeDrugs.dateMedicationStarted}
                           onChange={handleSevereInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
@@ -853,16 +847,16 @@ function ADRForm() {
                     </div>
                     <div className="form-group mb-3 col-md-4">
                       <FormGroup>
-                        <Label for="date_medication_stop">
+                        <Label for="dateMedicationStopped">
                           Date medication started{" "}
                           <span style={{ color: "red" }}>*</span>
                         </Label>
                         <input
                           className="form-control"
                           type="date"
-                          name="date_medication_stop"
-                          id="date_medication_stop"
-                          value={severeDrugs.date_medication_stop}
+                          name="dateMedicationStopped"
+                          id="dateMedicationStopped"
+                          value={severeDrugs.dateMedicationStopped}
                           onChange={handleSevereInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
@@ -877,10 +871,10 @@ function ADRForm() {
                         <select
                           className="form-control"
                           type="text"
-                          name="reaction_stopped"
-                          id="reaction_stopped"
+                          name="reactionReappeared"
+                          id="reactionReappeared"
                           style={{ border: "1px solid #014d88" }}
-                          value={severeDrugs.reaction_stopped}
+                          value={severeDrugs.reactionReappeared}
                           onChange={handleSevereInputChange}
                         >
                           <option value="">--Please choose an option--</option>
@@ -899,10 +893,10 @@ function ADRForm() {
                         <select
                           className="form-control"
                           type="text"
-                          name="reaction_reappeared"
-                          id="reaction_reappeared"
+                          name="reactionStopped"
+                          id="reactionStopped"
                           style={{ border: "1px solid #014d88" }}
-                          value={severeDrugs.reaction_reappeared}
+                          value={severeDrugs.reactionStopped}
                           onChange={handleSevereInputChange}
                         >
                           <option value="">--Please choose an option--</option>
@@ -949,9 +943,9 @@ function ADRForm() {
                         <input
                           className="form-control"
                           type="text"
-                          name="relevant_test"
-                          id="relevant_test"
-                          value={concomitantMedicines.relevant_test}
+                          name="relevantTest"
+                          id="relevantTest"
+                          value={concomitantMedicines.relevantTest}
                           onChange={handleMedicineInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
@@ -966,9 +960,9 @@ function ADRForm() {
                         <input
                           className="form-control"
                           type="date"
-                          name="relevant_test_date"
-                          id="relevant_test_date"
-                          value={concomitantMedicines.relevant_test_date}
+                          name="relevantTestDate"
+                          id="relevantTestDate"
+                          value={concomitantMedicines.relevantTestDate}
                           onChange={handleMedicineInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
@@ -983,9 +977,9 @@ function ADRForm() {
                         <input
                           className="form-control"
                           type="number"
-                          name="relevant_result"
-                          id="relevant_result"
-                          value={concomitantMedicines.relevant_result}
+                          name="relevantResult"
+                          id="relevantResult"
+                          value={concomitantMedicines.relevantResult}
                           onChange={handleMedicineInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
@@ -1000,9 +994,9 @@ function ADRForm() {
                         <input
                           className="form-control"
                           type="date"
-                          name="relevant_result_date"
-                          id="relevant_result_date"
-                          value={concomitantMedicines.relevant_result_date}
+                          name="relevantResultDate"
+                          id="relevantResultDate"
+                          value={concomitantMedicines.relevantResultDate}
                           onChange={handleMedicineInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
@@ -1018,11 +1012,11 @@ function ADRForm() {
                         <select
                           className="form-control"
                           type="text"
-                          name="preexisting_medical_conditions"
-                          id="preexisting_medical_conditions"
+                          name="preexistingMedicalConditions"
+                          id="preexistingMedicalConditions"
                           style={{ border: "1px solid #014d88" }}
                           value={
-                            concomitantMedicines.preexisting_medical_conditions
+                            concomitantMedicines.preexistingMedicalConditions
                           }
                           onChange={handleMedicineInputChange}
                         >
@@ -1035,22 +1029,22 @@ function ADRForm() {
                         </select>
                       </FormGroup>
                     </div>
-                    {concomitantMedicines.preexisting_medical_conditions !==
+                    {concomitantMedicines.preexistingMedicalConditions !==
                     "1625" ? (
                       ""
                     ) : (
                       <div className="form-group mb-3 col-md-4">
                         <FormGroup>
-                          <Label for="preexisting_medical_others">
+                          <Label for="preexistingMedicalOthers">
                             Preexisting Medical Other Description{" "}
                             <span style={{ color: "red" }}>*</span>
                           </Label>
                           <textarea
                             className="form-control"
                             type="text"
-                            name="preexisting_medical_others"
-                            id="preexisting_medical_others"
-                            value={adverseEffect.preexisting_medical_others}
+                            name="preexistingMedicalOthers"
+                            id="preexistingMedicalOthers"
+                            value={adverseEffect.preexistingMedicalOthers}
                             onChange={handleMedicineInputChange}
                             style={{
                               border: "1px solid #014d88",
@@ -1090,9 +1084,9 @@ function ADRForm() {
                         <input
                           className="form-control"
                           type="text"
-                          name="first_name"
-                          id="first_name"
-                          value={reporter.first_name}
+                          name="firstName"
+                          id="firstName"
+                          value={reporter.firstName}
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
@@ -1106,9 +1100,9 @@ function ADRForm() {
                         <input
                           className="form-control"
                           type="text"
-                          name="last_name"
-                          id="last_name"
-                          value={reporter.last_name}
+                          name="lastName"
+                          id="lastName"
+                          value={reporter.lastName}
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
@@ -1148,7 +1142,7 @@ function ADRForm() {
                     </div>
                     <div className="form-group mb-3 col-md-4">
                       <FormGroup>
-                        <Label for="onset_date">
+                        <Label for="">
                           City <span style={{ color: "red" }}>*</span>
                         </Label>
                         <input
@@ -1219,10 +1213,10 @@ function ADRForm() {
                         <select
                           className="form-control"
                           type="text"
-                          name="health_professional"
-                          id="health_professional"
+                          name="healthProfessional"
+                          id="healthProfessional"
                           style={{ border: "1px solid #014d88" }}
-                          value={reporter.health_professional}
+                          value={reporter.healthProfessional}
                           onChange={handleReporterInputChange}
                         >
                           <option value="">--Please choose an option--</option>

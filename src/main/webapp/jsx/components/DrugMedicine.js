@@ -10,12 +10,12 @@ const DrugMedicine = () => {
   const [storedValues, setStoredValues] = useState([]);
 
   const [concomitantMedicines, setConcomitantMedicines] = useState({
-    concomitant_brand_name: "",
-    concomitant_dosage: "",
-    concomitant_route: "",
-    date_concomitant_started: "",
-    date_concomitant_stopped: "",
-    concomitant_reason_use: "",
+    concomitantBrandName: "",
+    concomitantDosage: "",
+    concomitantRoute: "",
+    dateConcomitantStarted: "",
+    dateConcomitantStopped: "",
+    concomitantReasonUse: "",
   });
 
   useEffect(() => {
@@ -38,12 +38,12 @@ const DrugMedicine = () => {
     localStorage.setItem("medicine", JSON.stringify(newValues));
 
     setConcomitantMedicines({
-      concomitant_brand_name: "",
-      concomitant_dosage: "",
-      concomitant_route: "",
-      date_concomitant_started: "",
-      date_concomitant_stopped: "",
-      concomitant_reason_use: "",
+      concomitantBrandName: "",
+      concomitantDosage: "",
+      concomitantRoute: "",
+      dateConcomitantStarted: "",
+      dateConcomitantStopped: "",
+      concomitantReasonUse: "",
     });
   };
 
@@ -64,9 +64,9 @@ const DrugMedicine = () => {
           <input
             className="form-control"
             type="text"
-            name="concomitant_brand_name"
-            id="concomitant_brand_name"
-            value={concomitantMedicines.concomitant_brand_name}
+            name="concomitantBrandName"
+            id="concomitantBrandName"
+            value={concomitantMedicines.concomitantBrandName}
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
           />
@@ -81,9 +81,9 @@ const DrugMedicine = () => {
           <input
             className="form-control"
             type="text"
-            name="concomitant_dosage"
-            id="concomitant_dosage"
-            value={concomitantMedicines.concomitant_dosage}
+            name="concomitantDosage"
+            id="concomitantDosage"
+            value={concomitantMedicines.concomitantDosage}
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
           />
@@ -98,9 +98,9 @@ const DrugMedicine = () => {
           <input
             className="form-control"
             type="text"
-            name="concomitant_route"
-            id="concomitant_route"
-            value={concomitantMedicines.concomitant_route}
+            name="concomitantRoute"
+            id="concomitantRoute"
+            value={concomitantMedicines.concomitantRoute}
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
           />
@@ -115,9 +115,9 @@ const DrugMedicine = () => {
           <input
             className="form-control"
             type="date"
-            name="date_concomitant_started"
-            id="date_concomitant_started"
-            value={concomitantMedicines.date_concomitant_started}
+            name="dateConcomitantStarted"
+            id="dateConcomitantStarted"
+            value={concomitantMedicines.dateConcomitantStarted}
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
           />
@@ -125,16 +125,16 @@ const DrugMedicine = () => {
       </div>
       <div className="form-group mb-3 col-md-3">
         <FormGroup>
-          <Label for="date_concomitant_stopped">
+          <Label for="dateConcomitantStopped">
             Date stopped
             {/* <span style={{ color: "red" }}>*</span> */}
           </Label>
           <input
             className="form-control"
             type="date"
-            name="date_concomitant_stopped"
-            id="date_concomitant_stopped"
-            value={concomitantMedicines.date_concomitant_stopped}
+            name="dateConcomitantStopped"
+            id="dateConcomitantStopped"
+            value={concomitantMedicines.dateConcomitantStopped}
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
           />
@@ -149,9 +149,9 @@ const DrugMedicine = () => {
           <input
             className="form-control"
             type="text"
-            name="concomitant_reason_use"
-            id="concomitant_reason_use"
-            value={concomitantMedicines.concomitant_reason_use}
+            name="concomitantReasonUse"
+            id="concomitantReasonUse"
+            value={concomitantMedicines.concomitantReasonUse}
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
           />
@@ -176,7 +176,7 @@ const DrugMedicine = () => {
         <>
           <div className="col-xl-12 col-lg-12">
             <br />
-            <table className="table table-sm table-bordered table-responsive">
+            <table className="table table-bordered table-responsive">
               <thead>
                 <tr>
                   <th scope="col">Brand or Generic name</th>
@@ -192,12 +192,12 @@ const DrugMedicine = () => {
               <tbody>
                 {storedValues.map((x, i) => (
                   <tr key={i}>
-                    <td>{x.concomitant_brand_name}</td>
-                    <td>{x.concomitant_dosage}</td>
-                    <td>{x.concomitant_route}</td>
-                    <td>{x.date_concomitant_started}</td>
-                    <td>{x.date_concomitant_stopped}</td>
-                    <td>{x.concomitant_reason_use}</td>
+                    <td>{x.concomitantBrandName}</td>
+                    <td>{x.concomitantDosage}</td>
+                    <td>{x.concomitantRoute}</td>
+                    <td>{x.dateConcomitantStarted}</td>
+                    <td>{x.dateConcomitantStopped}</td>
+                    <td>{x.concomitantReasonUse}</td>
 
                     <td>
                       <Button
