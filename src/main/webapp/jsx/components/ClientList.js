@@ -49,7 +49,10 @@ const ClientList = (props) => {
   const [upload, setUpload] = useState([]);
   const [permissions, setPermissions] = useState(props.permissions);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    localStorage.removeItem("severeDrugs");
+    localStorage.removeItem("medicine");
+  }, []);
 
   const calculateAge = (dob) => {
     const today = new Date();

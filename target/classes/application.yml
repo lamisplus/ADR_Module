@@ -15,11 +15,7 @@ acrossHibernate:
 applicationInfo:
   applicationId: adr
   applicationName: ADR
-<<<<<<< HEAD
-  buildDate: "2024-06-19T10:17:59Z"
-=======
-  buildDate: "2024-06-19T10:40:28Z"
->>>>>>> origin/master
+  buildDate: "2024-06-19T13:14:21Z"
   buildId: "1.0.0-1.0.0"
 build:
   number: "1.0.0"
@@ -102,13 +98,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/lamisplus
-<<<<<<< HEAD
-    password: ***
-    username: ***
-=======
     password: *
     username: *
->>>>>>> origin/master
 
   jpa:
     database: POSTGRESQL

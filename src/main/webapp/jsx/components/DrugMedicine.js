@@ -80,7 +80,7 @@ const DrugMedicine = () => {
           </Label>
           <input
             className="form-control"
-            type="text"
+            type="number"
             name="concomitantDosage"
             id="concomitantDosage"
             value={concomitantMedicines.concomitantDosage}

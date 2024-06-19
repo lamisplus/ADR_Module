@@ -171,7 +171,7 @@ function ADRForm() {
     address: "",
     city: "",
     state: "",
-    phone: "",
+    phoneNumber: "",
     healthProfessional: "",
     occupation: "",
     country: "",
@@ -218,7 +218,7 @@ function ADRForm() {
     });
   };
 
-  const submitForm = () => {
+  const submitForm = async () => {
     const drugs = JSON.parse(localStorage.getItem("severeDrugs"));
     const medicines = JSON.parse(localStorage.getItem("medicine"));
 
@@ -245,7 +245,7 @@ function ADRForm() {
     };
 
     const adrPayload = {
-      patientUUID: uuid,
+      patientUuid: uuid,
       weight: bioData.weight,
       facilityId: organization?.id,
       adverseEffect: adverseEffect,
@@ -255,10 +255,17 @@ function ADRForm() {
     };
 
     console.log(adrPayload);
+    const response = await axios.post(`${baseUrl}adr/create`, adrPayload, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-    localStorage.removeItem("severeDrugs");
-    localStorage.removeItem("medicine");
-    history("/");
+    if (response.statusCode === 200) {
+      localStorage.removeItem("severeDrugs");
+      localStorage.removeItem("medicine");
+      history("/");
+    } else {
+      console.log(response);
+    }
   };
 
   return (

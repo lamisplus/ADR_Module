@@ -117,7 +117,7 @@ public class ADRService {
 
     public ApiResponse getAllAdrs( ){
 
-        List<ADR> adrList = adrRepository.findAll();
+        List<Object[]> adrList = adrRepository.getAllPatientAdr();
         log.info("adr list: {}", adrList);
 
         if(adrList.isEmpty()){

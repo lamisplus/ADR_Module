@@ -18,5 +18,7 @@ public interface ADRRepository extends JpaRepository<ADR, Long> {
     List<Object[]> findPatientDataByAdr(@Param("patientUuid") String patientUuid);
 
 
-
+    @Query(value = "SELECT p.hospital_number, p.first_name, p.surname, p.sex, adr.* FROM adr_table adr " +
+            "JOIN patient_person p ON p.uuid = adr.patient_uuid", nativeQuery = true)
+    List<Object[]> getAllPatientAdr();
 }
