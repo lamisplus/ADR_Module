@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.FetchType;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,10 +29,12 @@ public class ConcomitantMedicines implements Serializable {
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "brands",columnDefinition = "jsonb")
     private List<Medicine> medicines;
+    @NotNull(message = "relevant is required")
     private String relevantTest;
     @Convert(converter = LocalDateTime.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate relevantTestDate;
+    @NotNull(message = "relevant results is required")
     private String relevantResult;
     @Convert(converter = LocalDateTime.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

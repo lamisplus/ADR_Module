@@ -10,6 +10,9 @@ import org.lamisplus.modules.starter.service.ADRService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.List;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -19,10 +22,17 @@ public class ADRController {
     private final ADRService adrService;
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createADR(@RequestBody ADRRequest request){
+    public ResponseEntity<ApiResponse> createADR(@Valid @RequestBody ADRRequest request){
         log.info("entering into the create controller...!");
         return ResponseEntity.ok(adrService.createADR(request));
     }
+
+    @GetMapping("/adr/patient/{patientUuid}")
+    public ResponseEntity<List<Object[]>> getPatientDataByAdr(@PathVariable("patientUuid") String patientUuid) {
+        List<Object[]> patientData = adrService.getPatientDataByAdr(patientUuid);
+        return ResponseEntity.ok(patientData);
+    }
+
 
     @PutMapping("/update/{patientUuid}")
     public ResponseEntity<ApiResponse> updateADRByPatientId(@PathVariable("patientUuid")String patientUuid,@RequestBody ADRRequest request){

@@ -70,6 +70,19 @@ public class ADRService {
     }
 
 
+    public List<Object[]> getPatientDataByAdr(String patientUuid){
+
+        List<Object[]> patientDataByAdr = adrRepository.findPatientDataByAdr(patientUuid);
+
+        if (patientDataByAdr.isEmpty()) {
+            throw new ADRNotFoundException("No patient data found for ADR with patient ID " + patientUuid);
+        }
+
+        return patientDataByAdr;
+
+    }
+
+
     public ApiResponse updateADRByPatientId(String patientUuid, ADRRequest request) {
 
         ADR existingAdr = adrRepository.findByPatientUuid(patientUuid)
