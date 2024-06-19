@@ -37,7 +37,7 @@ public class AdverseEffect implements Serializable {
     private boolean intervention;
 
     private boolean others;
-    private boolean otherDescription;
+    private String otherDescription;
     @NotNull(message = "outcomes is required")
     private String outcomes;
     @Convert(converter = LocalDateTime.class)
