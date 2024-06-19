@@ -12,6 +12,7 @@ import SaveIcon from "@material-ui/icons/Save";
 import { token, url as baseUrl } from "../../api";
 import Drug from "./Drug";
 import DrugMedicine from "./DrugMedicine";
+import { ToastContainer, toast } from "react-toastify";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -259,7 +260,8 @@ function ADRForm() {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
+      toast.success("ADR Form Filled Successfully");
       localStorage.removeItem("severeDrugs");
       localStorage.removeItem("medicine");
       history("/");
