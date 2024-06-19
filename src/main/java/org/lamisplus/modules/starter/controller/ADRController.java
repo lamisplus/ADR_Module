@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.starter.domain.dto.ADRRequest;
 import org.lamisplus.modules.starter.domain.dto.ADRResponse;
 import org.lamisplus.modules.starter.domain.dto.ApiResponse;
+import org.lamisplus.modules.starter.domain.dto.PatientDetails;
 import org.lamisplus.modules.starter.service.ADRService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,8 @@ public class ADRController {
     }
 
     @GetMapping("/adr/patient/{patientUuid}")
-    public ResponseEntity<List<Object[]>> getPatientDataByAdr(@PathVariable("patientUuid") String patientUuid) {
-        List<Object[]> patientData = adrService.getPatientDataByAdr(patientUuid);
+    public ResponseEntity<List<PatientDetails>> getPatientDataByAdr(@PathVariable("patientUuid") String patientUuid) {
+        List<PatientDetails> patientData = adrService.getPatientDataByAdr(patientUuid);
         return ResponseEntity.ok(patientData);
     }
 
