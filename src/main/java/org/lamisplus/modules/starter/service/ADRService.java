@@ -93,7 +93,20 @@ public class ADRService {
         ADR updatedAdr = fromADRToDTO(request);
         log.info("mapped adr info : {}", updatedAdr);
 
-        updatedAdr.setId(existingAdr.getId()); // ensure tha same id for update
+        Optional<User> currentUser = userService.getUserWithRoles();
+        log.info("current user: {}",currentUser);
+
+        if (currentUser.isPresent()) {
+            log.info("currentUser: " + currentUser.get());
+            User user = currentUser.get();
+            Long currentOrganisationUnitId = user.getCurrentOrganisationUnitId();
+            updatedAdr.setFacilityID(currentOrganisationUnitId);
+        }
+
+
+        updatedAdr.setId(existingAdr.getId());// ensure tha same id for update
+
+
 
         ADR saveAdr = adrRepository.save(updatedAdr);
         log.info("saved to db: {}", saveAdr);
