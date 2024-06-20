@@ -35,7 +35,6 @@ public class AdverseEffect implements Serializable {
     private boolean anomaly;
     @NotNull(message = "intervention is required")
     private boolean intervention;
-
     private boolean others;
     private String otherDescription;
     @NotNull(message = "outcomes is required")

@@ -31,15 +31,12 @@ public class ADR extends ADRAuditEntity implements Persistable<Long>, Serializab
     @Type(type = "jsonb-node")
     @Column(columnDefinition = "jsonb", name = "adverse_effect", nullable = true)
     private JsonNode adverseEffect;
-
     @Type(type = "jsonb-node")
     @Column(columnDefinition = "jsonb", name = "severe_drugs", nullable = true)
     private JsonNode severeDrugs;
-
     @Type(type = "jsonb-node")
     @Column(columnDefinition = "jsonb", name = "concomitant_medicines", nullable = true)
     private JsonNode concomitantMedicines;
-
     @Type(type = "jsonb-node")
     @Column(columnDefinition = "jsonb", name = "reporter", nullable = true)
     private JsonNode reporter;

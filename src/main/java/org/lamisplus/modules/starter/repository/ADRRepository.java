@@ -25,16 +25,20 @@ public interface ADRRepository extends JpaRepository<ADR, Long> {
 //    List<PatientDetails> getAllPatientAdr();
 
 
+//    @Query(value = "SELECT p.hospital_number AS hospitalNumber, p.first_name AS firstName, p.surname AS surname, p.sex AS sex, " +
+//            "adr.patient_uuid AS patientUuid, adr.weight, adr.facility_id AS facilityID, adr.adverse_effect AS adverseEffect, " +
+//            "adr.severe_drugs AS severeDrugs, adr.concomitant_medicines AS concomitantMedicines, adr.reporter " +
+//            "FROM adr_table adr " +
+//            "JOIN patient_person p ON p.uuid = adr.patient_uuid", nativeQuery = true)
+//    List<PatientDetails> getAllPatientAdr();
+//
 
-
-
-    @Query(value = "SELECT p.hospital_number AS hospitalNumber, p.first_name AS firstName, p.surname AS surname, p.sex AS sex, " +
-            "adr.patient_uuid AS patientUuid, adr.weight, adr.facility_id AS facilityID, adr.adverse_effect AS adverseEffect, " +
-            "adr.severe_drugs AS severeDrugs, adr.concomitant_medicines AS concomitantMedicines, adr.reporter " +
+    @Query(value = "SELECT p.hospital_number, p.first_name, p.surname, p.sex, " +
+            "adr.patient_uuid, adr.weight, adr.facility_id, adr.adverse_effect, " +
+            "adr.severe_drugs, adr.concomitant_medicines, adr.reporter " +
             "FROM adr_table adr " +
             "JOIN patient_person p ON p.uuid = adr.patient_uuid", nativeQuery = true)
-    List<PatientDetails> getAllPatientAdr();
-
+    List<Object[]> getAllPatientAdr();
 
 
 }

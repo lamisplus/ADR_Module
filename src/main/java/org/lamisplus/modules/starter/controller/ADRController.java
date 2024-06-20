@@ -37,20 +37,20 @@ public class ADRController {
 
     @PutMapping("/update/{patientUuid}")
     public ResponseEntity<ApiResponse> updateADRByPatientId(@PathVariable("patientUuid")String patientUuid,@RequestBody ADRRequest request){
-        log.info("entering into the create controller...!");
+        log.info("entering into the update adr by patient id controller...!");
         return ResponseEntity.ok(adrService.updateADRByPatientId(patientUuid,request));
     }
 
     @GetMapping("/{patientUuid}")
     public ResponseEntity<ApiResponse>getAdrByPatientId(@PathVariable("patientUuid")String patientUuid){
-        log.info("entering into the create controller...!");
+        log.info("entering into the get adr patient controller...!");
         return ResponseEntity.ok(adrService.getADRByPatientId(patientUuid));
     }
 
 
     @GetMapping("/get_all")
     public ResponseEntity<ApiResponse> getAllAdrs(){
-        log.info("entering into the create controller...!");
+        log.info("entering into the get all adrs  controller...!");
         return ResponseEntity.ok(adrService.getAllAdrs());
     }
 }

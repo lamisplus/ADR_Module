@@ -1,5 +1,6 @@
 package org.lamisplus.modules.starter.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.lamisplus.modules.starter.repository.ADRRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -115,8 +117,42 @@ public class ADRService {
                 .build();
     }
 
+//    public ApiResponse getAllAdrs() {
+//        List<PatientDetails> adrList = adrRepository.getAllPatientAdr();
+//
+//        log.info("adr list: {}", adrList);
+//
+//        if (adrList.isEmpty()) {
+//            throw new ADRNotFoundException("No ADRs found");
+//        }
+//
+//        return ApiResponse.builder()
+//                .statusCode(String.valueOf(HttpStatus.OK.value()))
+//                .message(GeneralResponseEnum.SUCCESS.getMessage())
+//                .details(adrList)
+//                .build();
+//    }
+
     public ApiResponse getAllAdrs() {
-        List<PatientDetails> adrList = adrRepository.getAllPatientAdr();
+        List<Object[]> results = adrRepository.getAllPatientAdr();
+        List<PatientDetailsDTO> adrList = new ArrayList<>();
+
+        for (Object[] result : results) {
+            PatientDetailsDTO dto = new PatientDetailsDTO();
+            dto.setHospitalNumber((String) result[0]);
+            dto.setFirstName((String) result[1]);
+            dto.setSurname((String) result[2]);
+            dto.setSex((String) result[3]);
+            dto.setPatientUuid((String) result[4]);
+            dto.setWeight((Integer) result[5]);
+            dto.setFacilityID((Long) result[6]);
+            dto.setAdverseEffect((JsonNode) result[7]);
+            dto.setSevereDrugs((JsonNode) result[8]);
+            dto.setConcomitantMedicines((JsonNode) result[9]);
+            dto.setReporter((JsonNode) result[10]);
+
+            adrList.add(dto);
+        }
 
         log.info("adr list: {}", adrList);
 
@@ -130,6 +166,8 @@ public class ADRService {
                 .details(adrList)
                 .build();
     }
+
+
 
 
     private ADR fromADRToDTO(ADRRequest adrRequest){
