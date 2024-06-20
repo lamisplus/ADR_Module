@@ -10,15 +10,15 @@ import lombok.Setter;
 
 public interface PatientDetails {
 
-    String hospital_number();
-    String first_name();
-    String surname();
-    String sex();
-    String patientUuid();
-    Integer weight();
-    Long facilityID();
-    JsonNode adverseEffect();
-    JsonNode severeDrugs();
-    JsonNode concomitantMedicines();
-    JsonNode reporter();
+    String geHospitalNumber();
+    String getFirstName();
+    String getSurname();
+    String getSex();
+    String getPatientUuid();
+    Integer getWeight();
+    Long getFacilityID();
+    JsonNode getAdverseEffect();
+    JsonNode getSevereDrugs();
+    JsonNode getConcomitantMedicines();
+    JsonNode getReporter();
 }

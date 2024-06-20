@@ -115,13 +115,12 @@ public class ADRService {
                 .build();
     }
 
-    public ApiResponse getAllAdrs( ){
-
+    public ApiResponse getAllAdrs() {
         List<PatientDetails> adrList = adrRepository.getAllPatientAdr();
 
         log.info("adr list: {}", adrList);
 
-        if(adrList.isEmpty()){
+        if (adrList.isEmpty()) {
             throw new ADRNotFoundException("No ADRs found");
         }
 
@@ -130,9 +129,7 @@ public class ADRService {
                 .message(GeneralResponseEnum.SUCCESS.getMessage())
                 .details(adrList)
                 .build();
-
     }
-
 
 
     private ADR fromADRToDTO(ADRRequest adrRequest){
