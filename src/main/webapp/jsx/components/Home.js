@@ -1,4 +1,4 @@
-import React, { useState, Fragment,useEffect } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Row, Col, Card, Tab, Tabs } from "react-bootstrap";
 import axios from "axios";
@@ -19,19 +19,19 @@ const Home = () => {
   const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
-      userPermission();
-    }, []);
+    userPermission();
+  }, []);
 
   const userPermission = () => {
-      axios
-        .get(`${baseUrl}account`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          setPermissions(response.data.permissions);
-        })
-        .catch((error) => {});
-    };
+    axios
+      .get(`${baseUrl}account`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setPermissions(response.data.permissions);
+      })
+      .catch((error) => {});
+  };
 
   return (
     <Fragment>
@@ -58,13 +58,11 @@ const Home = () => {
                   className="mb-3"
                 >
                   <Tab eventKey="home" title="Patients">
-                    <ClientList permissions={permissions}/>
+                    <ClientList permissions={permissions} />
                   </Tab>
-                  /*
                   <Tab eventKey="hts" title="ADR Patients">
-                    <ADRList />
+                    <ADRList permissions={permissions} />
                   </Tab>
-                  */
                 </Tabs>
               </div>
             </Card.Body>

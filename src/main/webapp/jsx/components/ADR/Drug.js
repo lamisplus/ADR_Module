@@ -252,7 +252,7 @@ const Drug = () => {
                     <td>{x.manufacturerAddress}</td>
                     <td>{x.batchNo}</td>
                     <td>{x.nafdacNo}</td>
-                    <td>{x.expiry_date}</td>
+                    <td>{x.expiryDate}</td>
                     <td>
                       <Button
                         variant="contained"

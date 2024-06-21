@@ -23,11 +23,11 @@ public class Medicine {
     private Integer concomitantDosage;
     @NotNull(message = "concomitant dosage is required")
     private String concomitantRoute;
-    @Convert(converter = LocalDateTime.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+//    @Convert(converter = LocalDateTime.class)
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dateConcomitantStarted;
-    @Convert(converter = LocalDateTime.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+//    @Convert(converter = LocalDateTime.class)
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dateConcomitantStopped;
     private String concomitantReasonUse;
 }

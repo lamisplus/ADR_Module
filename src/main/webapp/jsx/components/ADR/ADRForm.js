@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Card, CardContent } from "@material-ui/core";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { TiArrowBack } from "react-icons/ti";
 import { Form, FormGroup, Label, Spinner } from "reactstrap";
@@ -79,8 +79,12 @@ function ADRForm() {
   const [outcomes, setOutcomes] = useState([]);
 
   const [relevant, setRelevant] = useState([]);
-  let { state } = useLocation();
   const history = useHistory();
+  const patientInfo =
+    history.location && history.location.state
+      ? history.location.state.patientInfo
+      : {};
+
   //console.log(state);
   const {
     firstName,
@@ -90,7 +94,7 @@ function ADRForm() {
     uuid,
     identifier,
     organization,
-  } = state?.patientInfo;
+  } = patientInfo;
 
   const adrOutcomes = useCallback(async () => {
     try {
@@ -219,7 +223,7 @@ function ADRForm() {
     });
   };
 
-  const submitForm = async () => {
+  const submitForm = () => {
     const drugs = JSON.parse(localStorage.getItem("severeDrugs"));
     const medicines = JSON.parse(localStorage.getItem("medicine"));
 
@@ -250,24 +254,26 @@ function ADRForm() {
       weight: bioData.weight,
       facilityId: organization?.id,
       adverseEffect: adverseEffect,
-      severeDrugs: severeDrugData,
+      severeDrug: severeDrugData,
       concomitantMedicines: medicationData,
       reporter: reporter,
     };
 
     console.log(adrPayload);
-    const response = await axios.post(`${baseUrl}adr/create`, adrPayload, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (response.status === 200) {
-      toast.success("ADR Form Filled Successfully");
-      localStorage.removeItem("severeDrugs");
-      localStorage.removeItem("medicine");
-      history("/");
-    } else {
-      console.log(response);
-    }
+    axios
+      .post(`${baseUrl}adr/create`, adrPayload, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log("res", response);
+        toast.success("ADR Form Filled Successfully");
+        localStorage.removeItem("severeDrugs");
+        localStorage.removeItem("medicine");
+        history.push("/");
+      })
+      .catch((error) => {
+        console.error(`${error.message}`);
+      });
   };
 
   return (
@@ -1190,9 +1196,9 @@ function ADRForm() {
                         <input
                           className="form-control"
                           type="number"
-                          name="phone"
-                          id="phone"
-                          value={reporter.phone}
+                          name="phoneNumber"
+                          id="phoneNumber"
+                          value={reporter.phoneNumber}
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />

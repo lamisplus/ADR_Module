@@ -32,7 +32,7 @@ public class Drug {
     private String batchNo;
     @NotNull(message = "batchNo is required")
     private String nafdacNo;
-    @Convert(converter = LocalDateTime.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+//    @Convert(converter = LocalDateTime.class)
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate expiryDate;
 }

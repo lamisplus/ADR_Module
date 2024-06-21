@@ -15,12 +15,12 @@ org\lamisplus\modules\starter\exeception\GlobalExceptionHandler.class
 org\lamisplus\modules\starter\constants\GeneralResponseEnum.class
 org\lamisplus\modules\starter\domain\dto\ConcomitantMedicines.class
 org\lamisplus\modules\starter\domain\entity\ADRAuditEntity.class
+org\lamisplus\modules\starter\domain\dto\PatientADRProjection.class
 org\lamisplus\modules\starter\config\DomainConfiguration.class
 org\lamisplus\modules\starter\domain\dto\ADRRequest$ADRRequestBuilder.class
 org\lamisplus\modules\starter\domain\dto\Drug.class
 org\lamisplus\modules\starter\domain\dto\SevereDrug.class
 org\lamisplus\modules\starter\service\ADRService.class
-org\lamisplus\modules\starter\domain\dto\PatientDetails.class
 org\lamisplus\modules\starter\domain\dto\Medicine.class
 org\lamisplus\modules\starter\exeception\ADRAlreadyExistException.class
 org\lamisplus\modules\starter\controller\ADRController.class

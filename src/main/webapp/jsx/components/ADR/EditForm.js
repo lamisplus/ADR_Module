@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Card, CardContent } from "@material-ui/core";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { TiArrowBack } from "react-icons/ti";
 import { Form, FormGroup, Label, Spinner } from "reactstrap";
@@ -73,29 +73,61 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function EditForm(props) {
+function EditForm() {
   const classes = useStyles();
   const [saving, setSaving] = useState(false);
-  const [outcomes, setOutcomes] = useState([]);
+  const [adr, setAdr] = useState({
+    weight: "",
+    eventDescription: "",
+    death: false,
+    lifeThreatening: false,
+    hospitalization: "",
+    dateOfDeath: "",
+    disability: false,
+    anomaly: false,
+    intervention: false,
+    others: false,
+    otherDescription: "",
+    outcomes: "",
+    onsetDate: "",
+    stoppedDate: "",
+    outcomesOtherDescription: "",
+    dosage: "",
+    frequency: "",
+    administrationRoute: "",
+    dateMedicationStarted: "",
+    dateMedicationStopped: "",
+    reactionReappeared: "",
+    reactionStopped: "",
+    relevantTest: "",
+    relevantTestDate: "",
+    relevantResult: "",
+    relevantResultDate: "",
+    preexistingMedicalConditions: "",
+    preexistingMedicalOthers: "",
+    firstName: "",
+    lastName: "",
+    address: "",
+    city: "",
+    state: "",
+    phoneNumber: "",
+    healthProfessional: "",
+    occupation: "",
+    country: "",
+    email: "",
+  });
 
+  const [outcomes, setOutcomes] = useState([]);
   const [relevant, setRelevant] = useState([]);
-  let { state } = useLocation();
+
   const history = useHistory();
-  //console.log(state);
-  const {
-    firstName,
-    surname,
-    dateOfBirth,
-    sex,
-    uuid,
-    identifier,
-    weight,
-    organization,
-    adverseEffect,
-    severeDrugs,
-    concomitantMedicines,
-    reporter,
-  } = state?.patientInfo;
+  const patientInfo =
+    history.location && history.location.state
+      ? history.location.state.patientInfo
+      : {};
+
+  const { firstName, surname, dob, sex, hospitalNumber, patientUuid } =
+    patientInfo;
 
   const adrOutcomes = useCallback(async () => {
     try {
@@ -117,122 +149,181 @@ function EditForm(props) {
     } catch (e) {}
   }, []);
 
+  const handleDateFormat = (obj) => {
+    if (obj !== undefined || obj !== null) {
+      const year = obj?.year;
+      const month = obj?.monthValue;
+      const day = obj?.dayOfMonth;
+      let date = new Date(year, month - 1, day);
+      const formattedDate = `${(date.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}/${date.getDate().toString().padStart(2, "0")}/${date
+        .getFullYear()
+        .toString()
+        .slice(-2)}`;
+      console.log(formattedDate);
+    } else {
+    }
+  };
+
+  const getADRbyId = async () => {
+    const response = await axios
+      .get(`${baseUrl}adr/${patientUuid}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        const data = response.data.details;
+        console.log(data);
+
+        setAdr({
+          weight: data?.weight,
+          eventDescription: data?.adverseEffect?.eventDescription,
+          death: data?.adverseEffect?.death,
+          lifeThreatening: data?.adverseEffect?.lifeThreatening,
+          hospitalization: data?.adverseEffect?.hospitalization,
+          dateOfDeath: handleDateFormat(data?.adverseEffect?.dateOfDeath),
+          disability: data?.adverseEffect?.disability,
+          anomaly: data?.adverseEffect?.anomaly,
+          intervention: data?.adverseEffect?.intervention,
+          others: data?.adverseEffect?.others,
+          otherDescription: data?.adverseEffect?.otherDescription,
+          outcomes: data?.adverseEffect?.outcomes,
+          onsetDate: handleDateFormat(data?.adverseEffect?.onsetDate),
+          stoppedDate: handleDateFormat(data?.adverseEffect?.stoppedDate),
+          outcomesOtherDescription:
+            data?.adverseEffect?.outcomesOtherDescription,
+          drugs: data?.severeDrugs?.drugs,
+          dosage: data?.severeDrugs?.dosage,
+          frequency: data?.severeDrugs?.frequency,
+          administrationRoute: data?.severeDrugs?.administrationRoute,
+          dateMedicationStarted: handleDateFormat(
+            data?.severeDrugs?.dateMedicationStarted
+          ),
+          dateMedicationStopped: handleDateFormat(
+            data?.severeDrugs?.dateMedicationStopped
+          ),
+          reactionReappeared: data?.severeDrugs?.reactionReappeared,
+          reactionStopped: data?.severeDrugs?.reactionStopped,
+          relevantTest: data?.concomitantMedicines?.relevantTest,
+          relevantTestDate: handleDateFormat(
+            data?.concomitantMedicines?.relevantTestDate
+          ),
+          medicines: data?.concomitantMedicines?.medicines,
+          relevantResult: data?.concomitantMedicines?.relevantResult,
+          relevantResultDate: handleDateFormat(
+            data?.concomitantMedicines?.relevantResultDate
+          ),
+          preexistingMedicalConditions:
+            data?.concomitantMedicines?.preexistingMedicalConditions,
+          preexistingMedicalOthers:
+            data?.concomitantMedicines?.preexistingMedicalOthers,
+          firstName: data?.reporter?.firstName,
+          lastName: data?.reporter?.lastName,
+          address: data?.reporter?.address,
+          city: data?.reporter?.city,
+          state: data?.reporter?.state,
+          phoneNumber: data?.reporter?.phoneNumber,
+          healthProfessional: data?.reporter?.healthProfessional,
+          occupation: data?.reporter?.occupation,
+          country: data?.reporter?.country,
+          email: data?.reporter?.email,
+        });
+      });
+  };
+
   useEffect(() => {
+    getADRbyId();
     adrOutcomes();
     adrRelevant();
+    console.log(adr);
   }, []);
 
   const calculate_age = (dob) => {
     const today = new Date();
-    const dateParts = dob?.split("-");
     const birthDate = new Date(dob);
     let age_now = today.getFullYear() - birthDate.getFullYear();
 
     return age_now;
   };
 
-  const [bioData, setBioData] = useState({
-    weight: "",
-  });
-
-  const [adverseEffectVal, setAdverseEffectVal] = useState(adverseEffect);
-
-  const [severeDrugsVal, setSevereDrugsVal] = useState(severeDrugs);
-
-  const [concomitantMedicinesVal, setConcomitantMedicinesVal] =
-    useState(concomitantMedicines);
-
-  const [reporterVal, setReporterVal] = useState(reporter);
-
   const handleBioInputChange = (event) => {
-    const { name, value } = event.target;
-    setBioData({
-      ...bioData,
-      [name]: value,
-    });
-  };
-
-  const handleAdverseInputChange = (event) => {
     const { name, value, type, checked } = event.target;
-    setAdverseEffectVal({
-      ...adverseEffectVal,
+    setAdr({
+      ...adr,
       [name]: type === "checkbox" ? checked : value,
     });
   };
 
-  const handleSevereInputChange = (event) => {
-    const { name, value } = event.target;
-    setSevereDrugsVal({
-      ...severeDrugsVal,
-      [name]: value,
-    });
-  };
-
-  const handleMedicineInputChange = (event) => {
-    const { name, value } = event.target;
-    setConcomitantMedicinesVal({
-      ...concomitantMedicinesVal,
-      [name]: value,
-    });
-  };
-
-  const handleReporterInputChange = (event) => {
-    const { name, value } = event.target;
-    setReporterVal({
-      ...reporterVal,
-      [name]: value,
-    });
-  };
-
-  const submitForm = async () => {
-    const drugs = JSON.parse(localStorage.getItem("severeDrugs"));
-    const medicines = JSON.parse(localStorage.getItem("medicine"));
-
-    const severeDrugData = {
-      drugs: drugs,
-      dosage: severeDrugs.dosage,
-      frequency: severeDrugs.frequency,
-      administrationRoute: severeDrugs.administrationRoute,
-      dateMedicationStarted: severeDrugs.dateMedicationStarted,
-      dateMedicationStopped: severeDrugs.dateMedicationStopped,
-      reactionReappeared: severeDrugs.reactionReappeared,
-      reactionStopped: severeDrugs.reactionStopped,
+  const submitForm = () => {
+    const payload = {
+      adverseEffect: {
+        anomaly: adr.anomaly,
+        dateOfDeath: adr.dateOfDeath,
+        death: adr.death,
+        disability: adr.disability,
+        eventDescription: adr.eventDescription,
+        hospitalization: adr.hospitalization,
+        intervention: adr.intervention,
+        lifeThreatening: adr.lifeThreatening,
+        //onsetDate: adr.onsetDate,
+        otherDescription: adr.otherDescription,
+        others: adr.others,
+        outcomes: adr.outcomes,
+        outcomesOtherDescription: adr.outcomesOtherDescription,
+        //stoppedDate: adr.stoppedDate,
+      },
+      concomitantMedicines: {
+        //medicines: adr.medicines,
+        preexistingMedicalConditions: adr.preexistingMedicalConditions,
+        preexistingMedicalOthers: adr.preexistingMedicalOthers,
+        relevantResult: adr.relevantResult,
+        //relevantResultDate: adr.relevantResultDate,
+        relevantTest: adr.relevantTest,
+        //relevantTestDate: adr.relevantTestDate,
+      },
+      patientUuid: patientUuid,
+      reporter: {
+        address: adr.address,
+        city: adr.city,
+        country: adr.country,
+        email: adr.email,
+        firstName: adr.firstName,
+        healthProfessional: adr.healthProfessional,
+        lastName: adr.lastName,
+        occupation: adr.occupation,
+        phoneNumber: adr.phoneNumber,
+        state: adr.state,
+      },
+      severeDrug: {
+        //drugs: adr.drugs,
+        dosage: adr.dosage,
+        administrationRoute: adr.administrationRoute,
+        //dateMedicationStarted: adr.dateMedicationStarted,
+        //dateMedicationStopped: adr.dateMedicationStopped,
+        frequency: adr.frequency,
+        reactionReappeared: adr.reactionReappeared,
+        reactionStopped: adr.reactionStopped,
+      },
+      weight: adr.weight,
     };
 
-    const medicationData = {
-      medicines: medicines,
-      relevantTest: concomitantMedicines.relevantTest,
-      relevantTestDate: concomitantMedicines.relevantTestDate,
-      relevantResult: concomitantMedicines.relevantResult,
-      relevantResultDate: concomitantMedicines.relevantResultDate,
-      preexistingMedicalConditions:
-        concomitantMedicines.preexistingMedicalConditions,
-      preexistingMedicalOthers: concomitantMedicines.preexistingMedicalOthers,
-    };
-
-    const adrPayload = {
-      patientUuid: uuid,
-      weight: bioData.weight,
-      facilityId: organization?.id,
-      adverseEffect: adverseEffect,
-      severeDrugs: severeDrugData,
-      concomitantMedicines: medicationData,
-      reporter: reporter,
-    };
-
-    console.log(adrPayload);
-    const response = await axios.post(`${baseUrl}adr/create`, adrPayload, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (response.status === 200) {
-      toast.success("ADR Form updated Successfully");
-      localStorage.removeItem("severeDrugs");
-      localStorage.removeItem("medicine");
-      history("/");
-    } else {
-      console.log(response);
-    }
+    console.log(payload);
+    axios
+      .put(`${baseUrl}adr/update/${patientUuid}`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log("res", response);
+        toast.success("ADR Form Filled Successfully");
+        localStorage.removeItem("severeDrugs");
+        localStorage.removeItem("medicine");
+        history.push("/");
+      })
+      .catch((error) => {
+        console.error(`${error.message}`);
+        toast.success("ADR Form Updated Successfully");
+        history.push("/");
+      });
   };
 
   return (
@@ -309,7 +400,7 @@ function EditForm(props) {
                           type="text"
                           name="dob"
                           id="dob"
-                          value={dateOfBirth}
+                          value={dob}
                           style={{ border: "1px solid #014d88" }}
                           readOnly
                         />
@@ -323,7 +414,7 @@ function EditForm(props) {
                           type="text"
                           name="age"
                           id="age"
-                          value={calculate_age(dateOfBirth)}
+                          value={calculate_age(dob)}
                           style={{ border: "1px solid #014d88" }}
                           readOnly
                         />
@@ -351,7 +442,7 @@ function EditForm(props) {
                           type="text"
                           name="hospitalNo"
                           id="hospitalNo"
-                          value={identifier?.identifier[0].value}
+                          value={hospitalNumber}
                           style={{ border: "1px solid #014d88" }}
                           readOnly
                         />
@@ -366,6 +457,7 @@ function EditForm(props) {
                           className="form-control"
                           type="number"
                           name="weight"
+                          value={adr.weight}
                           id="weight"
                           onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
@@ -405,10 +497,10 @@ function EditForm(props) {
                           type="text"
                           name="eventDescription"
                           id="eventDescription"
-                          value={adverseEffect.eventDescription}
+                          value={adr.eventDescription}
                           rows={4}
                           cols={60}
-                          onChange={handleAdverseInputChange}
+                          onChange={handleBioInputChange}
                           style={{
                             border: "1px solid #014d88",
                             height: "80px",
@@ -435,8 +527,8 @@ function EditForm(props) {
                                   <input
                                     type="checkbox"
                                     name="death"
-                                    checked={adverseEffect.death}
-                                    onChange={handleAdverseInputChange}
+                                    checked={adr.death}
+                                    onChange={handleBioInputChange}
                                   />{" "}
                                   Death
                                 </label>
@@ -455,8 +547,8 @@ function EditForm(props) {
                                   <input
                                     type="checkbox"
                                     name="lifeThreatening"
-                                    checked={adverseEffect.lifeThreatening}
-                                    onChange={handleAdverseInputChange}
+                                    checked={adr.lifeThreatening}
+                                    onChange={handleBioInputChange}
                                   />{" "}
                                   Life threatening
                                 </label>
@@ -476,9 +568,9 @@ function EditForm(props) {
                                   type="text"
                                   name="hospitalization"
                                   id="hospitalization"
-                                  value={adverseEffect.hospitalization}
+                                  value={adr.hospitalization}
                                   style={{ border: "1px solid #014d88" }}
-                                  onChange={handleAdverseInputChange}
+                                  onChange={handleBioInputChange}
                                 >
                                   <option value="">
                                     --Please choose an option--
@@ -500,8 +592,8 @@ function EditForm(props) {
                                   <input
                                     type="checkbox"
                                     name="disability"
-                                    checked={adverseEffect.disability}
-                                    onChange={handleAdverseInputChange}
+                                    checked={adr.disability}
+                                    onChange={handleBioInputChange}
                                   />{" "}
                                   Disability or Permanent Damage
                                 </label>
@@ -519,8 +611,8 @@ function EditForm(props) {
                                   <input
                                     type="checkbox"
                                     name="anomaly"
-                                    checked={adverseEffect.anomaly}
-                                    onChange={handleAdverseInputChange}
+                                    checked={adr.anomaly}
+                                    onChange={handleBioInputChange}
                                   />{" "}
                                   Congenital Anomaly/Birth Defects
                                 </label>
@@ -529,7 +621,7 @@ function EditForm(props) {
                           </td>
                           <td>
                             {" "}
-                            {adverseEffect.eventDescription === "" ? (
+                            {adr.eventDescription === "" ? (
                               ""
                             ) : (
                               <div className="form-group  col-md-6">
@@ -544,16 +636,16 @@ function EditForm(props) {
                                     name="outcomes"
                                     id="outcomes"
                                     style={{ border: "1px solid #014d88" }}
-                                    value={adverseEffect.outcomes}
-                                    onChange={handleAdverseInputChange}
+                                    value={adr.outcomes}
+                                    onChange={handleBioInputChange}
                                   >
                                     <option value="">
                                       --Please choose an option--
                                     </option>
                                     {outcomes?.map((outcome, index) => (
                                       <option
-                                        key={outcome.id}
-                                        value={outcome.id}
+                                        key={outcome.code}
+                                        value={outcome.code}
                                       >
                                         {outcome.display}
                                       </option>
@@ -573,8 +665,8 @@ function EditForm(props) {
                                   <input
                                     type="checkbox"
                                     name="intervention"
-                                    checked={adverseEffect.intervention}
-                                    onChange={handleAdverseInputChange}
+                                    checked={adr.intervention}
+                                    onChange={handleBioInputChange}
                                   />{" "}
                                   Require Intervention to Permanent Impairment
                                   or Disability (Devices)
@@ -584,7 +676,7 @@ function EditForm(props) {
                           </td>
                           <td>
                             {" "}
-                            {adverseEffect.outcomes === "" ? (
+                            {adr.outcomes === "" ? (
                               ""
                             ) : (
                               <div className="form-group mb-3 col-md-6">
@@ -598,8 +690,8 @@ function EditForm(props) {
                                     type="date"
                                     name="onsetDate"
                                     id="onsetDate"
-                                    value={adverseEffect.onsetDate}
-                                    onChange={handleAdverseInputChange}
+                                    value={adr.onsetDate}
+                                    onChange={handleBioInputChange}
                                     style={{ border: "1px solid #014d88" }}
                                   />
                                 </FormGroup>
@@ -616,8 +708,8 @@ function EditForm(props) {
                                   <input
                                     type="checkbox"
                                     name="others"
-                                    checked={handleAdverseInputChange.others}
-                                    onChange={handleAdverseInputChange}
+                                    checked={adr.others}
+                                    onChange={handleBioInputChange}
                                   />{" "}
                                   Others
                                 </label>
@@ -637,8 +729,8 @@ function EditForm(props) {
                                   type="date"
                                   name="stoppedDate"
                                   id="stoppedDate"
-                                  value={adverseEffect.stoppedDate}
-                                  onChange={handleAdverseInputChange}
+                                  value={adr.stoppedDate}
+                                  onChange={handleBioInputChange}
                                   style={{ border: "1px solid #014d88" }}
                                 />
                               </FormGroup>
@@ -648,7 +740,7 @@ function EditForm(props) {
                         <tr>
                           <td>
                             {" "}
-                            {adverseEffect.death === false ? (
+                            {adr.death === false ? (
                               ""
                             ) : (
                               <div className="form-group mb-3 col-md-6">
@@ -662,8 +754,8 @@ function EditForm(props) {
                                     type="date"
                                     name="dateOfDeath"
                                     id="dateOfDeath"
-                                    value={adverseEffect.dateOfDeath}
-                                    onChange={handleAdverseInputChange}
+                                    value={adr.dateOfDeath}
+                                    onChange={handleBioInputChange}
                                     style={{ border: "1px solid #014d88" }}
                                   />
                                 </FormGroup>
@@ -679,7 +771,7 @@ function EditForm(props) {
                       </tbody>
                     </table>
                     {/* <row> */}{" "}
-                    {adverseEffect.others === false ? (
+                    {adr.others === false ? (
                       " "
                     ) : (
                       <div className="form-group mb-3 col-md-6">
@@ -693,8 +785,8 @@ function EditForm(props) {
                             type="text"
                             name="otherDescription"
                             id="otherDescription"
-                            value={adverseEffect.otherDescription}
-                            onChange={handleAdverseInputChange}
+                            value={adr.otherDescription}
+                            onChange={handleBioInputChange}
                             style={{
                               border: "1px solid #014d88",
                             }}
@@ -702,7 +794,8 @@ function EditForm(props) {
                         </FormGroup>
                       </div>
                     )}{" "}
-                    {adverseEffect.outcomes === "1616" ? (
+                    {adr.outcomes ===
+                    "ADVERSE_EVENT_OUTCOME_OTHERS_(SPECIFY)" ? (
                       <div className="form-group mb-3 col-md-6">
                         <FormGroup>
                           <Label for="outcomesOtherDescription">
@@ -714,8 +807,8 @@ function EditForm(props) {
                             type="text"
                             name="outcomesOtherDescription"
                             id="outcomesOtherDescription"
-                            value={adverseEffect.outcomesOtherDescription}
-                            onChange={handleAdverseInputChange}
+                            value={adr.outcomesOtherDescription}
+                            onChange={handleBioInputChange}
                             style={{
                               border: "1px solid #014d88",
                             }}
@@ -763,8 +856,8 @@ function EditForm(props) {
                           type="number"
                           name="dosage"
                           id="ç"
-                          value={severeDrugsVal?.dosage}
-                          onChange={handleSevereInputChange}
+                          value={adr.dosage}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -779,8 +872,8 @@ function EditForm(props) {
                           type="number"
                           name="frequency"
                           id="frequency"
-                          value={severeDrugsVal?.frequency}
-                          onChange={handleSevereInputChange}
+                          value={adr.frequency}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -796,8 +889,8 @@ function EditForm(props) {
                           type="text"
                           name="administrationRoute"
                           id="administrationRoute"
-                          value={severeDrugsVal.administrationRoute}
-                          onChange={handleSevereInputChange}
+                          value={adr.administrationRoute}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -813,8 +906,8 @@ function EditForm(props) {
                           type="date"
                           name="dateMedicationStarted"
                           id="dateMedicationStarted"
-                          value={severeDrugsVal.dateMedicationStarted}
-                          onChange={handleSevereInputChange}
+                          value={adr.dateMedicationStarted}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -830,8 +923,8 @@ function EditForm(props) {
                           type="date"
                           name="dateMedicationStopped"
                           id="dateMedicationStopped"
-                          value={severeDrugsVal.dateMedicationStopped}
-                          onChange={handleSevereInputChange}
+                          value={adr.dateMedicationStopped}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -848,8 +941,8 @@ function EditForm(props) {
                           name="reactionReappeared"
                           id="reactionReappeared"
                           style={{ border: "1px solid #014d88" }}
-                          value={severeDrugsVal.reactionReappeared}
-                          onChange={handleSevereInputChange}
+                          value={adr.reactionReappeared}
+                          onChange={handleBioInputChange}
                         >
                           <option value="">--Please choose an option--</option>
                           <option value="Yes">Yes</option>
@@ -870,8 +963,8 @@ function EditForm(props) {
                           name="reactionStopped"
                           id="reactionStopped"
                           style={{ border: "1px solid #014d88" }}
-                          value={severeDrugsVal.reactionStopped}
-                          onChange={handleSevereInputChange}
+                          value={adr.reactionStopped}
+                          onChange={handleBioInputChange}
                         >
                           <option value="">--Please choose an option--</option>
                           <option value="Yes">Yes</option>
@@ -919,8 +1012,8 @@ function EditForm(props) {
                           type="text"
                           name="relevantTest"
                           id="relevantTest"
-                          value={concomitantMedicinesVal.relevantTest}
-                          onChange={handleMedicineInputChange}
+                          value={adr.relevantTest}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -936,8 +1029,8 @@ function EditForm(props) {
                           type="date"
                           name="relevantTestDate"
                           id="relevantTestDate"
-                          value={concomitantMedicinesVal.relevantTestDate}
-                          onChange={handleMedicineInputChange}
+                          value={adr.relevantTestDate}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -953,8 +1046,8 @@ function EditForm(props) {
                           type="number"
                           name="relevantResult"
                           id="relevantResult"
-                          value={concomitantMedicinesVal.relevantResult}
-                          onChange={handleMedicineInputChange}
+                          value={adr.relevantResult}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -970,8 +1063,8 @@ function EditForm(props) {
                           type="date"
                           name="relevantResultDate"
                           id="relevantResultDate"
-                          value={concomitantMedicinesVal.relevantResultDate}
-                          onChange={handleMedicineInputChange}
+                          value={adr.relevantResultDate}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -989,10 +1082,8 @@ function EditForm(props) {
                           name="preexistingMedicalConditions"
                           id="preexistingMedicalConditions"
                           style={{ border: "1px solid #014d88" }}
-                          value={
-                            concomitantMedicinesVal.preexistingMedicalConditions
-                          }
-                          onChange={handleMedicineInputChange}
+                          value={adr.preexistingMedicalConditions}
+                          onChange={handleBioInputChange}
                         >
                           <option value="">--Please choose an option--</option>
                           {relevant.map((outcome, index) => (
@@ -1003,7 +1094,7 @@ function EditForm(props) {
                         </select>
                       </FormGroup>
                     </div>
-                    {concomitantMedicinesVal.preexistingMedicalConditions !==
+                    {adr.preexistingMedicalConditions !==
                     "ADR_PREEXISTING_MEDICAL_CONDITIONS_OTHERS_(SPECIFY)" ? (
                       ""
                     ) : (
@@ -1018,10 +1109,8 @@ function EditForm(props) {
                             type="text"
                             name="preexistingMedicalOthers"
                             id="preexistingMedicalOthers"
-                            value={
-                              concomitantMedicinesVal.preexistingMedicalOthers
-                            }
-                            onChange={handleMedicineInputChange}
+                            value={adr.preexistingMedicalOthers}
+                            onChange={handleBioInputChange}
                             style={{
                               border: "1px solid #014d88",
                             }}
@@ -1062,8 +1151,8 @@ function EditForm(props) {
                           type="text"
                           name="firstName"
                           id="firstName"
-                          value={reporterVal.firstName}
-                          onChange={handleReporterInputChange}
+                          value={adr.firstName}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -1078,8 +1167,8 @@ function EditForm(props) {
                           type="text"
                           name="lastName"
                           id="lastName"
-                          value={reporterVal.lastName}
-                          onChange={handleReporterInputChange}
+                          value={adr.lastName}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -1094,8 +1183,8 @@ function EditForm(props) {
                           type="text"
                           name="address"
                           id="address"
-                          value={reporterVal.address}
-                          onChange={handleReporterInputChange}
+                          value={adr.address}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -1110,8 +1199,8 @@ function EditForm(props) {
                           type="text"
                           name="country"
                           id="country"
-                          value={reporterVal.country}
-                          onChange={handleReporterInputChange}
+                          value={adr.country}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -1126,8 +1215,8 @@ function EditForm(props) {
                           type="text"
                           name="city"
                           id="city"
-                          value={reporterVal.city}
-                          onChange={handleReporterInputChange}
+                          value={adr.city}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -1142,8 +1231,8 @@ function EditForm(props) {
                           type="text"
                           name="state"
                           id="state"
-                          value={reporterVal.state}
-                          onChange={handleReporterInputChange}
+                          value={adr.state}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -1156,10 +1245,10 @@ function EditForm(props) {
                         <input
                           className="form-control"
                           type="number"
-                          name="phone"
-                          id="phone"
-                          value={reporterVal.phone}
-                          onChange={handleReporterInputChange}
+                          name="phoneNumber"
+                          id="phoneNumber"
+                          value={adr.phoneNumber}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -1174,8 +1263,8 @@ function EditForm(props) {
                           type="email"
                           name="email"
                           id="email"
-                          value={reporterVal.email}
-                          onChange={handleReporterInputChange}
+                          value={adr.email}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -1192,8 +1281,8 @@ function EditForm(props) {
                           name="healthProfessional"
                           id="healthProfessional"
                           style={{ border: "1px solid #014d88" }}
-                          value={reporterVal.healthProfessional}
-                          onChange={handleReporterInputChange}
+                          value={adr.healthProfessional}
+                          onChange={handleBioInputChange}
                         >
                           <option value="">--Please choose an option--</option>
                           <option value="Yes">Yes</option>
@@ -1211,8 +1300,8 @@ function EditForm(props) {
                           type="text"
                           name="occupation"
                           id="occupation"
-                          value={reporterVal.occupation}
-                          onChange={handleReporterInputChange}
+                          value={adr.occupation}
+                          onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
                       </FormGroup>
@@ -1231,11 +1320,11 @@ function EditForm(props) {
                       >
                         {!saving ? (
                           <span style={{ textTransform: "capitalize" }}>
-                            Save
+                            Update
                           </span>
                         ) : (
                           <span style={{ textTransform: "capitalize" }}>
-                            Saving...
+                            Updating...
                           </span>
                         )}
                       </Button>

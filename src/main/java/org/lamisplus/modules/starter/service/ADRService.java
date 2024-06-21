@@ -91,7 +91,17 @@ public class ADRService {
         ADR updatedAdr = fromADRToDTO(request);
         log.info("mapped adr info : {}", updatedAdr);
 
-        updatedAdr.setId(existingAdr.getId()); // ensure tha same id for update
+        Optional<User> currentUser = userService.getUserWithRoles();
+        log.info("current user: {}",currentUser);
+
+        if (currentUser.isPresent()) {
+            log.info("currentUser: " + currentUser.get());
+            User user = currentUser.get();
+            Long currentOrganisationUnitId = user.getCurrentOrganisationUnitId();
+            updatedAdr.setFacilityID(currentOrganisationUnitId);
+        }
+
+        updatedAdr.setId(existingAdr.getId());// ensure tha same id for update
 
         ADR saveAdr = adrRepository.save(updatedAdr);
         log.info("saved to db: {}", saveAdr);
@@ -115,21 +125,34 @@ public class ADRService {
                 .build();
     }
 
-    public ApiResponse getAllAdrs( ){
+    public List<PatientADRProjection> getAllAdrs(String searchValue){
 
-        List<ADR> adrList = adrRepository.getAllPatientAdr();
+        List<PatientADRProjection> adrList;
 
-        log.info("adr list: {}", adrList);
+        if (!((searchValue == null) || (searchValue.equals("*")))) {
+            searchValue = searchValue.replaceAll("\\s", "");
+            searchValue = searchValue.replaceAll(",", "");
+            String queryParam = "";
+            queryParam = "%" + searchValue + "%";
+            adrList = adrRepository.getAllPatientAdrByParam(queryParam);
+        } else {
+            adrList = adrRepository.getAllPatientAdr();
+
+        }
 
         if(adrList.isEmpty()){
             throw new ADRNotFoundException("No ADRs found");
+        }else{
+            return adrList;
         }
 
-        return ApiResponse.builder()
-                .statusCode(String.valueOf(HttpStatus.OK.value()))
-                .message(GeneralResponseEnum.SUCCESS.getMessage())
-                .details(adrList)
-                .build();
+
+
+//        return ApiResponse.builder()
+//                .statusCode(String.valueOf(HttpStatus.OK.value()))
+//                .message(GeneralResponseEnum.SUCCESS.getMessage())
+//                .details(adrList)
+//                .build();
 
     }
 

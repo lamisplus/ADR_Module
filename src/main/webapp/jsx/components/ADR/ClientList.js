@@ -120,7 +120,12 @@ const ClientList = (props) => {
                     : calculateAge(row.dateOfBirth),
                 actions: (
                   <div>
-                    <Link to="/adr-form" state={{ patientInfo: row }}>
+                    <Link to={{
+                            pathname: "/adr-form",
+                            state: {
+                              patientInfo: row
+                            },
+                          }}>
                       <Button>Fill Form</Button>
                     </Link>
                   </div>

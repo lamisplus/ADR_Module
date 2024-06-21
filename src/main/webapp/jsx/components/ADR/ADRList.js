@@ -46,9 +46,6 @@ const tableIcons = {
 };
 
 const AList = (props) => {
-  const [upload, setUpload] = useState([]);
-  const [permissions, setPermissions] = useState(props.permissions);
-
   useEffect(() => {
     localStorage.removeItem("severeDrugs");
     localStorage.removeItem("medicine");
@@ -78,17 +75,10 @@ const AList = (props) => {
     return ageYears === 1 ? "1 year" : `${ageYears} years`;
   };
 
-  const getHospitalNumber = (identifier) => {
-    const hospitalNumber = identifier.identifier.find(
-      (obj) => obj.type == "HospitalNumber"
-    );
-    return hospitalNumber ? hospitalNumber.value : "";
-  };
-
   const handleRemoteData = (query) =>
     new Promise((resolve, reject) => {
       axios
-        .get(`${baseUrl}adr/get_all`, {
+        .get(`${baseUrl}adr/get_all?searchParam=${query.search}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => response)
@@ -101,15 +91,28 @@ const AList = (props) => {
             });
           } else {
             resolve({
-              data: result.data.details.map((row) => ({
-                name: "",
-                id: "",
-                sex: "",
-                dateOfBirth: "",
-                age: "",
+              data: result.data.map((row) => ({
+                name: [row.firstName, row.surname].filter(Boolean).join(", "),
+                id: row.hospitalNumber,
+                sex: row.sex,
+                dateOfBirth: row.dob,
+                age:
+                  row.dob === 0 ||
+                  row.dob === undefined ||
+                  row.dob === null ||
+                  row.dob === ""
+                    ? 0
+                    : calculateAge(row.dob),
                 actions: (
                   <div>
-                    <Link to="/edit-adr-form" state={{ patientInfo: row }}>
+                    <Link
+                      to={{
+                        pathname: "/edit-adr-form",
+                        state: {
+                          patientInfo: row,
+                        },
+                      }}
+                    >
                       <Button className="btn btn-info">Edit Form</Button>
                     </Link>
                   </div>

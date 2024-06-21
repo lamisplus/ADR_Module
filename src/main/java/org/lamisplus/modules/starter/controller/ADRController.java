@@ -4,9 +4,8 @@ package org.lamisplus.modules.starter.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.starter.domain.dto.ADRRequest;
-import org.lamisplus.modules.starter.domain.dto.ADRResponse;
 import org.lamisplus.modules.starter.domain.dto.ApiResponse;
-import org.lamisplus.modules.starter.domain.dto.PatientDetails;
+import org.lamisplus.modules.starter.domain.dto.PatientADRProjection;
 import org.lamisplus.modules.starter.domain.entity.ADR;
 import org.lamisplus.modules.starter.service.ADRService;
 import org.springframework.http.ResponseEntity;
@@ -48,10 +47,9 @@ public class ADRController {
         return ResponseEntity.ok(adrService.getADRByPatientId(patientUuid));
     }
 
-
     @GetMapping("/get_all")
-    public ResponseEntity<ApiResponse> getAllAdrs(){
+    public ResponseEntity<List<PatientADRProjection>> getAllAdrs(@RequestParam(defaultValue = "*") String searchParam){
         log.info("entering into the create controller...!");
-        return ResponseEntity.ok(adrService.getAllAdrs());
+        return ResponseEntity.ok(adrService.getAllAdrs(searchParam));
     }
 }

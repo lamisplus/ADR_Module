@@ -4,7 +4,6 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
-<<<<<<< HEAD
     <changeSet id="20240426" author="Tyav Barnabas">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
@@ -29,17 +28,4 @@
                 );
         </sql>
     </changeSet>
-=======
-<!--    <changeSet id="20240426" author="victor">-->
-<!--        <preConditions onFail="MARK_RAN">-->
-<!--            <sqlCheck expectedResult="0">-->
-<!--      -->
-<!--            </sqlCheck>-->
-<!--        </preConditions>-->
-<!--        <sql>-->
-
-<!--        </sql>-->
-<!--    </changeSet>-->
->>>>>>> origin/master
-
 </databaseChangeLog>
