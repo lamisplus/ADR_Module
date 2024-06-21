@@ -31,12 +31,12 @@ public class ConcomitantMedicines implements Serializable {
     private List<Medicine> medicines;
     @NotNull(message = "relevant is required")
     private String relevantTest;
-    @Convert(converter = LocalDateTime.class)
+//    @Convert(converter = LocalDateTime.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate relevantTestDate;
     @NotNull(message = "relevant results is required")
     private String relevantResult;
-    @Convert(converter = LocalDateTime.class)
+    //@Convert(converter = LocalDateTime.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate relevantResultDate;
     private String preexistingMedicalConditions;

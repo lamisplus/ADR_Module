@@ -39,10 +39,10 @@ public class AdverseEffect implements Serializable {
     private String otherDescription;
     @NotNull(message = "outcomes is required")
     private String outcomes;
-    @Convert(converter = LocalDateTime.class)
+    //@Convert(converter = LocalDateTime.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate onsetDate;
-    @Convert(converter = LocalDateTime.class)
+    //@Convert(converter = LocalDateTime.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate stoppedDate;
     private String outcomesOtherDescription;
