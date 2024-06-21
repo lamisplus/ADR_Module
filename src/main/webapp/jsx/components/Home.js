@@ -1,75 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
-import { Card, CardBody } from "reactstrap";
-import "semantic-ui-css/semantic.min.css";
-import { Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-
+import React, { useState, Fragment, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Row, Col, Card, Tab, Tabs } from "react-bootstrap";
 import axios from "axios";
 import { token, url as baseUrl } from "../../api";
-import { Tab } from "semantic-ui-react";
+import { FaUserPlus } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import ClientList from "./ADR/ClientList";
+import ADRList from "./ADR/ADRList";
 
-import Typography from "@mui/material/Typography";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import ClientList from "./ClientList";
-import ADRList from "./ADRList";
+const divStyle = {
+  borderRadius: "2px",
+  fontSize: 14,
+};
 
-const useStyles = makeStyles((theme) => ({
-  card: {
-    margin: theme.spacing(20),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  cardBottom: {
-    marginBottom: 20,
-  },
-  Select: {
-    height: 45,
-    width: 350,
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-    "& a": {
-      textDecoration: "none !important",
-    },
-  },
-  input: {
-    display: "none",
-  },
-  error: {
-    color: "#f85032",
-    fontSize: "11px",
-  },
-  success: {
-    color: "#4BB543 ",
-    fontSize: "11px",
-  },
-}));
-function Home(props) {
-  const classes = useStyles();
-  const [patients, setPatients] = useState([]);
+const Home = () => {
+  const [key, setKey] = useState("home");
   const [permissions, setPermissions] = useState([]);
-  const [loading, setLoading] = useState("");
-  const [modal, setModal] = useState(false);
-  const [patient, setPatient] = useState(false);
-
-  const [enablePPI, setEnablePPI] = useState(true);
-  const [modalRecall, setModalRecall] = useState(false);
 
   useEffect(() => {
     userPermission();
@@ -85,52 +32,45 @@ function Home(props) {
       })
       .catch((error) => {});
   };
-  const enablePPIColumns = () => {
-    setEnablePPI(!enablePPI);
-  };
-  const panes = [
-    {
-      menuItem: "Clients",
-      render: () => (
-        <Tab.Pane>
-          <ClientList permissions={permissions} />
-        </Tab.Pane>
-      ),
-    },
-    {
-      menuItem: "ADR",
-      render: () => (
-        <Tab.Pane>
-          <ADRList permissions={permissions} />
-        </Tab.Pane>
-      ),
-    },
-  ];
 
   return (
-    <>
-      <div className={classes.root}>
-        <ToastContainer autoClose={3000} hideProgressBar />
-        {permissions.length > 0 && (
-          <Card>
-            <CardBody>
-              <div className="row mb-12 col-md-12">
-                <div className="mb-6 col-md-6">
-                  <Breadcrumbs aria-label="breadcrumb">
-                    <Typography style={{ color: "#992E62" }}>ADR</Typography>
-                    <Typography style={{ color: "#014d88" }}>Home</Typography>
-                  </Breadcrumbs>
-                </div>
-              </div>
-              <br />
-
-              <Tab panes={panes} />
-            </CardBody>
-          </Card>
-        )}
+    <Fragment>
+      <div
+        className="row page-titles mx-0"
+        style={{ marginTop: "0px", marginBottom: "-10px" }}
+      >
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item active">
+            <h4>ADR</h4>
+          </li>
+        </ol>
       </div>
-    </>
+      <br />
+      <Row>
+        <Col xl={12}>
+          <Card style={divStyle}>
+            <Card.Body>
+              <div className="custom-tab-1">
+                <Tabs
+                  id="controlled-tab-example"
+                  activeKey={key}
+                  onSelect={(k) => setKey(k)}
+                  className="mb-3"
+                >
+                  <Tab eventKey="home" title="Patients">
+                    <ClientList permissions={permissions} />
+                  </Tab>
+                  <Tab eventKey="hts" title="ADR Patients">
+                    <ADRList permissions={permissions} />
+                  </Tab>
+                </Tabs>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Fragment>
   );
-}
+};
 
 export default Home;

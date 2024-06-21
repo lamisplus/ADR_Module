@@ -15,7 +15,11 @@ acrossHibernate:
 applicationInfo:
   applicationId: adr
   applicationName: ADR
+<<<<<<< HEAD
   buildDate: "2024-06-21T08:57:15Z"
+=======
+  buildDate: "2024-06-20T17:08:48Z"
+>>>>>>> origin/futurebranch-fix
   buildId: "1.0.0-1.0.0"
 build:
   number: "1.0.0"

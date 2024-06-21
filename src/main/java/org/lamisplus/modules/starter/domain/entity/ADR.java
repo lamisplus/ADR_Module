@@ -2,14 +2,18 @@ package org.lamisplus.modules.starter.domain.entity;
 
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.annotations.Type;
+import org.lamisplus.modules.patient.domain.Patient;
 import org.springframework.data.domain.Persistable;
 import com.fasterxml.jackson.databind.JsonNode;
+import javax.persistence.Entity;
 
 @Entity
 @Getter
@@ -26,6 +30,8 @@ public class ADR extends ADRAuditEntity implements Persistable<Long>, Serializab
     private String patientUuid;
     @Column(name = "weight")
     private Integer weight;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate reportDate;
     @Column(name = "facility_id")
     private Long facilityID;
     @Type(type = "jsonb-node")
@@ -46,5 +52,4 @@ public class ADR extends ADRAuditEntity implements Persistable<Long>, Serializab
         // TODO Auto-generated method stub
         return id == null;
     }
-
 }

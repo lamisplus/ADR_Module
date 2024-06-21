@@ -1,5 +1,6 @@
 {
   "files": {
+<<<<<<< HEAD
     "main.css": "./static/css/main.3d42d67b.chunk.css",
 <<<<<<< HEAD
     "main.js": "./static/js/main.3b5b4a2c.chunk.js",
@@ -54,5 +55,38 @@
     "static/css/main.3d42d67b.chunk.css",
     "static/js/main.cd1b264c.chunk.js"
 >>>>>>> origin/master
+=======
+    "main.css": "./static/css/main.2f0685df.chunk.css",
+    "main.js": "./static/js/main.1aa875e5.chunk.js",
+    "main.js.map": "./static/js/main.1aa875e5.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.0b99a729.js",
+    "runtime-main.js.map": "./static/js/runtime-main.0b99a729.js.map",
+    "static/css/2.51deddb4.chunk.css": "./static/css/2.51deddb4.chunk.css",
+    "static/js/2.5b981d06.chunk.js": "./static/js/2.5b981d06.chunk.js",
+    "static/js/2.5b981d06.chunk.js.map": "./static/js/2.5b981d06.chunk.js.map",
+    "static/js/3.4b1c8090.chunk.js": "./static/js/3.4b1c8090.chunk.js",
+    "static/js/3.4b1c8090.chunk.js.map": "./static/js/3.4b1c8090.chunk.js.map",
+    "static/js/4.f1f0ef6e.chunk.js": "./static/js/4.f1f0ef6e.chunk.js",
+    "static/js/4.f1f0ef6e.chunk.js.map": "./static/js/4.f1f0ef6e.chunk.js.map",
+    "static/js/5.71cee3b3.chunk.js": "./static/js/5.71cee3b3.chunk.js",
+    "static/js/5.71cee3b3.chunk.js.map": "./static/js/5.71cee3b3.chunk.js.map",
+    "static/js/6.d7be16f4.chunk.js": "./static/js/6.d7be16f4.chunk.js",
+    "static/js/6.d7be16f4.chunk.js.map": "./static/js/6.d7be16f4.chunk.js.map",
+    "index.html": "./index.html",
+    "static/css/2.51deddb4.chunk.css.map": "./static/css/2.51deddb4.chunk.css.map",
+    "static/css/main.2f0685df.chunk.css.map": "./static/css/main.2f0685df.chunk.css.map",
+    "static/js/2.5b981d06.chunk.js.LICENSE.txt": "./static/js/2.5b981d06.chunk.js.LICENSE.txt",
+    "static/js/3.4b1c8090.chunk.js.LICENSE.txt": "./static/js/3.4b1c8090.chunk.js.LICENSE.txt",
+    "static/js/4.f1f0ef6e.chunk.js.LICENSE.txt": "./static/js/4.f1f0ef6e.chunk.js.LICENSE.txt",
+    "static/js/5.71cee3b3.chunk.js.LICENSE.txt": "./static/js/5.71cee3b3.chunk.js.LICENSE.txt",
+    "static/media/style.css": "./static/media/themifyd41d.9bad9444.eot"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0b99a729.js",
+    "static/css/2.51deddb4.chunk.css",
+    "static/js/2.5b981d06.chunk.js",
+    "static/css/main.2f0685df.chunk.css",
+    "static/js/main.1aa875e5.chunk.js"
+>>>>>>> origin/futurebranch-fix
   ]
 }

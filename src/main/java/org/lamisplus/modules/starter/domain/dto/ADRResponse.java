@@ -16,6 +16,7 @@ public class ADRResponse {
     private String patientUuid;
     private Integer weight;
     private Long facilityID;
+    private LocalDate reportDate;
     private Object adverseEffect;
     private Object severeDrug;
     private Object concomitantMedicines;

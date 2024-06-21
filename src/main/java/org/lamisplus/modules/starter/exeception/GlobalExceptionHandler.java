@@ -21,6 +21,14 @@ import java.util.List;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse>handleAllException(Exception ex){
+        ApiResponse response = new ApiResponse();
+        response.setStatusCode(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        response.setMessage(ex.getMessage());
+        return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ApiResponse> handleConstraintViolationException(ConstraintViolationException ex) {
