@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 
@@ -35,9 +36,8 @@ public class SevereDrug {
     private String administrationRoute;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @NotNull(message = "dateMedicationStarted is required")
-    private LocalDate dateMedicationStarted;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate dateMedicationStopped;
+    private Date dateMedicationStarted;
+    private Date dateMedicationStopped;
     @NotNull(message = "reasonMedicationStopped is required")
     private String reactionStopped;
     @NotNull(message = "reactionReappeared is required")

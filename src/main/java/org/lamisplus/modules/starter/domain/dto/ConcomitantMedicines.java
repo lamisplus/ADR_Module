@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -32,11 +33,11 @@ public class ConcomitantMedicines implements Serializable {
     @NotNull(message = "relevant is required")
     private String relevantTest;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate relevantTestDate;
+    private Date relevantTestDate;
     @NotNull(message = "relevant results is required")
     private String relevantResult;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate relevantResultDate;
+    private Date relevantResultDate;
     private String preexistingMedicalConditions;
     private String preexistingMedicalOthers;
 }

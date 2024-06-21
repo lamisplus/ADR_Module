@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Getter
@@ -28,7 +29,8 @@ public class AdverseEffect implements Serializable {
     @NotNull(message = "hospitalization is required")
     private String hospitalization;
     @NotNull(message = "date of death is required")
-    private LocalDate dateOfDeath;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date dateOfDeath;
     @NotNull(message = "disability is required")
     private boolean disability;
     @NotNull(message = "anomaly is required")
@@ -40,8 +42,8 @@ public class AdverseEffect implements Serializable {
     @NotNull(message = "outcomes is required")
     private String outcomes;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate onsetDate;
+    private Date onsetDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate stoppedDate;
+    private Date stoppedDate;
     private String outcomesOtherDescription;
 }

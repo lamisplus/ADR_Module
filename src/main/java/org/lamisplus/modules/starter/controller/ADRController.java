@@ -28,12 +28,6 @@ public class ADRController {
         return ResponseEntity.ok(adrService.createADR(request));
     }
 
-    @GetMapping("/adr/patient/{patientUuid}")
-    public ResponseEntity<List<PatientDetails>> getPatientDataByAdr(@PathVariable("patientUuid") String patientUuid) {
-        List<PatientDetails> patientData = adrService.getPatientDataByAdr(patientUuid);
-        return ResponseEntity.ok(patientData);
-    }
-
 
     @PutMapping("/update/{patientUuid}")
     public ResponseEntity<ApiResponse> updateADRByPatientId(@PathVariable("patientUuid")String patientUuid,@RequestBody ADRRequest request){

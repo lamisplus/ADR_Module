@@ -11,6 +11,7 @@ import javax.persistence.Convert;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -24,8 +25,8 @@ public class Medicine {
     @NotNull(message = "concomitant dosage is required")
     private String concomitantRoute;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate dateConcomitantStarted;
+    private Date dateConcomitantStarted;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate dateConcomitantStopped;
+    private Date dateConcomitantStopped;
     private String concomitantReasonUse;
 }
