@@ -33,11 +33,9 @@ public class SevereDrug {
     private Integer frequency;
     @NotNull(message = "duration is required")
     private String administrationRoute;
-    //@Convert(converter = LocalDateTime.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @NotNull(message = "dateMedicationStarted is required")
     private LocalDate dateMedicationStarted;
-    //@Convert(converter = LocalDateTime.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dateMedicationStopped;
     @NotNull(message = "reasonMedicationStopped is required")

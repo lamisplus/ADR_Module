@@ -36,7 +36,6 @@ public class ADRAuditEntity {
     @Column(name = "created_date", updatable = false)
     @CreatedDate
     private LocalDateTime createdDate = LocalDateTime.now ();
-    //@JsonIgnore
     @ToString.Exclude
     @Column(name = "created_by", updatable = false)
     private String createdBy = SecurityUtils.getCurrentUserLogin ().orElse ("");
@@ -46,7 +45,6 @@ public class ADRAuditEntity {
     private LocalDateTime lastModifiedDate = LocalDateTime.now ();
 
     @Column(name = "last_modified_by")
-    //@JsonIgnore
     @ToString.Exclude
     private String lastModifiedBy = SecurityUtils.getCurrentUserLogin ().orElse ("");
 
