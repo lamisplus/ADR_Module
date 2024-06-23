@@ -537,7 +537,33 @@ function EditForm() {
                           </td>
                           <td></td>
                         </tr>
-
+                        <tr>
+                          {" "}
+                          {adr.death === false ? (
+                            ""
+                          ) : (
+                            <td>
+                              <div className="form-group mb-3 col-md-6">
+                                <FormGroup>
+                                  <Label for="dateOfDeath">
+                                    Death Date{" "}
+                                    <span style={{ color: "red" }}>*</span>
+                                  </Label>
+                                  <input
+                                    className="form-control"
+                                    type="date"
+                                    name="dateOfDeath"
+                                    id="dateOfDeath"
+                                    value={adr.dateOfDeath}
+                                    onChange={handleBioInputChange}
+                                    style={{ border: "1px solid #014d88" }}
+                                  />
+                                </FormGroup>
+                              </div>
+                            </td>
+                          )}
+                          <td></td>
+                        </tr>
                         <tr>
                           <td>
                             {" "}
@@ -737,33 +763,7 @@ function EditForm() {
                             </div>
                           </td>
                         </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            {adr.death === false ? (
-                              ""
-                            ) : (
-                              <div className="form-group mb-3 col-md-6">
-                                <FormGroup>
-                                  <Label for="dateOfDeath">
-                                    Death Date{" "}
-                                    <span style={{ color: "red" }}>*</span>
-                                  </Label>
-                                  <input
-                                    className="form-control"
-                                    type="date"
-                                    name="dateOfDeath"
-                                    id="dateOfDeath"
-                                    value={adr.dateOfDeath}
-                                    onChange={handleBioInputChange}
-                                    style={{ border: "1px solid #014d88" }}
-                                  />
-                                </FormGroup>
-                              </div>
-                            )}
-                          </td>
-                          <td></td>
-                        </tr>
+
                         {/* <tr>
                           <td>Mark</td>
                           <td>Otto</td>
@@ -915,7 +915,7 @@ function EditForm() {
                     <div className="form-group mb-3 col-md-4">
                       <FormGroup>
                         <Label for="dateMedicationStopped">
-                          Date medication started{" "}
+                          Date medication stopped{" "}
                           <span style={{ color: "red" }}>*</span>
                         </Label>
                         <input
@@ -954,7 +954,7 @@ function EditForm() {
                     <div className="form-group  col-md-4">
                       <FormGroup>
                         <Label>
-                          Reaction Reappeared after drug reduction{" "}
+                          Reaction reappeared after drug reintroduction{" "}
                           <span style={{ color: "red" }}>*</span>
                         </Label>
                         <select
