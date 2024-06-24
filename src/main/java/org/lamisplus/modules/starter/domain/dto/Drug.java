@@ -32,5 +32,19 @@ public class Drug {
     private String nafdacNo;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date expiryDate;
+    @NotNull(message = "relevant is required")
+    private Integer dosage;
+    @NotNull(message = "frequency is required")
+    private Integer frequency;
+    @NotNull(message = "duration is required")
+    private String administrationRoute;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @NotNull(message = "dateMedicationStarted is required")
+    private Date dateMedicationStarted;
+    private Date dateMedicationStopped;
+    @NotNull(message = "reasonMedicationStopped is required")
+    private String reactionStopped;
+    @NotNull(message = "reactionReappeared is required")
+    private String reactionReappeared;
 
 }

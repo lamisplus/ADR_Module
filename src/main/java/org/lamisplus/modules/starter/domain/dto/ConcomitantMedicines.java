@@ -30,14 +30,6 @@ public class ConcomitantMedicines implements Serializable {
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "brands",columnDefinition = "jsonb")
     private List<Medicine> medicines;
-    @NotNull(message = "relevant is required")
-    private String relevantTest;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date relevantTestDate;
-    @NotNull(message = "relevant results is required")
-    private String relevantResult;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date relevantResultDate;
     private String preexistingMedicalConditions;
     private String preexistingMedicalOthers;
 }

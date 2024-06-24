@@ -3,6 +3,7 @@ package org.lamisplus.modules.starter.domain.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 
 import javax.persistence.*;
@@ -30,7 +31,7 @@ public class ADR extends ADRAuditEntity implements Persistable<Long>, Serializab
     private String patientUuid;
     @Column(name = "weight")
     private Integer weight;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private LocalDate reportDate;
     @Column(name = "facility_id")
     private Long facilityID;

@@ -164,7 +164,7 @@ public class ADRService {
 
         adr.setPatientUuid(adrRequest.getPatientUuid());
         adr.setWeight(adrRequest.getWeight());
-        adr.setReportDate(LocalDate.now());
+        adr.setReportDate(adrRequest.getReportDate());
         AdverseEffect adverseEffect = adrRequest.getAdverseEffect();
         ConcomitantMedicines concomitantMedicines = adrRequest.getConcomitantMedicines();
         SevereDrug severeDrug = adrRequest.getSevereDrug();
@@ -188,7 +188,7 @@ public class ADRService {
         ADRResponse response = new ADRResponse();
         response.setPatientUuid(adr.getPatientUuid());
         response.setWeight(adr.getWeight());
-        response.setReportDate(LocalDate.now());
+        response.setReportDate(adr.getReportDate());
         response.setAdverseEffect(adr.getAdverseEffect());
         response.setConcomitantMedicines(adr.getConcomitantMedicines());
         response.setSevereDrug(adr.getSevereDrugs());

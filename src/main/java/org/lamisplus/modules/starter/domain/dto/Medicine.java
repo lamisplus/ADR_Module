@@ -30,4 +30,12 @@ public class Medicine {
     private Date dateConcomitantStopped;
     @NotNull(message = "batchNo is required")
     private String concomitantReasonUse;
+    @NotNull(message = "relevant is required")
+    private String relevantTest;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date relevantTestDate;
+    @NotNull(message = "relevant results is required")
+    private String relevantResult;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date relevantResultDate;
 }
