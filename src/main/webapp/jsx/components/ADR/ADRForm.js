@@ -77,7 +77,11 @@ function ADRForm() {
   const classes = useStyles();
   const [saving, setSaving] = useState(false);
   const [outcomes, setOutcomes] = useState([]);
-
+  const [errors, setErrors] = useState({});
+  const styles = {
+    color: "#f85032",
+    fontSize: "11px",
+  };
   const [relevant, setRelevant] = useState([]);
   const history = useHistory();
   const patientInfo =
@@ -162,10 +166,6 @@ function ADRForm() {
   });
 
   const [concomitantMedicines, setConcomitantMedicines] = useState({
-    relevantTest: "",
-    relevantTestDate: "",
-    relevantResult: "",
-    relevantResultDate: "",
     preexistingMedicalConditions: "",
     preexistingMedicalOthers: "",
   });
@@ -181,6 +181,7 @@ function ADRForm() {
     occupation: "",
     country: "",
     email: "",
+    reportDate: "",
   });
 
   const handleBioInputChange = (event) => {
@@ -223,27 +224,38 @@ function ADRForm() {
     });
   };
 
+  const validateInputs = () => {
+    const temp = { ...errors };
+    temp.firstName = reporter.firstName ? "" : "First Name is required.";
+    temp.lastName = reporter.lastName ? "" : "Last Name is required.";
+    temp.address = reporter.address ? "" : "Address is required.";
+    temp.city = reporter.city ? "" : "City is required.";
+    temp.state = reporter.state ? "" : "State is required.";
+    temp.phoneNumber = reporter.phoneNumber ? "" : "Phone Number is required.";
+    temp.healthProfessional = reporter.healthProfessional
+      ? ""
+      : "Health Professional is required.";
+    temp.occupation = reporter.occupation ? "" : "Occupation is required.";
+    temp.country = reporter.country ? "" : "Country is required.";
+    temp.email = reporter.email ? "" : "Email is required.";
+    temp.reportDate = reporter.reportDate ? "" : "Report Date is required.";
+
+    setErrors({
+      ...temp,
+    });
+    return Object.values(temp).every((x) => x === "");
+  };
+
   const submitForm = () => {
     const drugs = JSON.parse(localStorage.getItem("severeDrugs"));
     const medicines = JSON.parse(localStorage.getItem("medicine"));
 
     const severeDrugData = {
       drugs: drugs,
-      dosage: severeDrugs.dosage,
-      frequency: severeDrugs.frequency,
-      administrationRoute: severeDrugs.administrationRoute,
-      dateMedicationStarted: severeDrugs.dateMedicationStarted,
-      dateMedicationStopped: severeDrugs.dateMedicationStopped,
-      reactionReappeared: severeDrugs.reactionReappeared,
-      reactionStopped: severeDrugs.reactionStopped,
     };
 
     const medicationData = {
       medicines: medicines,
-      relevantTest: concomitantMedicines.relevantTest,
-      relevantTestDate: concomitantMedicines.relevantTestDate,
-      relevantResult: concomitantMedicines.relevantResult,
-      relevantResultDate: concomitantMedicines.relevantResultDate,
       preexistingMedicalConditions:
         concomitantMedicines.preexistingMedicalConditions,
       preexistingMedicalOthers: concomitantMedicines.preexistingMedicalOthers,
@@ -257,23 +269,26 @@ function ADRForm() {
       severeDrug: severeDrugData,
       concomitantMedicines: medicationData,
       reporter: reporter,
+      reportDate: reporter.reportDate,
     };
 
     console.log(adrPayload);
-    axios
-      .post(`${baseUrl}adr/create`, adrPayload, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        console.log("res", response);
-        toast.success("ADR Form Filled Successfully");
-        localStorage.removeItem("severeDrugs");
-        localStorage.removeItem("medicine");
-        history.push("/");
-      })
-      .catch((error) => {
-        console.error(`${error.message}`);
-      });
+    if (validateInputs()) {
+      axios
+        .post(`${baseUrl}adr/create`, adrPayload, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          console.log("res", response);
+          toast.success("ADR Form Filled Successfully");
+          localStorage.removeItem("severeDrugs");
+          localStorage.removeItem("medicine");
+          history.push("/");
+        })
+        .catch((error) => {
+          console.error(`${error.message}`);
+        });
+    }
   };
 
   return (
@@ -461,10 +476,13 @@ function ADRForm() {
                       <tbody>
                         <tr>
                           <td>
-                            <h3>Seriousness of Adverse Event</h3>
+                            <h3>
+                              Seriousness of Adverse Event (check all that
+                              apply)
+                            </h3>
                           </td>
                           <td>
-                            <h3>Outcomes (check all that apply)</h3>
+                            <h3>Outcomes </h3>
                           </td>
                         </tr>
                         <tr>
@@ -486,7 +504,33 @@ function ADRForm() {
                           </td>
                           <td></td>
                         </tr>
-
+                        <tr>
+                          {" "}
+                          {adverseEffect.death === false ? (
+                            ""
+                          ) : (
+                            <td>
+                              <div className="form-group mb-3 col-md-4">
+                                <FormGroup>
+                                  <Label for="dateOfDeath">
+                                    Death Date{" "}
+                                    <span style={{ color: "red" }}>*</span>
+                                  </Label>
+                                  <input
+                                    className="form-control"
+                                    type="date"
+                                    name="dateOfDeath"
+                                    id="dateOfDeath"
+                                    value={adverseEffect.dateOfDeath}
+                                    onChange={handleAdverseInputChange}
+                                    style={{ border: "1px solid #014d88" }}
+                                  />
+                                </FormGroup>
+                              </div>
+                            </td>
+                          )}
+                          <td></td>
+                        </tr>
                         <tr>
                           <td>
                             {" "}
@@ -509,7 +553,7 @@ function ADRForm() {
                         <tr>
                           <td>
                             {" "}
-                            <div className="form-group mb-3 col-md-6">
+                            <div className="form-group mb-3 col-md-4">
                               <FormGroup>
                                 <label>Hospitalization: </label>
                                 <select
@@ -665,54 +709,31 @@ function ADRForm() {
                               </FormGroup>
                             </div>
                           </td>
-                          <td>
-                            {" "}
-                            <div className="form-group mb-3 col-md-6">
-                              <FormGroup>
-                                <Label for="stoppedDate">
-                                  Stop Date of Event{" "}
-                                  <span style={{ color: "red" }}>*</span>
-                                </Label>
-                                <input
-                                  className="form-control"
-                                  type="date"
-                                  name="stoppedDate"
-                                  id="stoppedDate"
-                                  value={adverseEffect.stoppedDate}
-                                  onChange={handleAdverseInputChange}
-                                  style={{ border: "1px solid #014d88" }}
-                                />
-                              </FormGroup>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            {adverseEffect.death === false ? (
-                              ""
-                            ) : (
+                          {adverseEffect.onsetDate !== "" && (
+                            <td>
+                              {" "}
                               <div className="form-group mb-3 col-md-6">
                                 <FormGroup>
-                                  <Label for="dateOfDeath">
-                                    Death Date{" "}
+                                  <Label for="stoppedDate">
+                                    Stop Date of Event{" "}
                                     <span style={{ color: "red" }}>*</span>
                                   </Label>
                                   <input
                                     className="form-control"
                                     type="date"
-                                    name="dateOfDeath"
-                                    id="dateOfDeath"
-                                    value={adverseEffect.dateOfDeath}
+                                    name="stoppedDate"
+                                    id="stoppedDate"
+                                    value={adverseEffect.stoppedDate}
                                     onChange={handleAdverseInputChange}
                                     style={{ border: "1px solid #014d88" }}
+                                    min={adverseEffect.onsetDate}
                                   />
                                 </FormGroup>
                               </div>
-                            )}
-                          </td>
-                          <td></td>
+                            </td>
+                          )}
                         </tr>
+
                         {/* <tr>
                           <td>Mark</td>
                           <td>Otto</td>
@@ -793,135 +814,7 @@ function ADRForm() {
                 <div className="basic-form">
                   <div className="row">
                     <h3>Product Details</h3>
-                    <Drug />
-                    <h3>Indication for use (Diagnosis)</h3>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Dosage <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="number"
-                          name="dosage"
-                          id="ç"
-                          value={severeDrugs.dosage}
-                          onChange={handleSevereInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Frequency <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="number"
-                          name="frequency"
-                          id="frequency"
-                          value={severeDrugs.frequency}
-                          onChange={handleSevereInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Route Administration{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="administrationRoute"
-                          id="administrationRoute"
-                          value={severeDrugs.administrationRoute}
-                          onChange={handleSevereInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">
-                          Date medication started{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="date"
-                          name="dateMedicationStarted"
-                          id="dateMedicationStarted"
-                          value={severeDrugs.dateMedicationStarted}
-                          onChange={handleSevereInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="dateMedicationStopped">
-                          Date medication started{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="date"
-                          name="dateMedicationStopped"
-                          id="dateMedicationStopped"
-                          value={severeDrugs.dateMedicationStopped}
-                          onChange={handleSevereInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Reaction Stopped or Reduced after drug withdrawal{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <select
-                          className="form-control"
-                          type="text"
-                          name="reactionReappeared"
-                          id="reactionReappeared"
-                          style={{ border: "1px solid #014d88" }}
-                          value={severeDrugs.reactionReappeared}
-                          onChange={handleSevereInputChange}
-                        >
-                          <option value="">--Please choose an option--</option>
-                          <option value="Yes">Yes</option>
-                          <option value="No">No</option>
-                          <option value="Doesn't Apply">Doesn't Apply</option>
-                        </select>
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Reaction Reappeared after drug reduction{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <select
-                          className="form-control"
-                          type="text"
-                          name="reactionStopped"
-                          id="reactionStopped"
-                          style={{ border: "1px solid #014d88" }}
-                          value={severeDrugs.reactionStopped}
-                          onChange={handleSevereInputChange}
-                        >
-                          <option value="">--Please choose an option--</option>
-                          <option value="Yes">Yes</option>
-                          <option value="No">No</option>
-                          <option value="Doesn't Apply">Doesn't Apply</option>
-                        </select>
-                      </FormGroup>
-                    </div>
+                    <Drug adverseEffect={adverseEffect} />
                   </div>
                 </div>
               </div>
@@ -949,75 +842,7 @@ function ADRForm() {
                     <h3>All medicines taken within the last 3 months</h3>
 
                     <DrugMedicine />
-                    <h3>Relevant Tests/Laboratory Data with Dates</h3>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Relevant Test
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="relevantTest"
-                          id="relevantTest"
-                          value={concomitantMedicines.relevantTest}
-                          onChange={handleMedicineInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Test Date
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="date"
-                          name="relevantTestDate"
-                          id="relevantTestDate"
-                          value={concomitantMedicines.relevantTestDate}
-                          onChange={handleMedicineInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Result
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="number"
-                          name="relevantResult"
-                          id="relevantResult"
-                          value={concomitantMedicines.relevantResult}
-                          onChange={handleMedicineInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Result Date
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="date"
-                          name="relevantResultDate"
-                          id="relevantResultDate"
-                          value={concomitantMedicines.relevantResultDate}
-                          onChange={handleMedicineInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
+
                     <h3>Other Relevant History</h3>
                     <div className="form-group  col-md-4">
                       <FormGroup>
@@ -1106,6 +931,11 @@ function ADRForm() {
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
+                        {errors.firstName !== "" ? (
+                          <span style={styles}>{errors.firstName}</span>
+                        ) : (
+                          ""
+                        )}
                       </FormGroup>
                     </div>
                     <div className="form-group  col-md-4">
@@ -1122,6 +952,11 @@ function ADRForm() {
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
+                        {errors.lastName !== "" ? (
+                          <span style={styles}>{errors.lastName}</span>
+                        ) : (
+                          ""
+                        )}
                       </FormGroup>
                     </div>
                     <div className="form-group  col-md-4">
@@ -1138,6 +973,11 @@ function ADRForm() {
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
+                        {errors.address !== "" ? (
+                          <span style={styles}>{errors.address}</span>
+                        ) : (
+                          ""
+                        )}
                       </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-4">
@@ -1154,6 +994,11 @@ function ADRForm() {
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
+                        {errors.country !== "" ? (
+                          <span style={styles}>{errors.country}</span>
+                        ) : (
+                          ""
+                        )}
                       </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-4">
@@ -1170,6 +1015,11 @@ function ADRForm() {
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
+                        {errors.city !== "" ? (
+                          <span style={styles}>{errors.city}</span>
+                        ) : (
+                          ""
+                        )}
                       </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-4">
@@ -1186,6 +1036,11 @@ function ADRForm() {
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
+                        {errors.state !== "" ? (
+                          <span style={styles}>{errors.state}</span>
+                        ) : (
+                          ""
+                        )}
                       </FormGroup>
                     </div>
                     <div className="form-group  col-md-4">
@@ -1202,6 +1057,11 @@ function ADRForm() {
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
+                        {errors.phoneNumber !== "" ? (
+                          <span style={styles}>{errors.phoneNumber}</span>
+                        ) : (
+                          ""
+                        )}
                       </FormGroup>
                     </div>
                     <div className="form-group  col-md-4">
@@ -1218,6 +1078,11 @@ function ADRForm() {
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
+                        {errors.email !== "" ? (
+                          <span style={styles}>{errors.email}</span>
+                        ) : (
+                          ""
+                        )}
                       </FormGroup>
                     </div>
                     <div className="form-group  col-md-4">
@@ -1239,6 +1104,13 @@ function ADRForm() {
                           <option value="Yes">Yes</option>
                           <option value="No">No</option>
                         </select>
+                        {errors.healthProfessional !== "" ? (
+                          <span style={styles}>
+                            {errors.healthProfessional}
+                          </span>
+                        ) : (
+                          ""
+                        )}
                       </FormGroup>
                     </div>
                     <div className="form-group  col-md-4">
@@ -1255,6 +1127,32 @@ function ADRForm() {
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />
+                        {errors.occupation !== "" ? (
+                          <span style={styles}>{errors.occupation}</span>
+                        ) : (
+                          ""
+                        )}
+                      </FormGroup>
+                    </div>
+                    <div className="form-group  col-md-4">
+                      <FormGroup>
+                        <Label>
+                          Report Date <span style={{ color: "red" }}>*</span>
+                        </Label>
+                        <input
+                          className="form-control"
+                          type="date"
+                          name="reportDate"
+                          id="reportDate"
+                          value={reporter.reportDate}
+                          onChange={handleReporterInputChange}
+                          style={{ border: "1px solid #014d88" }}
+                        />
+                        {errors.reportDate !== "" ? (
+                          <span style={styles}>{errors.reportDate}</span>
+                        ) : (
+                          ""
+                        )}
                       </FormGroup>
                     </div>
                     <row>

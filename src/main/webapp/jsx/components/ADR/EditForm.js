@@ -115,6 +115,7 @@ function EditForm() {
     occupation: "",
     country: "",
     email: "",
+    reportDate: "",
   });
 
   const [outcomes, setOutcomes] = useState([]);
@@ -149,23 +150,6 @@ function EditForm() {
     } catch (e) {}
   }, []);
 
-  const handleDateFormat = (obj) => {
-    if (obj !== undefined || obj !== null) {
-      const year = obj?.year;
-      const month = obj?.monthValue;
-      const day = obj?.dayOfMonth;
-      let date = new Date(year, month - 1, day);
-      const formattedDate = `${(date.getMonth() + 1)
-        .toString()
-        .padStart(2, "0")}/${date.getDate().toString().padStart(2, "0")}/${date
-        .getFullYear()
-        .toString()
-        .slice(-2)}`;
-      console.log(formattedDate);
-    } else {
-    }
-  };
-
   const getADRbyId = async () => {
     const response = await axios
       .get(`${baseUrl}adr/${patientUuid}`, {
@@ -181,38 +165,30 @@ function EditForm() {
           death: data?.adverseEffect?.death,
           lifeThreatening: data?.adverseEffect?.lifeThreatening,
           hospitalization: data?.adverseEffect?.hospitalization,
-          dateOfDeath: handleDateFormat(data?.adverseEffect?.dateOfDeath),
+          dateOfDeath: data?.adverseEffect?.dateOfDeath,
           disability: data?.adverseEffect?.disability,
           anomaly: data?.adverseEffect?.anomaly,
           intervention: data?.adverseEffect?.intervention,
           others: data?.adverseEffect?.others,
           otherDescription: data?.adverseEffect?.otherDescription,
           outcomes: data?.adverseEffect?.outcomes,
-          onsetDate: handleDateFormat(data?.adverseEffect?.onsetDate),
-          stoppedDate: handleDateFormat(data?.adverseEffect?.stoppedDate),
+          onsetDate: data?.adverseEffect?.onsetDate,
+          stoppedDate: data?.adverseEffect?.stoppedDate,
           outcomesOtherDescription:
             data?.adverseEffect?.outcomesOtherDescription,
           drugs: data?.severeDrugs?.drugs,
           dosage: data?.severeDrugs?.dosage,
           frequency: data?.severeDrugs?.frequency,
           administrationRoute: data?.severeDrugs?.administrationRoute,
-          dateMedicationStarted: handleDateFormat(
-            data?.severeDrugs?.dateMedicationStarted
-          ),
-          dateMedicationStopped: handleDateFormat(
-            data?.severeDrugs?.dateMedicationStopped
-          ),
+          dateMedicationStarted: data?.severeDrugs?.dateMedicationStarted,
+          dateMedicationStopped: data?.severeDrugs?.dateMedicationStopped,
           reactionReappeared: data?.severeDrugs?.reactionReappeared,
           reactionStopped: data?.severeDrugs?.reactionStopped,
           relevantTest: data?.concomitantMedicines?.relevantTest,
-          relevantTestDate: handleDateFormat(
-            data?.concomitantMedicines?.relevantTestDate
-          ),
+          relevantTestDate: data?.concomitantMedicines?.relevantTestDate,
           medicines: data?.concomitantMedicines?.medicines,
           relevantResult: data?.concomitantMedicines?.relevantResult,
-          relevantResultDate: handleDateFormat(
-            data?.concomitantMedicines?.relevantResultDate
-          ),
+          relevantResultDate: data?.concomitantMedicines?.relevantResultDate,
           preexistingMedicalConditions:
             data?.concomitantMedicines?.preexistingMedicalConditions,
           preexistingMedicalOthers:
@@ -227,6 +203,7 @@ function EditForm() {
           occupation: data?.reporter?.occupation,
           country: data?.reporter?.country,
           email: data?.reporter?.email,
+          reportDate: data?.reportDate,
         });
       });
   };
@@ -235,7 +212,6 @@ function EditForm() {
     getADRbyId();
     adrOutcomes();
     adrRelevant();
-    console.log(adr);
   }, []);
 
   const calculate_age = (dob) => {
@@ -265,21 +241,17 @@ function EditForm() {
         hospitalization: adr.hospitalization,
         intervention: adr.intervention,
         lifeThreatening: adr.lifeThreatening,
-        //onsetDate: adr.onsetDate,
+        onsetDate: adr.onsetDate,
         otherDescription: adr.otherDescription,
         others: adr.others,
         outcomes: adr.outcomes,
         outcomesOtherDescription: adr.outcomesOtherDescription,
-        //stoppedDate: adr.stoppedDate,
+        stoppedDate: adr.stoppedDate,
       },
       concomitantMedicines: {
-        //medicines: adr.medicines,
+        medicines: adr.medicines,
         preexistingMedicalConditions: adr.preexistingMedicalConditions,
         preexistingMedicalOthers: adr.preexistingMedicalOthers,
-        relevantResult: adr.relevantResult,
-        //relevantResultDate: adr.relevantResultDate,
-        relevantTest: adr.relevantTest,
-        //relevantTestDate: adr.relevantTestDate,
       },
       patientUuid: patientUuid,
       reporter: {
@@ -295,16 +267,10 @@ function EditForm() {
         state: adr.state,
       },
       severeDrug: {
-        //drugs: adr.drugs,
-        dosage: adr.dosage,
-        administrationRoute: adr.administrationRoute,
-        //dateMedicationStarted: adr.dateMedicationStarted,
-        //dateMedicationStopped: adr.dateMedicationStopped,
-        frequency: adr.frequency,
-        reactionReappeared: adr.reactionReappeared,
-        reactionStopped: adr.reactionStopped,
+        drugs: adr.drugs,
       },
       weight: adr.weight,
+      reportDate: adr.reportDate,
     };
 
     console.log(payload);
@@ -537,7 +503,33 @@ function EditForm() {
                           </td>
                           <td></td>
                         </tr>
-
+                        <tr>
+                          {" "}
+                          {adr.death === false ? (
+                            ""
+                          ) : (
+                            <td>
+                              <div className="form-group mb-3 col-md-6">
+                                <FormGroup>
+                                  <Label for="dateOfDeath">
+                                    Death Date{" "}
+                                    <span style={{ color: "red" }}>*</span>
+                                  </Label>
+                                  <input
+                                    className="form-control"
+                                    type="date"
+                                    name="dateOfDeath"
+                                    id="dateOfDeath"
+                                    value={adr.dateOfDeath}
+                                    onChange={handleBioInputChange}
+                                    style={{ border: "1px solid #014d88" }}
+                                  />
+                                </FormGroup>
+                              </div>
+                            </td>
+                          )}
+                          <td></td>
+                        </tr>
                         <tr>
                           <td>
                             {" "}
@@ -737,33 +729,7 @@ function EditForm() {
                             </div>
                           </td>
                         </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            {adr.death === false ? (
-                              ""
-                            ) : (
-                              <div className="form-group mb-3 col-md-6">
-                                <FormGroup>
-                                  <Label for="dateOfDeath">
-                                    Death Date{" "}
-                                    <span style={{ color: "red" }}>*</span>
-                                  </Label>
-                                  <input
-                                    className="form-control"
-                                    type="date"
-                                    name="dateOfDeath"
-                                    id="dateOfDeath"
-                                    value={adr.dateOfDeath}
-                                    onChange={handleBioInputChange}
-                                    style={{ border: "1px solid #014d88" }}
-                                  />
-                                </FormGroup>
-                              </div>
-                            )}
-                          </td>
-                          <td></td>
-                        </tr>
+
                         {/* <tr>
                           <td>Mark</td>
                           <td>Otto</td>
@@ -824,7 +790,7 @@ function EditForm() {
               </div>
 
               {/* suspected drug */}
-              <div
+              {/* <div
                 className="card-header"
                 style={{
                   backgroundColor: "#014d88",
@@ -838,144 +804,16 @@ function EditForm() {
                 >
                   Suspected Drug
                 </h5>
-              </div>
+              </div> */}
 
-              <div className="card-body">
+              {/* <div className="card-body">
                 <div className="basic-form">
                   <div className="row">
                     <h3>Product Details</h3>
-                    <Drug />
-                    <h3>Indication for use (Diagnosis)</h3>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Dosage <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="number"
-                          name="dosage"
-                          id="ç"
-                          value={adr.dosage}
-                          onChange={handleBioInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Frequency <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="number"
-                          name="frequency"
-                          id="frequency"
-                          value={adr.frequency}
-                          onChange={handleBioInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Route Administration{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="administrationRoute"
-                          id="administrationRoute"
-                          value={adr.administrationRoute}
-                          onChange={handleBioInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">
-                          Date medication started{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="date"
-                          name="dateMedicationStarted"
-                          id="dateMedicationStarted"
-                          value={adr.dateMedicationStarted}
-                          onChange={handleBioInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="dateMedicationStopped">
-                          Date medication started{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="date"
-                          name="dateMedicationStopped"
-                          id="dateMedicationStopped"
-                          value={adr.dateMedicationStopped}
-                          onChange={handleBioInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Reaction Stopped or Reduced after drug withdrawal{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <select
-                          className="form-control"
-                          type="text"
-                          name="reactionReappeared"
-                          id="reactionReappeared"
-                          style={{ border: "1px solid #014d88" }}
-                          value={adr.reactionReappeared}
-                          onChange={handleBioInputChange}
-                        >
-                          <option value="">--Please choose an option--</option>
-                          <option value="Yes">Yes</option>
-                          <option value="No">No</option>
-                          <option value="Doesn't Apply">Doesn't Apply</option>
-                        </select>
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Reaction Reappeared after drug reduction{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <select
-                          className="form-control"
-                          type="text"
-                          name="reactionStopped"
-                          id="reactionStopped"
-                          style={{ border: "1px solid #014d88" }}
-                          value={adr.reactionStopped}
-                          onChange={handleBioInputChange}
-                        >
-                          <option value="">--Please choose an option--</option>
-                          <option value="Yes">Yes</option>
-                          <option value="No">No</option>
-                          <option value="Doesn't Apply">Doesn't Apply</option>
-                        </select>
-                      </FormGroup>
-                    </div>
+                    <Drug adverseEffect={adr?.onsetDate} />
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* Concomitant Medicines */}
               <div
@@ -997,78 +835,10 @@ function EditForm() {
               <div className="card-body">
                 <div className="basic-form">
                   <div className="row">
-                    <h3>All medicines taken within the last 3 months</h3>
+                    {/* <h3>All medicines taken within the last 3 months</h3> */}
 
-                    <DrugMedicine />
-                    <h3>Relevant Tests/Laboratory Data with Dates</h3>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Relevant Test
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="relevantTest"
-                          id="relevantTest"
-                          value={adr.relevantTest}
-                          onChange={handleBioInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Test Date
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="date"
-                          name="relevantTestDate"
-                          id="relevantTestDate"
-                          value={adr.relevantTestDate}
-                          onChange={handleBioInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Result
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="number"
-                          name="relevantResult"
-                          id="relevantResult"
-                          value={adr.relevantResult}
-                          onChange={handleBioInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-3">
-                      <FormGroup>
-                        <Label>
-                          Result Date
-                          {/* <span style={{ color: "red" }}>*</span> */}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="date"
-                          name="relevantResultDate"
-                          id="relevantResultDate"
-                          value={adr.relevantResultDate}
-                          onChange={handleBioInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
+                    {/* <DrugMedicine /> */}
+
                     <h3>Other Relevant History</h3>
                     <div className="form-group  col-md-4">
                       <FormGroup>
@@ -1301,6 +1071,22 @@ function EditForm() {
                           name="occupation"
                           id="occupation"
                           value={adr.occupation}
+                          onChange={handleBioInputChange}
+                          style={{ border: "1px solid #014d88" }}
+                        />
+                      </FormGroup>
+                    </div>
+                    <div className="form-group  col-md-4">
+                      <FormGroup>
+                        <Label>
+                          Report Date <span style={{ color: "red" }}>*</span>
+                        </Label>
+                        <input
+                          className="form-control"
+                          type="date"
+                          name="reportDate"
+                          id="reportDate"
+                          value={adr.reportDate}
                           onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
                         />

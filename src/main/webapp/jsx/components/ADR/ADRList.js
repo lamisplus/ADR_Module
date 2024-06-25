@@ -91,7 +91,7 @@ const AList = (props) => {
             });
           } else {
             resolve({
-              data: result.data.map((row) => ({
+              data: result.data.reverse().map((row) => ({
                 name: [row.firstName, row.surname].filter(Boolean).join(", "),
                 id: row.hospitalNumber,
                 sex: row.sex,
@@ -119,7 +119,7 @@ const AList = (props) => {
                 ),
               })),
               page: query.page,
-              totalCount: result.data.totalRecords,
+              totalCount: result.data.length,
             });
           }
         });

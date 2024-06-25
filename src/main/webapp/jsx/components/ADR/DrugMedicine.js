@@ -8,6 +8,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 const DrugMedicine = () => {
   const [storedValues, setStoredValues] = useState([]);
+  const [errors, setErrors] = useState({});
+  const styles = {
+    color: "#f85032",
+    fontSize: "11px",
+  };
 
   const [concomitantMedicines, setConcomitantMedicines] = useState({
     concomitantBrandName: "",
@@ -16,6 +21,10 @@ const DrugMedicine = () => {
     dateConcomitantStarted: "",
     dateConcomitantStopped: "",
     concomitantReasonUse: "",
+    relevantTest: "",
+    relevantTestDate: "",
+    relevantResult: "",
+    relevantResultDate: "",
   });
 
   useEffect(() => {
@@ -31,20 +40,64 @@ const DrugMedicine = () => {
     });
   };
 
+  const validateInputs = () => {
+    const temp = { ...errors };
+    temp.concomitantBrandName = concomitantMedicines.concomitantBrandName
+      ? ""
+      : "Concomitant Brand Name is required.";
+    temp.concomitantDosage = concomitantMedicines.concomitantDosage
+      ? ""
+      : "Concomitant Dosage is required.";
+    temp.concomitantRoute = concomitantMedicines.concomitantRoute
+      ? ""
+      : "Concomitant route is required.";
+    temp.dateConcomitantStarted = concomitantMedicines.dateConcomitantStarted
+      ? ""
+      : "Date Concomitant Started is required.";
+    temp.dateConcomitantStopped = concomitantMedicines.dateConcomitantStopped
+      ? ""
+      : "Date Concomitant Stopped is required.";
+    temp.concomitantReasonUse = concomitantMedicines.concomitantReasonUse
+      ? ""
+      : "Concomitant Reason Use is required.";
+    temp.relevantTest = concomitantMedicines.relevantTest
+      ? ""
+      : "Relevant Test is required.";
+    temp.relevantTestDate = concomitantMedicines.relevantTestDate
+      ? ""
+      : "Relevant Test Date is required.";
+    temp.relevantResult = concomitantMedicines.relevantResult
+      ? ""
+      : "Relevant Result is required.";
+    temp.relevantResultDate = concomitantMedicines.relevantResultDate
+      ? ""
+      : "Relevant Result Date is required.";
+    setErrors({
+      ...temp,
+    });
+    return Object.values(temp).every((x) => x === "");
+  };
+
   const addForm = (e) => {
     e.preventDefault();
-    const newValues = [...storedValues, concomitantMedicines];
-    setStoredValues(newValues);
-    localStorage.setItem("medicine", JSON.stringify(newValues));
+    if (validateInputs()) {
+      const newValues = [...storedValues, concomitantMedicines];
+      setStoredValues(newValues);
+      localStorage.setItem("medicine", JSON.stringify(newValues));
 
-    setConcomitantMedicines({
-      concomitantBrandName: "",
-      concomitantDosage: "",
-      concomitantRoute: "",
-      dateConcomitantStarted: "",
-      dateConcomitantStopped: "",
-      concomitantReasonUse: "",
-    });
+      setConcomitantMedicines({
+        concomitantBrandName: "",
+        concomitantDosage: "",
+        concomitantRoute: "",
+        dateConcomitantStarted: "",
+        dateConcomitantStopped: "",
+        concomitantReasonUse: "",
+        relevantTest: "",
+        relevantTestDate: "",
+        relevantResult: "",
+        relevantResultDate: "",
+      });
+    }
   };
 
   const deteleItem = (index) => {
@@ -70,6 +123,11 @@ const DrugMedicine = () => {
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
           />
+          {errors.concomitantBrandName !== "" ? (
+            <span style={styles}>{errors.concomitantBrandName}</span>
+          ) : (
+            ""
+          )}
         </FormGroup>
       </div>
       <div className="form-group  col-md-4">
@@ -87,6 +145,11 @@ const DrugMedicine = () => {
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
           />
+          {errors.concomitantDosage !== "" ? (
+            <span style={styles}>{errors.concomitantDosage}</span>
+          ) : (
+            ""
+          )}
         </FormGroup>
       </div>
       <div className="form-group  col-md-4">
@@ -104,6 +167,11 @@ const DrugMedicine = () => {
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
           />
+          {errors.concomitantRoute !== "" ? (
+            <span style={styles}>{errors.concomitantRoute}</span>
+          ) : (
+            ""
+          )}
         </FormGroup>
       </div>
       <div className="form-group mb-3 col-md-3">
@@ -121,6 +189,11 @@ const DrugMedicine = () => {
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
           />
+          {errors.dateConcomitantStarted !== "" ? (
+            <span style={styles}>{errors.dateConcomitantStarted}</span>
+          ) : (
+            ""
+          )}
         </FormGroup>
       </div>
       <div className="form-group mb-3 col-md-3">
@@ -138,6 +211,11 @@ const DrugMedicine = () => {
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
           />
+          {errors.dateConcomitantStopped !== "" ? (
+            <span style={styles}>{errors.dateConcomitantStopped}</span>
+          ) : (
+            ""
+          )}
         </FormGroup>
       </div>
       <div className="form-group  col-md-6">
@@ -155,6 +233,101 @@ const DrugMedicine = () => {
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
           />
+          {errors.concomitantReasonUse !== "" ? (
+            <span style={styles}>{errors.concomitantReasonUse}</span>
+          ) : (
+            ""
+          )}
+        </FormGroup>
+      </div>
+      <h3>Relevant Tests/Laboratory Data with Dates</h3>
+      <div className="form-group  col-md-3">
+        <FormGroup>
+          <Label>
+            Relevant Test
+            {/* <span style={{ color: "red" }}>*</span> */}
+          </Label>
+          <input
+            className="form-control"
+            type="text"
+            name="relevantTest"
+            id="relevantTest"
+            value={concomitantMedicines.relevantTest}
+            onChange={handleMedicineInputChange}
+            style={{ border: "1px solid #014d88" }}
+          />
+          {errors.relevantTest !== "" ? (
+            <span style={styles}>{errors.relevantTest}</span>
+          ) : (
+            ""
+          )}
+        </FormGroup>
+      </div>
+      <div className="form-group  col-md-3">
+        <FormGroup>
+          <Label>
+            Test Date
+            {/* <span style={{ color: "red" }}>*</span> */}
+          </Label>
+          <input
+            className="form-control"
+            type="date"
+            name="relevantTestDate"
+            id="relevantTestDate"
+            value={concomitantMedicines.relevantTestDate}
+            onChange={handleMedicineInputChange}
+            style={{ border: "1px solid #014d88" }}
+          />
+          {errors.relevantTestDate !== "" ? (
+            <span style={styles}>{errors.relevantTestDate}</span>
+          ) : (
+            ""
+          )}
+        </FormGroup>
+      </div>
+      <div className="form-group  col-md-3">
+        <FormGroup>
+          <Label>
+            Result
+            {/* <span style={{ color: "red" }}>*</span> */}
+          </Label>
+          <input
+            className="form-control"
+            type="number"
+            name="relevantResult"
+            id="relevantResult"
+            value={concomitantMedicines.relevantResult}
+            onChange={handleMedicineInputChange}
+            style={{ border: "1px solid #014d88" }}
+          />
+          {errors.relevantResult !== "" ? (
+            <span style={styles}>{errors.relevantResult}</span>
+          ) : (
+            ""
+          )}
+        </FormGroup>
+      </div>
+      <div className="form-group  col-md-3">
+        <FormGroup>
+          <Label>
+            Result Date
+            {/* <span style={{ color: "red" }}>*</span> */}
+          </Label>
+          <input
+            className="form-control"
+            type="date"
+            name="relevantResultDate"
+            id="relevantResultDate"
+            value={concomitantMedicines.relevantResultDate}
+            onChange={handleMedicineInputChange}
+            style={{ border: "1px solid #014d88" }}
+            min={concomitantMedicines.relevantTestDate}
+          />
+          {errors.relevantResultDate !== "" ? (
+            <span style={styles}>{errors.relevantResultDate}</span>
+          ) : (
+            ""
+          )}
         </FormGroup>
       </div>
       <row>
@@ -185,6 +358,10 @@ const DrugMedicine = () => {
                   <th scope="col">Date started</th>
                   <th scope="col">Date stopped</th>
                   <th scope="col">Reason for Use</th>
+                  <th scope="col">Relevant Test</th>
+                  <th scope="col">Relevant Test Date</th>
+                  <th scope="col">Relevant Result</th>
+                  <th scope="col">Relevant Result Date</th>
 
                   <th scope="col"></th>
                 </tr>
@@ -198,7 +375,10 @@ const DrugMedicine = () => {
                     <td>{x.dateConcomitantStarted}</td>
                     <td>{x.dateConcomitantStopped}</td>
                     <td>{x.concomitantReasonUse}</td>
-
+                    <td>{x.relevantTest}</td>
+                    <td>{x.relevantTestDate}</td>
+                    <td>{x.relevantResult}</td>
+                    <td>{x.relevantResultDate}</td>
                     <td>
                       <Button
                         variant="contained"
