@@ -13,6 +13,7 @@ import { token, url as baseUrl } from "../../../api";
 import Drug from "./Drug";
 import DrugMedicine from "./DrugMedicine";
 import { ToastContainer, toast } from "react-toastify";
+import * as moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -474,268 +475,199 @@ function EditForm() {
                         />
                       </FormGroup>
                     </div>
-                    <table className="table table-sm">
-                      <tbody>
-                        <tr>
-                          <td>
-                            <h3>Seriousness of Adverse Event</h3>
-                          </td>
-                          <td>
-                            <h3>Outcomes (check all that apply)</h3>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            <div className="form-group mb-3 col-md-6">
-                              <FormGroup>
-                                <label>
-                                  <input
-                                    type="checkbox"
-                                    name="death"
-                                    checked={adr.death}
-                                    onChange={handleBioInputChange}
-                                  />{" "}
-                                  Death
-                                </label>
-                              </FormGroup>
-                            </div>
-                          </td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          {" "}
-                          {adr.death === false ? (
-                            ""
-                          ) : (
-                            <td>
-                              <div className="form-group mb-3 col-md-6">
-                                <FormGroup>
-                                  <Label for="dateOfDeath">
-                                    Death Date{" "}
-                                    <span style={{ color: "red" }}>*</span>
-                                  </Label>
-                                  <input
-                                    className="form-control"
-                                    type="date"
-                                    name="dateOfDeath"
-                                    id="dateOfDeath"
-                                    value={adr.dateOfDeath}
-                                    onChange={handleBioInputChange}
-                                    style={{ border: "1px solid #014d88" }}
-                                  />
-                                </FormGroup>
-                              </div>
-                            </td>
-                          )}
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            <div className="form-group mb-3 col-md-6">
-                              <FormGroup>
-                                <label>
-                                  <input
-                                    type="checkbox"
-                                    name="lifeThreatening"
-                                    checked={adr.lifeThreatening}
-                                    onChange={handleBioInputChange}
-                                  />{" "}
-                                  Life threatening
-                                </label>
-                              </FormGroup>
-                            </div>
-                          </td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            <div className="form-group mb-3 col-md-6">
-                              <FormGroup>
-                                <label>Hospitalization: </label>
-                                <select
-                                  className="form-control"
-                                  type="text"
-                                  name="hospitalization"
-                                  id="hospitalization"
-                                  value={adr.hospitalization}
-                                  style={{ border: "1px solid #014d88" }}
-                                  onChange={handleBioInputChange}
-                                >
-                                  <option value="">
-                                    --Please choose an option--
-                                  </option>
-                                  <option value="Initial">Initial</option>
-                                  <option value="Prolonged">Prolonged</option>
-                                </select>
-                              </FormGroup>
-                            </div>
-                          </td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            <div className="form-group mb-3 col-md-6">
-                              <FormGroup>
-                                <label>
-                                  <input
-                                    type="checkbox"
-                                    name="disability"
-                                    checked={adr.disability}
-                                    onChange={handleBioInputChange}
-                                  />{" "}
-                                  Disability or Permanent Damage
-                                </label>
-                              </FormGroup>
-                            </div>
-                          </td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            <div className="form-group mb-3 col-md-6">
-                              <FormGroup>
-                                <label>
-                                  <input
-                                    type="checkbox"
-                                    name="anomaly"
-                                    checked={adr.anomaly}
-                                    onChange={handleBioInputChange}
-                                  />{" "}
-                                  Congenital Anomaly/Birth Defects
-                                </label>
-                              </FormGroup>
-                            </div>
-                          </td>
-                          <td>
-                            {" "}
-                            {adr.eventDescription === "" ? (
-                              ""
-                            ) : (
-                              <div className="form-group  col-md-6">
-                                <FormGroup>
-                                  <Label>
-                                    Outcomes{" "}
-                                    <span style={{ color: "red" }}>*</span>
-                                  </Label>
-                                  <select
-                                    className="form-control"
-                                    type="text"
-                                    name="outcomes"
-                                    id="outcomes"
-                                    style={{ border: "1px solid #014d88" }}
-                                    value={adr.outcomes}
-                                    onChange={handleBioInputChange}
-                                  >
-                                    <option value="">
-                                      --Please choose an option--
-                                    </option>
-                                    {outcomes?.map((outcome, index) => (
-                                      <option
-                                        key={outcome.code}
-                                        value={outcome.code}
-                                      >
-                                        {outcome.display}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </FormGroup>
-                              </div>
-                            )}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            <div className="form-group mb-3 col-md-6">
-                              <FormGroup>
-                                <label>
-                                  <input
-                                    type="checkbox"
-                                    name="intervention"
-                                    checked={adr.intervention}
-                                    onChange={handleBioInputChange}
-                                  />{" "}
-                                  Require Intervention to Permanent Impairment
-                                  or Disability (Devices)
-                                </label>
-                              </FormGroup>
-                            </div>
-                          </td>
-                          <td>
-                            {" "}
-                            {adr.outcomes === "" ? (
-                              ""
-                            ) : (
-                              <div className="form-group mb-3 col-md-6">
-                                <FormGroup>
-                                  <Label for="onsetDate">
-                                    Onset Date of Event{" "}
-                                    <span style={{ color: "red" }}>*</span>
-                                  </Label>
-                                  <input
-                                    className="form-control"
-                                    type="date"
-                                    name="onsetDate"
-                                    id="onsetDate"
-                                    value={adr.onsetDate}
-                                    onChange={handleBioInputChange}
-                                    style={{ border: "1px solid #014d88" }}
-                                  />
-                                </FormGroup>
-                              </div>
-                            )}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {" "}
-                            <div className="form-group mb-3 col-md-6">
-                              <FormGroup>
-                                <label>
-                                  <input
-                                    type="checkbox"
-                                    name="others"
-                                    checked={adr.others}
-                                    onChange={handleBioInputChange}
-                                  />{" "}
-                                  Others
-                                </label>
-                              </FormGroup>
-                            </div>
-                          </td>
-                          <td>
-                            {" "}
-                            <div className="form-group mb-3 col-md-6">
-                              <FormGroup>
-                                <Label for="stoppedDate">
-                                  Stop Date of Event{" "}
-                                  <span style={{ color: "red" }}>*</span>
-                                </Label>
-                                <input
-                                  className="form-control"
-                                  type="date"
-                                  name="stoppedDate"
-                                  id="stoppedDate"
-                                  value={adr.stoppedDate}
-                                  onChange={handleBioInputChange}
-                                  style={{ border: "1px solid #014d88" }}
-                                />
-                              </FormGroup>
-                            </div>
-                          </td>
-                        </tr>
-
-                        {/* <tr>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                        </tr> */}
-                      </tbody>
-                    </table>
+                    {/* edit adverse effect */}
+                    <h3 className="mb-3">
+                      Seriousness of Adverse Event (check all that apply)
+                    </h3>
+                    <div className="form-group mb-3 col-md-2">
+                      <FormGroup>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="death"
+                            checked={adr.death}
+                            onChange={handleBioInputChange}
+                          />{" "}
+                          Death
+                        </label>
+                      </FormGroup>
+                    </div>{" "}
+                    {adr.death === false ? (
+                      ""
+                    ) : (
+                      <div className="form-group mb-3 col-md-2">
+                        <FormGroup>
+                          <Label for="dateOfDeath">
+                            Death Date <span style={{ color: "red" }}>*</span>
+                          </Label>
+                          <input
+                            className="form-control"
+                            type="date"
+                            name="dateOfDeath"
+                            id="dateOfDeath"
+                            value={adr.dateOfDeath}
+                            onChange={handleBioInputChange}
+                            style={{ border: "1px solid #014d88" }}
+                          />
+                        </FormGroup>
+                      </div>
+                    )}{" "}
+                    <div className="form-group mb-3 col-md-2">
+                      <FormGroup>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="lifeThreatening"
+                            checked={adr.lifeThreatening}
+                            onChange={handleBioInputChange}
+                          />{" "}
+                          Life threatening
+                        </label>
+                      </FormGroup>
+                    </div>{" "}
+                    <div className="form-group mb-3 col-md-2">
+                      <FormGroup>
+                        <label>Hospitalization: </label>
+                        <select
+                          className="form-control"
+                          type="text"
+                          name="hospitalization"
+                          id="hospitalization"
+                          value={adr.hospitalization}
+                          style={{ border: "1px solid #014d88" }}
+                          onChange={handleBioInputChange}
+                        >
+                          <option value="">--Please choose an option--</option>
+                          <option value="Initial">Initial</option>
+                          <option value="Prolonged">Prolonged</option>
+                        </select>
+                      </FormGroup>
+                    </div>{" "}
+                    <div className="form-group mb-3 col-md-2">
+                      <FormGroup>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="disability"
+                            checked={adr.disability}
+                            onChange={handleBioInputChange}
+                          />{" "}
+                          Disability or Permanent Damage
+                        </label>
+                      </FormGroup>
+                    </div>{" "}
+                    <div className="form-group mb-3 col-md-2">
+                      <FormGroup>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="anomaly"
+                            checked={adr.anomaly}
+                            onChange={handleBioInputChange}
+                          />{" "}
+                          Congenital Anomaly/Birth Defects
+                        </label>
+                      </FormGroup>
+                    </div>{" "}
+                    <div className="form-group mb-3 col-md-2">
+                      <FormGroup>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="intervention"
+                            checked={adr.intervention}
+                            onChange={handleBioInputChange}
+                          />{" "}
+                          Require Intervention to Permanent Impairment or
+                          Disability (Devices)
+                        </label>
+                      </FormGroup>
+                    </div>{" "}
+                    <div className="form-group mb-3 col-md-2">
+                      <FormGroup>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="others"
+                            checked={adr.others}
+                            onChange={handleBioInputChange}
+                          />{" "}
+                          Others
+                        </label>
+                      </FormGroup>
+                    </div>{" "}
+                    {adr.eventDescription === "" ? (
+                      ""
+                    ) : (
+                      <div className="form-group  col-md-2">
+                        <FormGroup>
+                          <Label>
+                            Outcomes <span style={{ color: "red" }}>*</span>
+                          </Label>
+                          <select
+                            className="form-control"
+                            type="text"
+                            name="outcomes"
+                            id="outcomes"
+                            style={{ border: "1px solid #014d88" }}
+                            value={adr.outcomes}
+                            onChange={handleBioInputChange}
+                          >
+                            <option value="">
+                              --Please choose an option--
+                            </option>
+                            {outcomes?.map((outcome, index) => (
+                              <option key={outcome.code} value={outcome.code}>
+                                {outcome.display}
+                              </option>
+                            ))}
+                          </select>
+                        </FormGroup>
+                      </div>
+                    )}{" "}
+                    {adr.outcomes === "" ? (
+                      ""
+                    ) : (
+                      <div className="form-group mb-3 col-md-2">
+                        <FormGroup>
+                          <Label for="onsetDate">
+                            Onset Date of Event{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </Label>
+                          <input
+                            className="form-control"
+                            type="date"
+                            name="onsetDate"
+                            id="onsetDate"
+                            value={adr.onsetDate}
+                            onChange={handleBioInputChange}
+                            style={{ border: "1px solid #014d88" }}
+                            min={dob}
+                            max={moment(new Date()).format("YYYY-MM-DD")}
+                          />
+                        </FormGroup>
+                      </div>
+                    )}
+                    {adr.onsetDate !== "" && (
+                      <div className="form-group mb-3 col-md-2">
+                        <FormGroup>
+                          <Label for="stoppedDate">
+                            Stop Date of Event{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </Label>
+                          <input
+                            className="form-control"
+                            type="date"
+                            name="stoppedDate"
+                            id="stoppedDate"
+                            value={adr.stoppedDate}
+                            onChange={handleBioInputChange}
+                            style={{ border: "1px solid #014d88" }}
+                            min={adr.onsetDate}
+                          />
+                        </FormGroup>
+                      </div>
+                    )}
                     {/* <row> */}{" "}
                     {adr.others === false ? (
                       " "
@@ -784,7 +716,6 @@ function EditForm() {
                     ) : (
                       ""
                     )}
-                    {/* </row> */}
                   </div>
                 </div>
               </div>
@@ -1089,6 +1020,7 @@ function EditForm() {
                           value={adr.reportDate}
                           onChange={handleBioInputChange}
                           style={{ border: "1px solid #014d88" }}
+                          max={moment(new Date()).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
                     </div>

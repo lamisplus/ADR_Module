@@ -1,9 +1,11 @@
 import React, { useState, forwardRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { Container, Row, Col, Card } from "react-bootstrap";
 import MaterialTable from "material-table";
 import axios from "axios";
 import { token as token, url as baseUrl } from "../../../api";
+import Button from "@material-ui/core/Button";
+import NotesIcon from "@mui/icons-material/Notes";
 
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
@@ -83,7 +85,7 @@ const AList = (props) => {
         })
         .then((response) => response)
         .then((result) => {
-          if (result.data === "") {
+          if (result?.data === "") {
             resolve({
               data: [],
               page: 0,
@@ -91,7 +93,7 @@ const AList = (props) => {
             });
           } else {
             resolve({
-              data: result.data.reverse().map((row) => ({
+              data: result?.data.reverse().map((row) => ({
                 name: [row.firstName, row.surname].filter(Boolean).join(", "),
                 id: row.hospitalNumber,
                 sex: row.sex,
@@ -113,7 +115,18 @@ const AList = (props) => {
                         },
                       }}
                     >
-                      <Button className="btn btn-info">Edit Form</Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className=" float-right ms-1"
+                        style={{
+                          backgroundColor: "rgb(153, 46, 98)",
+                          fontWeight: "bolder",
+                        }}
+                        startIcon={<NotesIcon />}
+                      >
+                        Edit Form
+                      </Button>
                     </Link>
                   </div>
                 ),
@@ -122,6 +135,13 @@ const AList = (props) => {
               totalCount: result.data.length,
             });
           }
+        })
+        .catch((err) => {
+          resolve({
+            data: [],
+            page: 0,
+            totalCount: 0,
+          });
         });
     });
 
@@ -153,7 +173,7 @@ const AList = (props) => {
                     { title: "Age", field: "age", filtering: false },
                     /*{ title: "Address", field: "address", filtering: false },*/
                     /*{ title: "Status", field: "status", filtering: false },*/
-                    { title: "Actions", field: "actions", filtering: false },
+                    { title: "", field: "actions", filtering: false },
                   ]}
                   data={handleRemoteData}
                   options={{

@@ -5,6 +5,7 @@ import { token, url as baseUrl } from "../../../api";
 import { Form, FormGroup, Label, Spinner } from "reactstrap";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
+import * as moment from "moment";
 
 const Drug = ({ adverseEffect }) => {
   const [drugs, setDrugs] = useState([]);
@@ -389,6 +390,7 @@ const Drug = ({ adverseEffect }) => {
             onChange={handleSevereInputChange}
             style={{ border: "1px solid #014d88" }}
             min={adverseEffect.onsetDate}
+            max={moment(new Date()).format("YYYY-MM-DD")}
           />
           {errors.dateMedicationStarted !== "" ? (
             <span style={styles}>{errors.dateMedicationStarted}</span>
@@ -411,6 +413,7 @@ const Drug = ({ adverseEffect }) => {
             onChange={handleSevereInputChange}
             style={{ border: "1px solid #014d88" }}
             min={severeDrugs.dateMedicationStarted}
+            max={moment(new Date()).format("YYYY-MM-DD")}
           />
           {errors.dateMedicationStopped !== "" ? (
             <span style={styles}>{errors.dateMedicationStopped}</span>

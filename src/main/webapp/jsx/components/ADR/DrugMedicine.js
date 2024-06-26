@@ -5,6 +5,7 @@ import { token, url as baseUrl } from "../../../api";
 import { Form, FormGroup, Label, Spinner } from "reactstrap";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
+import * as moment from "moment";
 
 const DrugMedicine = () => {
   const [storedValues, setStoredValues] = useState([]);
@@ -69,9 +70,9 @@ const DrugMedicine = () => {
     temp.relevantResult = concomitantMedicines.relevantResult
       ? ""
       : "Relevant Result is required.";
-    temp.relevantResultDate = concomitantMedicines.relevantResultDate
-      ? ""
-      : "Relevant Result Date is required.";
+    // temp.relevantResultDate = concomitantMedicines.relevantResultDate
+    //   ? ""
+    //   : "Relevant Result Date is required.";
     setErrors({
       ...temp,
     });
@@ -188,6 +189,7 @@ const DrugMedicine = () => {
             value={concomitantMedicines.dateConcomitantStarted}
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
+            max={moment(new Date()).format("YYYY-MM-DD")}
           />
           {errors.dateConcomitantStarted !== "" ? (
             <span style={styles}>{errors.dateConcomitantStarted}</span>
@@ -210,6 +212,8 @@ const DrugMedicine = () => {
             value={concomitantMedicines.dateConcomitantStopped}
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
+            min={concomitantMedicines.dateConcomitantStarted}
+            max={moment(new Date()).format("YYYY-MM-DD")}
           />
           {errors.dateConcomitantStopped !== "" ? (
             <span style={styles}>{errors.dateConcomitantStopped}</span>
@@ -277,6 +281,7 @@ const DrugMedicine = () => {
             value={concomitantMedicines.relevantTestDate}
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
+            max={moment(new Date()).format("YYYY-MM-DD")}
           />
           {errors.relevantTestDate !== "" ? (
             <span style={styles}>{errors.relevantTestDate}</span>
@@ -322,12 +327,13 @@ const DrugMedicine = () => {
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
             min={concomitantMedicines.relevantTestDate}
+            max={moment(new Date()).format("YYYY-MM-DD")}
           />
-          {errors.relevantResultDate !== "" ? (
+          {/* {errors.relevantResultDate !== "" ? (
             <span style={styles}>{errors.relevantResultDate}</span>
           ) : (
             ""
-          )}
+          )} */}
         </FormGroup>
       </div>
       <row>

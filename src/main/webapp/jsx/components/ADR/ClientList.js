@@ -1,6 +1,8 @@
 import React, { useState, forwardRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { Container, Row, Col, Card } from "react-bootstrap";
+import Button from "@material-ui/core/Button";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 import MaterialTable from "material-table";
 import axios from "axios";
 import { token as token, url as baseUrl } from "../../../api";
@@ -120,13 +122,27 @@ const ClientList = (props) => {
                     : calculateAge(row.dateOfBirth),
                 actions: (
                   <div>
-                    <Link to={{
-                            pathname: "/adr-form",
-                            state: {
-                              patientInfo: row
-                            },
-                          }}>
-                      <Button>Fill Form</Button>
+                    <Link
+                      to={{
+                        pathname: "/adr-form",
+                        state: {
+                          patientInfo: row,
+                        },
+                      }}
+                    >
+                      {/* <Button>Fill Form</Button> */}
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className=" float-right ms-1"
+                        style={{
+                          backgroundColor: "rgb(153, 46, 98)",
+                          fontWeight: "bolder",
+                        }}
+                        startIcon={<EditNoteIcon />}
+                      >
+                        Fill Form
+                      </Button>
                     </Link>
                   </div>
                 ),
@@ -166,7 +182,7 @@ const ClientList = (props) => {
                     { title: "Age", field: "age", filtering: false },
                     /*{ title: "Address", field: "address", filtering: false },*/
                     /*{ title: "Status", field: "status", filtering: false },*/
-                    { title: "Actions", field: "actions", filtering: false },
+                    { title: "", field: "actions", filtering: false },
                   ]}
                   data={handleRemoteData}
                   options={{
