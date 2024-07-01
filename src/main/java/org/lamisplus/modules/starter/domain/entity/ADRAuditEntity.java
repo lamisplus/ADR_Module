@@ -1,5 +1,6 @@
 package org.lamisplus.modules.starter.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vladmihalcea.hibernate.type.array.IntArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
@@ -35,18 +36,18 @@ public class ADRAuditEntity {
 
     @Column(name = "created_date", updatable = false)
     @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
     private LocalDateTime createdDate = LocalDateTime.now ();
-    //@JsonIgnore
     @ToString.Exclude
     @Column(name = "created_by", updatable = false)
     private String createdBy = SecurityUtils.getCurrentUserLogin ().orElse ("");
 
     @Column(name = "last_modified_date")
     @LastModifiedDate
+    @JsonFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
     private LocalDateTime lastModifiedDate = LocalDateTime.now ();
 
     @Column(name = "last_modified_by")
-    //@JsonIgnore
     @ToString.Exclude
     private String lastModifiedBy = SecurityUtils.getCurrentUserLogin ().orElse ("");
 

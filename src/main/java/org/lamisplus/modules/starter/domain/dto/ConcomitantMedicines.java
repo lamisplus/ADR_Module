@@ -11,10 +11,12 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.FetchType;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -28,14 +30,6 @@ public class ConcomitantMedicines implements Serializable {
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "brands",columnDefinition = "jsonb")
     private List<Medicine> medicines;
-    private String relevantTest;
-    @Convert(converter = LocalDateTime.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate relevantTestDate;
-    private String relevantResult;
-    @Convert(converter = LocalDateTime.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate relevantResultDate;
     private String preexistingMedicalConditions;
     private String preexistingMedicalOthers;
 }

@@ -14,6 +14,7 @@ import org.lamisplus.modules.starter.repository.ADRRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,15 +71,38 @@ public class ADRService {
     }
 
 
+    public List<ADR> getPatientDataByAdr(String patientUuid){
+
+        List<ADR> patientDataByAdr = adrRepository.findPatientDataByAdr(patientUuid);
+
+        if (patientDataByAdr.isEmpty()) {
+            throw new ADRNotFoundException("No patient data found for ADR with patient ID " + patientUuid);
+        }
+
+        return patientDataByAdr;
+
+    }
+
+
     public ApiResponse updateADRByPatientId(String patientUuid, ADRRequest request) {
 
         ADR existingAdr = adrRepository.findByPatientUuid(patientUuid)
-                .orElseThrow(()-> new ADRAlreadyExistException("ARD does not exist"));
+                .orElseThrow(()-> new ADRNotFoundException("ARD does not exist"));
 
         ADR updatedAdr = fromADRToDTO(request);
         log.info("mapped adr info : {}", updatedAdr);
 
-        updatedAdr.setId(existingAdr.getId()); // ensure tha same id for update
+        Optional<User> currentUser = userService.getUserWithRoles();
+        log.info("current user: {}",currentUser);
+
+        if (currentUser.isPresent()) {
+            log.info("currentUser: " + currentUser.get());
+            User user = currentUser.get();
+            Long currentOrganisationUnitId = user.getCurrentOrganisationUnitId();
+            updatedAdr.setFacilityID(currentOrganisationUnitId);
+        }
+
+        updatedAdr.setId(existingAdr.getId());// ensure tha same id for update
 
         ADR saveAdr = adrRepository.save(updatedAdr);
         log.info("saved to db: {}", saveAdr);
@@ -102,22 +126,32 @@ public class ADRService {
                 .build();
     }
 
-    public ApiResponse getAllAdrs( ){
 
-        List<ADR> adrList = adrRepository.findAll();
-        log.info("adr list: {}", adrList);
 
-        if(adrList.isEmpty()){
-            throw new ADRNotFoundException("No ADRs found");
+    public List<PatientADRProjection> getAllAdrs(String searchValue){
+
+        List<PatientADRProjection> adrList;
+
+        if (!((searchValue == null) || (searchValue.equals("*")))) {
+            searchValue = searchValue.replaceAll("\\s", "");
+            searchValue = searchValue.replaceAll(",", "");
+            String queryParam = "";
+            queryParam = "%" + searchValue + "%";
+            adrList = adrRepository.getAllPatientAdrByParam(queryParam);
+        } else {
+            adrList = adrRepository.getAllPatientAdr();
+
         }
 
-        return ApiResponse.builder()
-                .statusCode(String.valueOf(HttpStatus.OK.value()))
-                .message(GeneralResponseEnum.SUCCESS.getMessage())
-                .details(adrList)
-                .build();
+        if (adrList.isEmpty()) {
+            throw new ADRNotFoundException("No ADRs found");
+        }else{
+            return adrList;
+        }
+
 
     }
+
 
 
 
@@ -130,6 +164,7 @@ public class ADRService {
 
         adr.setPatientUuid(adrRequest.getPatientUuid());
         adr.setWeight(adrRequest.getWeight());
+        adr.setReportDate(adrRequest.getReportDate());
         AdverseEffect adverseEffect = adrRequest.getAdverseEffect();
         ConcomitantMedicines concomitantMedicines = adrRequest.getConcomitantMedicines();
         SevereDrug severeDrug = adrRequest.getSevereDrug();
@@ -153,6 +188,7 @@ public class ADRService {
         ADRResponse response = new ADRResponse();
         response.setPatientUuid(adr.getPatientUuid());
         response.setWeight(adr.getWeight());
+        response.setReportDate(adr.getReportDate());
         response.setAdverseEffect(adr.getAdverseEffect());
         response.setConcomitantMedicines(adr.getConcomitantMedicines());
         response.setSevereDrug(adr.getSevereDrugs());

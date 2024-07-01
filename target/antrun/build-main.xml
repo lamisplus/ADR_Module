@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project name="maven-antrun-" default="main"  >
 <target name="main">
-  <copy todir="C:\Users\barnabas.tyav\IdeaProjects\NewLamisCore\ADR_Module\target/classes/views/static/dhis2">
-    <fileset dir="C:\Users\barnabas.tyav\IdeaProjects\NewLamisCore\ADR_Module/build"/>
+  <copy todir="C:\Users\victor.ajor\Lamisplus_public\ADR_Module\target/classes/views/static/adr">
+    <fileset dir="C:\Users\victor.ajor\Lamisplus_public\ADR_Module/build"/>
   </copy>
 </target>
 </project>

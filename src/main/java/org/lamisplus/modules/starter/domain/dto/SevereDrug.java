@@ -11,8 +11,10 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.FetchType;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 
@@ -26,16 +28,6 @@ public class SevereDrug {
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "drugs",columnDefinition = "jsonb")
     private List<Drug> drugs;
-    private Integer dosage;
-    private Integer frequency;
-    private String administrationRoute;
-    @Convert(converter = LocalDateTime.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate dateMedicationStarted;
-    @Convert(converter = LocalDateTime.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate dateMedicationStopped;
-    private String reactionStopped;
-    private String reactionReappeared;
+
 
 }
