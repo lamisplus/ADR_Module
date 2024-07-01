@@ -77,6 +77,8 @@ const useStyles = makeStyles((theme) => ({
 function EditForm() {
   const classes = useStyles();
   const [saving, setSaving] = useState(false);
+  const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
   const [adr, setAdr] = useState({
     weight: "",
     eventDescription: "",
@@ -158,7 +160,7 @@ function EditForm() {
       })
       .then((response) => {
         const data = response.data.details;
-        console.log(data);
+        //console.log(data);
 
         setAdr({
           weight: data?.weight,
@@ -209,10 +211,40 @@ function EditForm() {
       });
   };
 
+  const GetCountry = () => {
+    axios
+      .get(`${baseUrl}organisation-units/parent-organisation-units/0`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setCountries(response.data);
+        setStateByCountryId(response.data[0].id);
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+
+  //Get list of State
+  function setStateByCountryId(id) {
+    axios
+      .get(`${baseUrl}organisation-units/parent-organisation-units/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        //console.log(response.data);
+        setStates(response.data.sort());
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  }
+
   useEffect(() => {
     getADRbyId();
     adrOutcomes();
     adrRelevant();
+    GetCountry();
   }, []);
 
   const calculate_age = (dob) => {
@@ -895,17 +927,52 @@ function EditForm() {
                         <Label for="country">
                           Country <span style={{ color: "red" }}>*</span>
                         </Label>
-                        <input
+
+                        <select
                           className="form-control"
                           type="text"
                           name="country"
                           id="country"
+                          style={{ border: "1px solid #014d88" }}
                           value={adr.country}
                           onChange={handleBioInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
+                        >
+                          {/* <option value="">--Please choose an option--</option> */}
+                          {countries.map((value, index) => (
+                            <option key={index} value={value.name}>
+                              {value.name}
+                            </option>
+                          ))}
+                        </select>
                       </FormGroup>
                     </div>
+                    <div className="form-group mb-3 col-md-4">
+                      <FormGroup>
+                        <Label for="state">
+                          State <span style={{ color: "red" }}>*</span>
+                        </Label>
+                        <select
+                          className="form-control"
+                          type="text"
+                          name="state"
+                          id="state"
+                          value={adr.state}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.2rem",
+                          }}
+                          onChange={handleBioInputChange}
+                        >
+                          <option value="">Select</option>
+                          {states.map((value, index) => (
+                            <option key={index} value={value.name}>
+                              {value.name}
+                            </option>
+                          ))}
+                        </select>
+                      </FormGroup>
+                    </div>
+
                     <div className="form-group mb-3 col-md-4">
                       <FormGroup>
                         <Label for="">
@@ -922,22 +989,7 @@ function EditForm() {
                         />
                       </FormGroup>
                     </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="state">
-                          State <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="state"
-                          id="state"
-                          value={adr.state}
-                          onChange={handleBioInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                      </FormGroup>
-                    </div>
+
                     <div className="form-group  col-md-4">
                       <FormGroup>
                         <Label>

@@ -14,6 +14,10 @@ import Drug from "./Drug";
 import DrugMedicine from "./DrugMedicine";
 import { ToastContainer, toast } from "react-toastify";
 import * as moment from "moment";
+import {
+  validatePhoneNumber,
+  checkNumberLimit,
+} from "../../../utils/utilityFunctions";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -78,7 +82,10 @@ function ADRForm() {
   const classes = useStyles();
   const [saving, setSaving] = useState(false);
   const [outcomes, setOutcomes] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
   const [errors, setErrors] = useState({});
+  const [isValid, setIsValid] = useState(true);
   const styles = {
     color: "#f85032",
     fontSize: "11px",
@@ -124,6 +131,7 @@ function ADRForm() {
   useEffect(() => {
     adrOutcomes();
     adrRelevant();
+    GetCountry();
   }, []);
 
   const calculate_age = (dob) => {
@@ -201,14 +209,6 @@ function ADRForm() {
     });
   };
 
-  const handleSevereInputChange = (event) => {
-    const { name, value } = event.target;
-    setSevereDrugs({
-      ...severeDrugs,
-      [name]: value,
-    });
-  };
-
   const handleMedicineInputChange = (event) => {
     const { name, value } = event.target;
     setConcomitantMedicines({
@@ -219,11 +219,44 @@ function ADRForm() {
 
   const handleReporterInputChange = (event) => {
     const { name, value } = event.target;
+
+    if (name === "phoneNumber" && value.length > 11) {
+      const acceptedNumber = checkNumberLimit(value);
+      if (validatePhoneNumber(acceptedNumber) !== true) {
+        toast.error("Reporter Phone number is not valid");
+      } else {
+        value = acceptedNumber;
+      }
+    }
     setReporter({
       ...reporter,
       [name]: value,
     });
   };
+
+  const GetCountry = () => {
+    axios
+      .get(`${baseUrl}organisation-units/parent-organisation-units/0`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setCountries(response.data);
+        setStateByCountryId(response.data[0].id);
+      })
+      .catch((error) => {});
+  };
+
+  //Get list of State
+  function setStateByCountryId(id) {
+    axios
+      .get(`${baseUrl}organisation-units/parent-organisation-units/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setStates(response.data.sort());
+      })
+      .catch((error) => {});
+  }
 
   const validateInputs = () => {
     const temp = { ...errors };
@@ -273,7 +306,7 @@ function ADRForm() {
       reportDate: reporter.reportDate,
     };
 
-    console.log(adrPayload);
+    //console.log(adrPayload);
     if (validateInputs()) {
       axios
         .post(`${baseUrl}adr/create`, adrPayload, {
@@ -912,7 +945,25 @@ function ADRForm() {
                         <Label for="country">
                           Country <span style={{ color: "red" }}>*</span>
                         </Label>
-                        <input
+
+                        <select
+                          className="form-control"
+                          type="text"
+                          name="country"
+                          id="country"
+                          style={{ border: "1px solid #014d88" }}
+                          value={reporter.country}
+                          onChange={handleReporterInputChange}
+                        >
+                          <option value="">--Please choose an option--</option>
+                          {countries.map((value, index) => (
+                            <option key={index} value={value.name}>
+                              {value.name}
+                            </option>
+                          ))}
+                        </select>
+
+                        {/* <input
                           className="form-control"
                           type="text"
                           name="country"
@@ -920,9 +971,49 @@ function ADRForm() {
                           value={reporter.country}
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
-                        />
+                        /> */}
                         {errors.country !== "" ? (
                           <span style={styles}>{errors.country}</span>
+                        ) : (
+                          ""
+                        )}
+                      </FormGroup>
+                    </div>
+                    <div className="form-group mb-3 col-md-4">
+                      <FormGroup>
+                        <Label for="state">
+                          State <span style={{ color: "red" }}>*</span>
+                        </Label>
+                        <select
+                          className="form-control"
+                          type="text"
+                          name="state"
+                          id="state"
+                          value={reporter.state}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.2rem",
+                          }}
+                          onChange={handleReporterInputChange}
+                        >
+                          <option value="">Select</option>
+                          {states.map((value, index) => (
+                            <option key={index} value={value.name}>
+                              {value.name}
+                            </option>
+                          ))}
+                        </select>
+                        {/* <input
+                          className="form-control"
+                          type="text"
+                          name="state"
+                          id="state"
+                          value={reporter.state}
+                          onChange={handleReporterInputChange}
+                          style={{ border: "1px solid #014d88" }}
+                        /> */}
+                        {errors.state !== "" ? (
+                          <span style={styles}>{errors.state}</span>
                         ) : (
                           ""
                         )}
@@ -949,27 +1040,7 @@ function ADRForm() {
                         )}
                       </FormGroup>
                     </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="state">
-                          State <span style={{ color: "red" }}>*</span>
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="state"
-                          id="state"
-                          value={reporter.state}
-                          onChange={handleReporterInputChange}
-                          style={{ border: "1px solid #014d88" }}
-                        />
-                        {errors.state !== "" ? (
-                          <span style={styles}>{errors.state}</span>
-                        ) : (
-                          ""
-                        )}
-                      </FormGroup>
-                    </div>
+
                     <div className="form-group  col-md-4">
                       <FormGroup>
                         <Label>
@@ -983,6 +1054,8 @@ function ADRForm() {
                           value={reporter.phoneNumber}
                           onChange={handleReporterInputChange}
                           style={{ border: "1px solid #014d88" }}
+                          pattern="[0-9]{9}"
+                          title="Please enter valid phone number"
                         />
                         {errors.phoneNumber !== "" ? (
                           <span style={styles}>{errors.phoneNumber}</span>
