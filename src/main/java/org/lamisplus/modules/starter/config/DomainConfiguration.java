@@ -9,12 +9,15 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.TransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.sql.DataSource;
 
 @RequiredArgsConstructor
+@EnableTransactionManagement
 @Slf4j
 @Configuration
 @EnableJpaRepositories( transactionManagerRef = "adrTransactionManger",
@@ -35,3 +38,5 @@ public class DomainConfiguration {
         return jpaTransactionManager;
     }
 }
+
+

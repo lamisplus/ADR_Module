@@ -15,8 +15,8 @@ acrossHibernate:
 applicationInfo:
   applicationId: adr
   applicationName: ADR
-  buildDate: "2024-06-19T10:40:28Z"
-  buildId: "1.0.0-1.0.0"
+  buildDate: "2024-07-01T15:27:36Z"
+  buildId: "2.0.0.1-1.0.0"
 build:
   number: "1.0.0"
 logging:
@@ -109,6 +109,7 @@ spring:
       ddl-auto: none
     properties:
       hibernate.enable_lazy_load_no_trans: true
+
 
 remote:
   lamis.url: http://localhost:8081/api/adr/
