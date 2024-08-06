@@ -296,7 +296,7 @@ const DrugMedicine = () => {
             Result
             {/* <span style={{ color: "red" }}>*</span> */}
           </Label>
-          <input
+          {/* <input
             className="form-control"
             type="number"
             name="relevantResult"
@@ -304,7 +304,21 @@ const DrugMedicine = () => {
             value={concomitantMedicines.relevantResult}
             onChange={handleMedicineInputChange}
             style={{ border: "1px solid #014d88" }}
-          />
+          /> */}
+
+          <select
+            className="form-control"
+            type="text"
+            name="relevantResult"
+            id="relevantResult"
+            style={{ border: "1px solid #014d88" }}
+            value={concomitantMedicines.relevantResult}
+            onChange={handleMedicineInputChange}
+          >
+            <option value="">--Please choose an option--</option>
+            <option value="Positive">Positive</option>
+            <option value="Negative">Negative</option>
+          </select>
           {errors.relevantResult !== "" ? (
             <span style={styles}>{errors.relevantResult}</span>
           ) : (

@@ -9,6 +9,7 @@ import * as moment from "moment";
 
 const Drug = ({ adverseEffect }) => {
   const [drugs, setDrugs] = useState([]);
+  const [drugsRoute, setDrugsRoute] = useState([]);
   const [storedValues, setStoredValues] = useState([]);
   const [errors, setErrors] = useState({});
   const styles = {
@@ -44,8 +45,19 @@ const Drug = ({ adverseEffect }) => {
     } catch (e) {}
   }, []);
 
+  const adrDrugsRoutes = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}application-codesets/v2/ROUTE_OF_ADMINISTRATION`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setDrugsRoute(response.data.sort());
+    } catch (e) {}
+  }, []);
+
   useEffect(() => {
     adrDrugs();
+    adrDrugsRoutes();
   }, []);
 
   useEffect(() => {
@@ -360,7 +372,23 @@ const Drug = ({ adverseEffect }) => {
           <Label>
             Route Administration <span style={{ color: "red" }}>*</span>
           </Label>
-          <input
+          <select
+            className="form-control"
+            type="text"
+            name="administrationRoute"
+            id="administrationRoute"
+            style={{ border: "1px solid #014d88" }}
+            value={severeDrugs.administrationRoute}
+            onChange={handleSevereInputChange}
+          >
+            <option value="">--Please choose an option--</option>
+            {drugsRoute.map((drug, index) => (
+              <option key={drug.id} value={drug.id}>
+                {drug.display}
+              </option>
+            ))}
+          </select>
+          {/* <input
             className="form-control"
             type="text"
             name="administrationRoute"
@@ -368,7 +396,7 @@ const Drug = ({ adverseEffect }) => {
             value={severeDrugs.administrationRoute}
             onChange={handleSevereInputChange}
             style={{ border: "1px solid #014d88" }}
-          />
+          /> */}
           {errors.administrationRoute !== "" ? (
             <span style={styles}>{errors.administrationRoute}</span>
           ) : (
